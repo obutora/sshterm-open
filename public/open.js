@@ -98,7 +98,10 @@ export const STRINGS = {
   },
 };
 
-/** How long a redirect may take before the page offers help. */
+/**
+ * How long the page may keep focus after the redirect, without being hidden,
+ * before it offers help.
+ */
 const LEFT_TIMEOUT_MS = 2000;
 
 function main() {
@@ -133,15 +136,24 @@ function main() {
     showTrouble();
     return;
   }
+  // Only a hidden page means the app came up. iOS asks "Open in SSH Term?"
+  // over the page first, which blurs it without hiding it, so the wait
+  // pauses while the page is blurred and starts over when it gets focus
+  // back (Cancel, or the switch to the app before the page is hidden).
   let left = false;
-  const leave = () => {
-    left = true;
+  let timer;
+  const wait = () => {
+    clearTimeout(timer);
+    if (!left) timer = setTimeout(showTrouble, LEFT_TIMEOUT_MS);
   };
-  window.addEventListener('blur', leave);
-  document.addEventListener('visibilitychange', leave);
-  setTimeout(() => {
-    if (!left) showTrouble();
-  }, LEFT_TIMEOUT_MS);
+  window.addEventListener('blur', () => clearTimeout(timer));
+  window.addEventListener('focus', wait);
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState !== 'hidden') return;
+    left = true;
+    clearTimeout(timer);
+  });
+  wait();
   location.replace(link);
 }
 

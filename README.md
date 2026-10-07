@@ -21,9 +21,10 @@ anyone can read what happens to the part after `#`.
   to a custom scheme replaces the page with an error page.
 - On a computer it doesn't redirect; it says the link opens on a phone.
 - An "Open in SSH Term" button with the same link is always there. If the
-  page hasn't been left about 2 seconds after the redirect (no `blur` or
-  `visibilitychange`), or in an Android WebView, it shows what to do when the
-  app doesn't open, and the store links.
+  page isn't hidden after keeping focus for about 2 seconds after the
+  redirect, or in an Android WebView, it shows what to do when the app
+  doesn't open, and the store links. The wait pauses while the page is
+  blurred, as it is under iOS's "Open in SSH Term?" prompt.
 - It never shows `h` or `s`, stores nothing, and loads nothing but its own
   `open.js` and `open.css`: no fonts, analytics or CDN. `_headers` sets the
   CSP, `X-Robots-Tag: noindex` and `Referrer-Policy: no-referrer`.
