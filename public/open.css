@@ -60,6 +60,12 @@ h1 {
   color: var(--accent);
 }
 
+.icon {
+  display: block;
+  margin: 0 auto 1rem;
+  border-radius: 22%;
+}
+
 .note {
   margin: 0 0 1.5rem;
   color: var(--muted);

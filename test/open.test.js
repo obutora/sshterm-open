@@ -1,6 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { linkFromHash, pickLang, platformOf } from '../public/open.js';
+import { pickLang, platformOf } from '../public/common.js';
+import { linkFromHash, STRINGS } from '../public/open.js';
 
 const H = '0123456789abcdef0123456789abcdef';
 const S = '00112233aabbccdd';
@@ -70,6 +71,6 @@ test('the app languages, English otherwise', () => {
     ['', 'en'],
     [undefined, 'en'],
   ]) {
-    assert.equal(pickLang(tag), want, String(tag));
+    assert.equal(pickLang(tag, STRINGS), want, String(tag));
   }
 });

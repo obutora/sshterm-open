@@ -3,6 +3,8 @@
 // checks their form and hands them to SSH Term as
 // sshtermx://open?h=…[&s=…]. It stores nothing and loads nothing else.
 
+import { localize, pickLang, platformOf } from './common.js';
+
 const HOST_ID = /^[0-9a-f]{32}$/;
 const SESSION_ID = /^[0-9a-f]{16}$/;
 
@@ -17,32 +19,6 @@ export function linkFromHash(hash) {
   if (hs.length !== 1 || !HOST_ID.test(hs[0]) || ss.length > 1) return null;
   if (ss.length === 1 && !SESSION_ID.test(ss[0])) return null;
   return `sshtermx://open?h=${hs[0]}` + (ss.length === 1 ? `&s=${ss[0]}` : '');
-}
-
-/**
- * 'ios', 'android', 'android-wv' (an app's own WebView, where redirecting
- * replaces the page with an error page) or 'desktop'.
- */
-export function platformOf(ua, maxTouchPoints = 0) {
-  if (/Android/.test(ua)) return ua.includes('; wv)') ? 'android-wv' : 'android';
-  // iPadOS reports a Mac; only the touch screen tells them apart.
-  if (/iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && maxTouchPoints > 1)) {
-    return 'ios';
-  }
-  return 'desktop';
-}
-
-const HANT_REGIONS = new Set(['tw', 'hk', 'mo']);
-
-/** The app's language for a BCP 47 tag (navigator.language); English otherwise. */
-export function pickLang(tag) {
-  const [language, ...rest] = String(tag || '').toLowerCase().split(/[-_]/);
-  if (language === 'zh') {
-    const script = rest.find((p) => p.length === 4);
-    const hant = script ? script === 'hant' : rest.some((p) => HANT_REGIONS.has(p));
-    return hant ? 'zh_Hant' : 'zh';
-  }
-  return Object.hasOwn(STRINGS, language) ? language : 'en';
 }
 
 export const STRINGS = {
@@ -105,12 +81,9 @@ export const STRINGS = {
 const LEFT_TIMEOUT_MS = 2000;
 
 function main() {
-  const t = STRINGS[pickLang(navigator.language)];
+  const t = STRINGS[pickLang(navigator.language, STRINGS)];
   const $ = (id) => document.getElementById(id);
-  document.documentElement.lang = t.htmlLang;
-  for (const el of document.querySelectorAll('[data-t]')) {
-    el.textContent = t[el.dataset.t];
-  }
+  localize(t);
 
   const link = linkFromHash(location.hash);
   if (!link) {
@@ -132,6 +105,8 @@ function main() {
     }
     $('trouble').hidden = false;
   };
+  // In an app's own WebView, a redirect to a custom scheme replaces the
+  // page with an error page.
   if (platform === 'android-wv') {
     showTrouble();
     return;

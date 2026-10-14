@@ -26,7 +26,7 @@ anyone can read what happens to the part after `#`.
   doesn't open, and the store links. The wait pauses while the page is
   blurred, as it is under iOS's "Open in SSH Term?" prompt.
 - It never shows `h` or `s`, stores nothing, and loads nothing but its own
-  `open.js` and `open.css`: no fonts, analytics or CDN. `_headers` sets the
+  `open.js`, `common.js` and `open.css`: no fonts, analytics or CDN. `_headers` sets the
   CSP, `X-Robots-Tag: noindex` and `Referrer-Policy: no-referrer`.
 - Languages follow `navigator.language`: English, Japanese, Korean,
   Simplified and Traditional Chinese, the same as the app. Others get
@@ -35,9 +35,23 @@ anyone can read what happens to the part after `#`.
 The URL and the `#h=…&s=…` form never change: links stay in the services'
 message history.
 
+## The store link
+
+`https://sshterm.iru-yo.com/app` is the one link to share (on X and
+elsewhere) for installing SSH Term. On iOS it goes at once to the App Store,
+on Android to Google Play; on a computer it shows both. Its `og:` and
+`twitter:` tags give link previews a card with the app icon.
+
+`?utm_source=…&utm_medium=…&utm_campaign=…` is passed to Google Play as it
+is; `utm_campaign` (up to 40 characters) is also the App Store's campaign
+token `ct`. Other keys are dropped.
+
 ## Layout
 
 - `public/`: the site, deployed as is to Cloudflare Pages (no build step;
-  output directory `public`). `/open` serves `open.html`.
+  output directory `public`). `/open` serves `open.html`, `/app` serves
+  `app.html`. `common.js` holds what both pages share: the platform by user
+  agent, the language and filling in the strings.
 - `test/`: `npm test` (Node 22+) checks the link, platform and language
-  rules in `public/open.js`.
+  rules in `public/open.js` and `public/common.js`, and the store URLs in
+  `public/app.js`.
