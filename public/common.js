@@ -1,4 +1,4 @@
-// What the open page (/open) and the store link (/app) share.
+// What the open page (/open), the store link (/app) and the theme page (/theme) share.
 
 /**
  * 'ios', 'android', 'android-wv' (an app's own WebView) or 'desktop'.
@@ -29,9 +29,9 @@ export function pickLang(tag, strings) {
 }
 
 /** Fills every [data-t] element of the page from [t] and sets its language. */
-export function localize(t) {
-  document.documentElement.lang = t.htmlLang;
-  for (const el of document.querySelectorAll('[data-t]')) {
+export function localize(t, doc = document) {
+  doc.documentElement.lang = t.htmlLang;
+  for (const el of doc.querySelectorAll('[data-t]')) {
     el.textContent = t[el.dataset.t];
   }
 }

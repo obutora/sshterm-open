@@ -2,6 +2,13 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "build": "node build/main.js",
     "test": "node --test"
+  },
+  "devDependencies": {
+    "ajv": "^8.20.0"
+  },
+  "dependencies": {
+    "qrcode-generator": "^2.0.4"
   }
 }

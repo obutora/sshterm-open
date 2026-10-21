@@ -1,0 +1,42 @@
+/* The theme page (/theme), on top of open.css. Colours of the 見本 come from
+   the theme, set by theme.js through the CSSOM (no inline style attributes). */
+
+#theme {
+  margin-bottom: 1.5rem;
+}
+
+#name {
+  margin: 0 0 0.25rem;
+  font-size: 1.25rem;
+  overflow-wrap: anywhere;
+}
+
+.meta {
+  margin: 0 0 0.25rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+  overflow-wrap: anywhere;
+}
+
+.terminal {
+  margin-top: 1rem;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  font: 13px/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  text-align: left;
+  white-space: pre;
+  overflow-x: auto;
+}
+
+.palette {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 0.25rem;
+  margin-top: 0.75rem;
+}
+
+.swatch {
+  height: 1.25rem;
+  border-radius: 0.25rem;
+}

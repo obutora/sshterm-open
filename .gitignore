@@ -1,1 +1,8 @@
 .wrangler/
+node_modules/
+# Written by npm run build (the theme gallery); Cloudflare Pages builds them on each deploy.
+# The same files as LIST_FILES and the <id>/ directories in build/gallery.js.
+/public/themes/index.html
+/public/themes/colors.css
+/public/themes/sitemap.xml
+/public/themes/*-*-*-*-*/

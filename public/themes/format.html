@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>SSH Term theme format v1</title>
+<link rel="icon" href="/icon.png">
+<link rel="stylesheet" href="/themes/format.css">
+<script type="module" src="/themes/format.js"></script>
+</head>
+<body>
+<main>
+  <h1><span class="prompt" aria-hidden="true">&gt;_</span> <span data-t="title">SSH Term theme format v1</span></h1>
+  <p data-t="intro">SSH Term reads terminal color themes as JSON in this format, from a file, the clipboard or a theme link. You can write one by hand or make one with your own tool.</p>
+  <p><span data-t="schemaLead">JSON Schema (2020-12):</span> <a href="/themes/schema/v1.json"><code>https://sshterm.iru-yo.com/themes/schema/v1.json</code></a></p>
+
+  <section>
+    <h2 data-t="editorTitle">Checking in an editor</h2>
+    <p data-t="editor">Put "$schema" with the schema’s URL at the top of the file, as in the example at the end. VS Code and other editors then complete and check it. The app reads past "$schema" when it is this URL and refuses any other value.</p>
+  </section>
+
+  <section>
+    <h2 data-t="fileTitle">The file</h2>
+    <p data-t="file">One JSON object with these fields. A file holds 1 to 32 themes.</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th data-t="thField">Field</th><th data-t="thValue">Value</th></tr></thead>
+        <tbody>
+        <tr><td><code>$schema</code></td><td data-t="fSchema">Optional. Only the schema’s URL.</td></tr>
+        <tr><td><code>format</code></td><td data-t="fFormat">Always "ssh-term-theme".</td></tr>
+        <tr><td><code>formatVersion</code></td><td data-t="fFormatVersion">1. A file of a newer version is refused, asking to update the app.</td></tr>
+        <tr><td><code>themes</code></td><td data-t="fThemes">An array of 1 to 32 themes.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3 data-t="themeTitle">A theme</h3>
+    <div class="scroll">
+      <table>
+        <thead><tr><th data-t="thField">Field</th><th data-t="thValue">Value</th></tr></thead>
+        <tbody>
+        <tr><td><code>id</code></td><td data-t="fId">A UUID v4 in lowercase. Give each new theme a new random one: a theme sent again with the same id is offered as a replacement for the one the reader has.</td></tr>
+        <tr><td><code>name</code></td><td data-t="fName">The theme’s name.</td></tr>
+        <tr><td><code>author</code></td><td data-t="fAuthor">Who made it.</td></tr>
+        <tr><td><code>license</code></td><td data-t="fLicense">CC0-1.0, CC-BY-4.0 or MIT (see Licenses).</td></tr>
+        <tr><td><code>basedOn</code></td><td data-t="fBasedOn">Optional. The theme this one was made from, one step back: its name, author and license. For one of the app’s presets, its name alone.</td></tr>
+        <tr><td><code>colors</code></td><td data-t="fColors">The colors, below.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2 data-t="colorsTitle">Colors</h2>
+    <p data-t="colors">Write a color as #RRGGBB or #RRGGBBAA (alpha last, as in CSS), in upper or lower case, with no spaces. Foreground, background and the 16 ANSI colors are required; the app fills in the others when they are missing. The app itself writes all 23, and #RRGGBB when a color is opaque.</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th data-t="thKey">Key</th><th data-t="thColor">Color</th><th data-t="thMissing">When missing</th></tr></thead>
+        <tbody>
+        <tr><td><code>foreground</code></td><td data-t="cForeground">Foreground (text)</td><td data-t="required">Required</td></tr>
+        <tr><td><code>background</code></td><td data-t="cBackground">Background</td><td data-t="required">Required</td></tr>
+        <tr><td><code>cursor</code></td><td data-t="cCursor">Cursor</td><td data-t="fillForeground">The foreground</td></tr>
+        <tr><td><code>selection</code></td><td data-t="cSelection">Selection</td><td data-t="fillSelection">The foreground at 40% opacity (alpha 66)</td></tr>
+        <tr><td><code>black</code></td><td>ANSI 0</td><td data-t="required">Required</td></tr>
+        <tr><td><code>red</code></td><td>ANSI 1</td><td data-t="required">Required</td></tr>
+        <tr><td><code>green</code></td><td>ANSI 2</td><td data-t="required">Required</td></tr>
+        <tr><td><code>yellow</code></td><td>ANSI 3</td><td data-t="required">Required</td></tr>
+        <tr><td><code>blue</code></td><td>ANSI 4</td><td data-t="required">Required</td></tr>
+        <tr><td><code>magenta</code></td><td>ANSI 5</td><td data-t="required">Required</td></tr>
+        <tr><td><code>cyan</code></td><td>ANSI 6</td><td data-t="required">Required</td></tr>
+        <tr><td><code>white</code></td><td>ANSI 7</td><td data-t="required">Required</td></tr>
+        <tr><td><code>brightBlack</code></td><td>ANSI 8</td><td data-t="required">Required</td></tr>
+        <tr><td><code>brightRed</code></td><td>ANSI 9</td><td data-t="required">Required</td></tr>
+        <tr><td><code>brightGreen</code></td><td>ANSI 10</td><td data-t="required">Required</td></tr>
+        <tr><td><code>brightYellow</code></td><td>ANSI 11</td><td data-t="required">Required</td></tr>
+        <tr><td><code>brightBlue</code></td><td>ANSI 12</td><td data-t="required">Required</td></tr>
+        <tr><td><code>brightMagenta</code></td><td>ANSI 13</td><td data-t="required">Required</td></tr>
+        <tr><td><code>brightCyan</code></td><td>ANSI 14</td><td data-t="required">Required</td></tr>
+        <tr><td><code>brightWhite</code></td><td>ANSI 15</td><td data-t="required">Required</td></tr>
+        <tr><td><code>searchHitBackground</code></td><td data-t="cSearchHit">Search hits</td><td><code>#FFB86C</code></td></tr>
+        <tr><td><code>searchHitBackgroundCurrent</code></td><td data-t="cSearchHitCurrent">The current search hit</td><td><code>#FF79C6</code></td></tr>
+        <tr><td><code>searchHitForeground</code></td><td data-t="cSearchHitText">Text of search hits</td><td><code>#282A36</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2 data-t="rulesTitle">Rules</h2>
+    <p data-t="rulesLead">The app, the theme link page and the theme gallery check the same rules. The schema says all of them but the file size, the trimming of names and the unique ids.</p>
+    <ul>
+      <li data-t="rSize">A file is at most 64 KB (65,536 bytes of UTF-8).</li>
+      <li data-t="rFields">No fields other than the ones above, at any level. null is not a value: leave an optional field out instead.</li>
+      <li data-t="rLength">Names and authors (also in basedOn) lose their surrounding white space, then are 1 to 40 characters (Unicode code points).</li>
+      <li data-t="rPlain">They are plain text: no control characters (U+0000–U+001F, U+007F–U+009F) and none that turn the direction of text (U+061C, U+200E, U+200F, U+202A–U+202E, U+2066–U+2069).</li>
+      <li data-t="rIds">The themes of a file each have their own id.</li>
+      <li data-t="rColors">A file with a required color missing or a color written wrong is refused, naming the color.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2 data-t="licTitle">Licenses</h2>
+    <p data-t="lic">Pick one of these SPDX IDs, written exactly so:</p>
+    <ul>
+      <li data-t="licCc0">CC0-1.0: anyone may use and change the theme, without credit.</li>
+      <li data-t="licCcBy">CC-BY-4.0 (the app’s default): anyone may use and change it, crediting you.</li>
+      <li data-t="licMit">MIT: anyone may use and change it, keeping the copyright and license notice.</li>
+    </ul>
+    <p data-t="licDerived">When you make a theme from someone else’s, put theirs in basedOn. If theirs is CC-BY-4.0 or MIT, yours keeps the same license; if it is CC0-1.0, choose any.</p>
+  </section>
+
+  <section>
+    <h2 data-t="linkTitle">Theme links</h2>
+    <p data-t="link">A theme link opens one theme in SSH Term: https://sshterm.iru-yo.com/theme#t=… where t is a v1 file holding one theme, compressed with deflate-raw (DEFLATE without a zlib or gzip header) and written in base64url without padding. The part after # never reaches the server.</p>
+    <p data-t="linkLimit">It must expand to no more than 64 KB. In JavaScript (browsers and Node):</p>
+    <pre id="link-js"><code>async function themeLink(theme) {
+  const doc = { format: 'ssh-term-theme', formatVersion: 1, themes: [theme] };
+  const json = new TextEncoder().encode(JSON.stringify(doc));
+  const stream = new Blob([json]).stream().pipeThrough(new CompressionStream('deflate-raw'));
+  const bytes = new Uint8Array(await new Response(stream).arrayBuffer());
+  let binary = '';
+  for (const b of bytes) binary += String.fromCharCode(b);
+  const t = btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  return `https://sshterm.iru-yo.com/theme#t=${t}`;
+}
+</code></pre>
+    <p data-t="linkPython">In Python:</p>
+    <pre id="link-py"><code>import base64, json, zlib
+
+def theme_link(theme):
+    doc = {"format": "ssh-term-theme", "formatVersion": 1, "themes": [theme]}
+    deflate = zlib.compressobj(9, zlib.DEFLATED, -15)
+    raw = deflate.compress(json.dumps(doc, ensure_ascii=False).encode()) + deflate.flush()
+    t = base64.urlsafe_b64encode(raw).rstrip(b"=").decode()
+    return "https://sshterm.iru-yo.com/theme#t=" + t
+</code></pre>
+  </section>
+
+  <section>
+    <h2 data-t="convTitle">From Windows Terminal and iTerm2</h2>
+    <p data-t="conv">SSH Term also reads a Windows Terminal color scheme (JSON) and an iTerm2 .itermcolors file; the author is added in the app. To convert one yourself, take the colors from these keys:</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>v1</th><th>Windows Terminal</th><th>iTerm2</th></tr></thead>
+        <tbody>
+        <tr><td><code>foreground</code></td><td><code>foreground</code></td><td><code>Foreground Color</code></td></tr>
+        <tr><td><code>background</code></td><td><code>background</code></td><td><code>Background Color</code></td></tr>
+        <tr><td><code>cursor</code></td><td><code>cursorColor</code></td><td><code>Cursor Color</code></td></tr>
+        <tr><td><code>selection</code></td><td><code>selectionBackground</code></td><td><code>Selection Color</code></td></tr>
+        <tr><td><code>black</code></td><td><code>black</code></td><td><code>Ansi 0 Color</code></td></tr>
+        <tr><td><code>red</code></td><td><code>red</code></td><td><code>Ansi 1 Color</code></td></tr>
+        <tr><td><code>green</code></td><td><code>green</code></td><td><code>Ansi 2 Color</code></td></tr>
+        <tr><td><code>yellow</code></td><td><code>yellow</code></td><td><code>Ansi 3 Color</code></td></tr>
+        <tr><td><code>blue</code></td><td><code>blue</code></td><td><code>Ansi 4 Color</code></td></tr>
+        <tr><td><code>magenta</code></td><td><code>purple</code></td><td><code>Ansi 5 Color</code></td></tr>
+        <tr><td><code>cyan</code></td><td><code>cyan</code></td><td><code>Ansi 6 Color</code></td></tr>
+        <tr><td><code>white</code></td><td><code>white</code></td><td><code>Ansi 7 Color</code></td></tr>
+        <tr><td><code>brightBlack</code></td><td><code>brightBlack</code></td><td><code>Ansi 8 Color</code></td></tr>
+        <tr><td><code>brightRed</code></td><td><code>brightRed</code></td><td><code>Ansi 9 Color</code></td></tr>
+        <tr><td><code>brightGreen</code></td><td><code>brightGreen</code></td><td><code>Ansi 10 Color</code></td></tr>
+        <tr><td><code>brightYellow</code></td><td><code>brightYellow</code></td><td><code>Ansi 11 Color</code></td></tr>
+        <tr><td><code>brightBlue</code></td><td><code>brightBlue</code></td><td><code>Ansi 12 Color</code></td></tr>
+        <tr><td><code>brightMagenta</code></td><td><code>brightPurple</code></td><td><code>Ansi 13 Color</code></td></tr>
+        <tr><td><code>brightCyan</code></td><td><code>brightCyan</code></td><td><code>Ansi 14 Color</code></td></tr>
+        <tr><td><code>brightWhite</code></td><td><code>brightWhite</code></td><td><code>Ansi 15 Color</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p data-t="convNote">iTerm2 gives each component as a number from 0 to 1: multiply it by 255 and round. Its Alpha Component, if there, is the alpha. The search hit colors have no counterpart: leave them out. An opaque selection color would hide the text under it, so SSH Term writes it with alpha 66 (40% opacity): do the same.</p>
+  </section>
+
+  <section>
+    <h2 data-t="exampleTitle">Example</h2>
+    <p data-t="example">A file with one theme:</p>
+    <pre id="example"><code>{
+  "$schema": "https://sshterm.iru-yo.com/themes/schema/v1.json",
+  "format": "ssh-term-theme",
+  "formatVersion": 1,
+  "themes": [
+    {
+      "id": "8b0e5c3a-2f6d-4e91-a7c4-5d1f0b9e3a62",
+      "name": "Harbor Night",
+      "author": "SSH Term",
+      "license": "CC0-1.0",
+      "basedOn": {
+        "name": "Dracula"
+      },
+      "colors": {
+        "foreground": "#E6E8EF",
+        "background": "#14181F",
+        "cursor": "#7FD1C7",
+        "selection": "#E6E8EF66",
+        "black": "#1C222B",
+        "red": "#E86A6A",
+        "green": "#7FCB8A",
+        "yellow": "#E8C66A",
+        "blue": "#6A9FE8",
+        "magenta": "#C08AE6",
+        "cyan": "#6ACFD8",
+        "white": "#C9CED8",
+        "brightBlack": "#4A5363",
+        "brightRed": "#F28B8B",
+        "brightGreen": "#9BE0A5",
+        "brightYellow": "#F2D88B",
+        "brightBlue": "#8BB8F2",
+        "brightMagenta": "#D4A8F0",
+        "brightCyan": "#8BE3EA",
+        "brightWhite": "#F4F6FA",
+        "searchHitBackground": "#FFB86C",
+        "searchHitBackgroundCurrent": "#FF79C6",
+        "searchHitForeground": "#282A36"
+      }
+    }
+  ]
+}
+</code></pre>
+    <p><a href="/themes/example.json" download data-t="download">Download example.json</a></p>
+  </section>
+</main>
+</body>
+</html>

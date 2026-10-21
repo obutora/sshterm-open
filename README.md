@@ -46,12 +46,129 @@ on Android to Google Play; on a computer it shows both. Its `og:` and
 is; `utm_campaign` (up to 40 characters) is also the App Store's campaign
 token `ct`. Other keys are dropped.
 
+## The theme format
+
+`https://sshterm.iru-yo.com/themes/format` explains SSH Term's theme file
+(format v1) for people who write themes by hand or convert them with their
+own tools: the fields, colours and how missing ones are filled, the rules,
+licences, theme links and a Windows Terminal / iTerm2 mapping, in the five
+languages. `https://sshterm.iru-yo.com/themes/schema/v1.json` is its JSON
+Schema (2020-12), served as `application/schema+json` with
+`Access-Control-Allow-Origin: *` so editors can fetch it from `$schema`.
+
+The schema says every rule but three, which a checker adds in code: a file
+is at most 64 KB, names and authors are 1–40 code points once trimmed (the
+schema counts untrimmed), and the IDs of a file's themes differ. Their URLs
+and contents never change once published; a later format gets `v2.json`.
+
+`test/fixtures/theme_format/` is a copy of the app's examples, with their
+`manifest.json`; copy them again when the app's examples change.
+
+## The theme page
+
+`https://sshterm.iru-yo.com/theme#t=<theme>` shows one SSH Term theme that
+someone sent as a link (SSH Term's テーマのリンク, ⋯ › Export › Copy Link or
+QR Code).
+
+- `t` is one theme's document (format v1, `ssh-term-theme`), compressed with
+  deflate-raw and encoded as base64url without padding. It is in the
+  fragment, so it never reaches the server. The page reads only `t`; other
+  keys are dropped. A missing, repeated or non-base64url `t` shows a
+  broken-link line and nothing else.
+- It inflates `t` with `DecompressionStream('deflate-raw')`, counting as it
+  goes, and stops past 64KB. The document must hold exactly one theme and
+  pass the app's rules (`theme-format.js`); otherwise only the broken-link
+  line shows: no 見本 and no button.
+- The 見本 is a terminal-like frame in the theme's foreground, background,
+  cursor, selection and 16 ANSI colours, with the name, author, licence and
+  the theme it was based on. Text goes in with `textContent` only.
+- An "Open in SSH Term" button opens `sshtermx://theme?t=<the same t>`, where
+  the app shows its import screen. The page never goes there by itself, on
+  any device. If the page is still in front about 2 seconds after the tap,
+  or in an Android WebView, it shows help and the store links as `/open`
+  does. On a computer it says to open the link on a phone.
+- Languages, the CSP, `noindex` and `no-referrer` are the same as `/open`
+  (the `/*` block of `_headers`); it loads only its own `theme.js`,
+  `theme-format.js`, `common.js`, `open.css` and `theme.css`.
+
+`public/theme-format.js` holds the format v1 rules as the app has them
+(`validateThemeDocument`, `validateThemeBytes`, `decodeThemeLink`,
+`encodeThemeLink`, the text and colour rules), with no DOM, for the browser
+and Node alike. `test/fixtures/theme_format/` is a copy of the app's
+fixtures and `test/fixtures/theme-link.txt` a link the app made; the tests
+check that both sides agree.
+
+## The theme gallery
+
+`https://sshterm.iru-yo.com/themes/` lists the themes people sent to
+[obutora/sshterm-themes](https://github.com/obutora/sshterm-themes), the
+gallery's repository where each theme is reviewed as a pull request.
+`npm run build` makes the pages from that repository's `main`; Cloudflare
+Pages runs it on every deploy, and sshterm-themes calls a deploy hook when
+its `main` changes.
+
+- The build clones the repository with its whole history (`THEMES_REPO`, a
+  URL or path, default `https://github.com/obutora/sshterm-themes.git`;
+  `THEMES_REF`, default `main`) and checks every file under `themes/` again:
+  `themes/<GitHub login>/<id>.json`, one theme the app reads
+  (`theme-format.js`), named after its id, its foreground at 4.5:1 or more
+  on its background (WCAG 2 contrast); no id twice, and no name twice
+  (compared after NFKC, ignoring case). One broken file fails the build with
+  a JSON line per problem and writes nothing, so nothing is published. The
+  id pattern, the name comparison and the contrast are `theme-format.js`'s,
+  which sshterm-themes' check vendors. Unlike that check, the build does not
+  run the JSON Schema (ajv): `validateThemeBytes` already holds every rule
+  the schema has.
+- The list (`/themes/`) shows each theme's small 見本, name, author and
+  licence, in the order the themes came to `main` (the commit on `main` that
+  first added the file; a moved file keeps its date). Its own JS filters by
+  name and by a dark or light background: dark is a background whose
+  relative luminance is under √(1.05 × 0.05) − 0.05 ≈ 0.179, where white
+  and black text contrast equally. That splits the app's 16 presets 8 and 8.
+- Each theme's page (`/themes/<id>/`) has the large 見本, the author,
+  licence, the theme it was based on, the GitHub account that sent it
+  (`https://github.com/<login>`, apart from the author the theme names), an
+  "Open in SSH Term" button with the theme's link (`/theme#t=…`), the same
+  link as a QR code (an SVG made by the build), and the theme's file.
+- The pages are in English; `public/themes/gallery.js` puts them in the
+  reader's language (the five of `/open`). Names and authors are never
+  translated, and every text goes into the HTML escaped. Colours come from
+  the build's `colors.css` files as custom properties: the pages load only
+  the site's own JS, CSS and SVG, and its icon.
+- `/themes/sitemap.xml` lists the gallery, and `robots.txt` points to it.
+  `_headers` removes `X-Robots-Tag: noindex` from `/themes` and `/themes/*`
+  only; the CSP is the same as everywhere.
+- A theme taken down from sshterm-themes leaves the site at the next build.
+  Themes already imported and theme links already shared stay: a link
+  carries the whole theme. The pages say so.
+
+The build's output (`public/themes/index.html`, `colors.css`,
+`sitemap.xml` and one directory per theme) is not committed.
+
 ## Layout
 
-- `public/`: the site, deployed as is to Cloudflare Pages (no build step;
-  output directory `public`). `/open` serves `open.html`, `/app` serves
-  `app.html`. `common.js` holds what both pages share: the platform by user
-  agent, the language and filling in the strings.
+- `public/`: the site, deployed to Cloudflare Pages (build command
+  `npm run build`, output directory `public`). `/open` serves `open.html`,
+  `/app` serves `app.html`, `/theme` serves `theme.html`. `common.js` holds
+  what the pages share: the platform by user agent, the language and filling
+  in the strings.
 - `test/`: `npm test` (Node 22+) checks the link, platform and language
   rules in `public/open.js` and `public/common.js`, and the store URLs in
-  `public/app.js`.
+  `public/app.js`; the theme page and `public/theme-format.js` (with
+  `test/fake-dom.js`, a minimal stand-in for the page's DOM).
+- `public/themes/`: `/themes/format` serves `format.html` (with `format.js`
+  and `format.css`); `schema/v1.json` is the schema and `example.json` the
+  example file shown on the page. `gallery.js` and `gallery.css` are the
+  gallery's.
+- `build/`: the gallery's build (`gallery.js`; `main.js` is `npm run build`).
+- `test/theme-schema.test.js` replays the app's examples against the schema
+  (skipping those the manifest marks `not-expressible`);
+  `test/theme-format-page.test.js` checks the page's strings, that it loads
+  only its own files, its example and theme-link code, and the schema's
+  headers. Both use `ajv` (`npm install` first).
+- `test/gallery-build.test.js` builds throwaway git repositories
+  (`test/themes-repo.js`) into a temporary `public/`;
+  `test/gallery-rules.test.js` checks the rules one by one;
+  `test/gallery-page.test.js` the strings, the filters and `_headers` as
+  Pages applies it. `test/fixtures/presets.json` holds the colours of the
+  app's 16 presets.

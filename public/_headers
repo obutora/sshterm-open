@@ -3,3 +3,15 @@
   X-Robots-Tag: noindex
   Referrer-Policy: no-referrer
   X-Content-Type-Options: nosniff
+
+# The theme gallery is for search engines; every other page stays noindex.
+# Pages applies the matching blocks in order, so these remove the header /* set.
+/themes
+  ! X-Robots-Tag
+
+/themes/*
+  ! X-Robots-Tag
+
+/themes/schema/*
+  Content-Type: application/schema+json
+  Access-Control-Allow-Origin: *

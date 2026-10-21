@@ -1,0 +1,15 @@
+{
+  "format": "ssh-term-theme",
+  "formatVersion": 1,
+  "themes": [
+    {
+      "id": "3f2b8c1d-9e4a-4c7b-8d2e-1a0b9c8d7e6f",
+      "name": "Midnight Ink",
+      "author": "Haga",
+      "license": "CC-BY-4.0",
+      "basedOn": {
+        "name": "Dracula"
+      }
+    }
+  ]
+}

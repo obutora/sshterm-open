@@ -1,0 +1,299 @@
+/* The theme gallery (/themes/ and /themes/<id>/). The colours of each 見本
+   come from the build's colors.css: custom properties --t-<colour key> on
+   .t-<id> (no inline styles: the CSP allows only the site's own files). */
+
+:root {
+  --bg: #f6f7f9;
+  --fg: #1d2129;
+  --muted: #5b6270;
+  --line: #d9dde3;
+  --card: #fff;
+  --accent: #6d4fd8;
+  --on-accent: #fff;
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1e1f29;
+    --fg: #f1f2f6;
+    --muted: #a7abbb;
+    --line: #3a3c4e;
+    --card: #262836;
+    --accent: #bd93f9;
+    --on-accent: #1e1f29;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font: 16px/1.6 system-ui, -apple-system, "Segoe UI", "Hiragino Sans", "Noto Sans CJK JP", sans-serif;
+}
+
+main {
+  max-width: 60rem;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 4rem;
+}
+
+h1 {
+  margin: 0 0 0.75rem;
+  font-size: 1.6rem;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+h2 {
+  margin: 0;
+  font-size: 1rem;
+  overflow-wrap: anywhere;
+}
+
+a {
+  color: var(--accent);
+}
+
+a:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.prompt {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  color: var(--accent);
+}
+
+.lead,
+.note {
+  color: var(--muted);
+}
+
+.back {
+  margin: 0 0 1rem;
+}
+
+/* The list */
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  margin: 1.5rem 0 1rem;
+}
+
+.filters label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--muted);
+}
+
+.filters input,
+.filters select {
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: 0.5rem;
+  background: var(--card);
+  color: var(--fg);
+  font: inherit;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cards > li {
+  padding: 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  background: var(--card);
+}
+
+.cards a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.cards .name {
+  margin-top: 0.6rem;
+}
+
+.cards a:hover .name {
+  text-decoration: underline;
+}
+
+.meta {
+  margin: 0.15rem 0 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  overflow-wrap: anywhere;
+}
+
+/* 見本 */
+
+.mini,
+.terminal {
+  border-radius: 0.5rem;
+  background: var(--t-background);
+  color: var(--t-foreground);
+  font: 13px/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.line {
+  white-space: pre;
+}
+
+.mini {
+  padding: 0.6rem 0.7rem;
+}
+
+.terminal {
+  margin: 1rem 0 1.5rem;
+  padding: 0.75rem 0.9rem;
+  overflow-x: auto;
+}
+
+.swatches,
+.palette {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 0.25rem;
+  margin-top: 0.5rem;
+}
+
+.swatches > span,
+.palette > span {
+  height: 0.9rem;
+  border-radius: 0.2rem;
+}
+
+.palette > span {
+  height: 1.25rem;
+}
+
+.c-black { color: var(--t-black); }
+.c-red { color: var(--t-red); }
+.c-green { color: var(--t-green); }
+.c-yellow { color: var(--t-yellow); }
+.c-blue { color: var(--t-blue); }
+.c-magenta { color: var(--t-magenta); }
+.c-cyan { color: var(--t-cyan); }
+.c-white { color: var(--t-white); }
+.c-brightBlack { color: var(--t-brightBlack); }
+.c-brightRed { color: var(--t-brightRed); }
+.c-brightGreen { color: var(--t-brightGreen); }
+.c-brightYellow { color: var(--t-brightYellow); }
+.c-brightBlue { color: var(--t-brightBlue); }
+.c-brightMagenta { color: var(--t-brightMagenta); }
+.c-brightCyan { color: var(--t-brightCyan); }
+.c-brightWhite { color: var(--t-brightWhite); }
+
+.sw-black { background: var(--t-black); }
+.sw-red { background: var(--t-red); }
+.sw-green { background: var(--t-green); }
+.sw-yellow { background: var(--t-yellow); }
+.sw-blue { background: var(--t-blue); }
+.sw-magenta { background: var(--t-magenta); }
+.sw-cyan { background: var(--t-cyan); }
+.sw-white { background: var(--t-white); }
+.sw-brightBlack { background: var(--t-brightBlack); }
+.sw-brightRed { background: var(--t-brightRed); }
+.sw-brightGreen { background: var(--t-brightGreen); }
+.sw-brightYellow { background: var(--t-brightYellow); }
+.sw-brightBlue { background: var(--t-brightBlue); }
+.sw-brightMagenta { background: var(--t-brightMagenta); }
+.sw-brightCyan { background: var(--t-brightCyan); }
+.sw-brightWhite { background: var(--t-brightWhite); }
+
+.sel { background: var(--t-selection); }
+.cur { background: var(--t-cursor); }
+
+/* A theme's page */
+
+.facts {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.35rem 1rem;
+  margin: 0 0 1.5rem;
+}
+
+.facts > div {
+  display: contents;
+}
+
+.facts dt {
+  color: var(--muted);
+}
+
+.facts dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.button {
+  display: inline-block;
+  padding: 0.8rem 1.4rem;
+  border-radius: 0.75rem;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.button:active {
+  opacity: 0.85;
+}
+
+.qr {
+  margin: 1.5rem 0;
+}
+
+.qr img {
+  display: block;
+  border-radius: 0.5rem;
+}
+
+.qr figcaption {
+  margin-top: 0.5rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* 投稿と取り下げ */
+
+.about {
+  margin-top: 2.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+}
+
+.about h2 {
+  margin-top: 1rem;
+  color: var(--fg);
+}
+
+.about p {
+  margin: 0.35rem 0;
+}

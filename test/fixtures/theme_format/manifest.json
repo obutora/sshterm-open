@@ -1,0 +1,570 @@
+{
+  "about": "Documents of the SSH Term theme format v1 and what the app makes of them. Replayed by the app's tests and, for the JSON Schema, by sshterm-open.",
+  "fields": {
+    "file": "Path from this directory.",
+    "valid": "Whether the app reads it.",
+    "themes": "valid: how many themes it holds.",
+    "reason": "invalid: the problem's code (tooLarge, notJson, notThemeFile, newerVersion, badVersion, themeCount, unknownField, badSchema, missingField, wrongType, badId, duplicateId, badText, badLicense, badColor, missingColor).",
+    "theme": "invalid: 0-based index in themes of the theme at fault; null for the document itself.",
+    "field": "invalid: the field at fault, a dotted path in the theme (name, basedOn.author, colors.red) or in the document (formatVersion, themes); null for the whole.",
+    "textProblem": "badText: empty, tooLong or forbiddenCharacter (names and authors are trimmed, then 1-40 code points without control or direction characters).",
+    "jsonSchema": "\"same\": a JSON Schema validator (plus JSON.parse) reaches the same verdict. \"not-expressible\": it cannot (size in bytes, trimming, IDs unique across themes); a checker needs code for these on top of the schema.",
+    "note": "What the case is about."
+  },
+  "cases": [
+    {
+      "file": "pass/full.json",
+      "valid": true,
+      "themes": 1,
+      "jsonSchema": "same",
+      "note": "All 23 colours; 元にしたテーマ with name, author and licence."
+    },
+    {
+      "file": "pass/preset-based.json",
+      "valid": true,
+      "themes": 1,
+      "jsonSchema": "same",
+      "note": "元にしたテーマ is a preset: its name alone."
+    },
+    {
+      "file": "pass/no-based-on.json",
+      "valid": true,
+      "themes": 1,
+      "jsonSchema": "same",
+      "note": "No 元にしたテーマ."
+    },
+    {
+      "file": "pass/required-colors-only.json",
+      "valid": true,
+      "themes": 1,
+      "jsonSchema": "same",
+      "note": "Only 前景, 背景 and the 16 ANSI: the cursor becomes the 前景 (#F8F8F2), the selection the 前景 at 40% (#F8F8F266), the search hits the app default (#FFB86C, #FF79C6, #282A36)."
+    },
+    {
+      "file": "pass/lowercase-and-alpha.json",
+      "valid": true,
+      "themes": 1,
+      "jsonSchema": "same",
+      "note": "Lowercase HEX and #RRGGBBAA."
+    },
+    {
+      "file": "pass/japanese.json",
+      "valid": true,
+      "themes": 1,
+      "jsonSchema": "same",
+      "note": "Non-ASCII name and author."
+    },
+    {
+      "file": "pass/two-themes.json",
+      "valid": true,
+      "themes": 2,
+      "jsonSchema": "same",
+      "note": "Two themes."
+    },
+    {
+      "file": "pass/32-themes.json",
+      "valid": true,
+      "themes": 32,
+      "jsonSchema": "same",
+      "note": "The most a file holds."
+    },
+    {
+      "file": "pass/name-40-code-points.json",
+      "valid": true,
+      "themes": 1,
+      "jsonSchema": "same",
+      "note": "40 code points (80 UTF-16 units): length counts code points, as JSON Schema maxLength does."
+    },
+    {
+      "file": "pass/name-padded-40.json",
+      "valid": true,
+      "themes": 1,
+      "jsonSchema": "not-expressible",
+      "note": "40 code points once the surrounding spaces go; the app keeps the trimmed text."
+    },
+    {
+      "file": "pass/exactly-64kb.json",
+      "valid": true,
+      "themes": 1,
+      "jsonSchema": "not-expressible",
+      "note": "65536 bytes, padded with spaces between tokens: the limit is 64 × 1024 bytes of UTF-8, inclusive."
+    },
+    {
+      "file": "pass/with-schema.json",
+      "valid": true,
+      "themes": 1,
+      "jsonSchema": "same",
+      "note": "\"$schema\" set to the v1 schema's URL, for editors; the app ignores it."
+    },
+    {
+      "file": "fail/over-64kb.json",
+      "valid": false,
+      "reason": "tooLarge",
+      "theme": null,
+      "field": null,
+      "jsonSchema": "not-expressible",
+      "note": "65537 bytes; otherwise valid."
+    },
+    {
+      "file": "fail/not-json.json",
+      "valid": false,
+      "reason": "notJson",
+      "theme": null,
+      "field": null,
+      "jsonSchema": "same",
+      "note": "Truncated JSON."
+    },
+    {
+      "file": "fail/wrong-format.json",
+      "valid": false,
+      "reason": "notThemeFile",
+      "theme": null,
+      "field": null,
+      "jsonSchema": "same",
+      "note": "format is not \"ssh-term-theme\"."
+    },
+    {
+      "file": "fail/not-an-object.json",
+      "valid": false,
+      "reason": "notThemeFile",
+      "theme": null,
+      "field": null,
+      "jsonSchema": "same",
+      "note": "The top level is an array."
+    },
+    {
+      "file": "fail/format-version-2.json",
+      "valid": false,
+      "reason": "newerVersion",
+      "theme": null,
+      "field": "formatVersion",
+      "jsonSchema": "same",
+      "note": "A newer version: the app says to update it. A schema (const 1) refuses it too but cannot tell this reason from a broken version."
+    },
+    {
+      "file": "fail/format-version-missing.json",
+      "valid": false,
+      "reason": "badVersion",
+      "theme": null,
+      "field": "formatVersion",
+      "jsonSchema": "same",
+      "note": "No formatVersion."
+    },
+    {
+      "file": "fail/format-version-string.json",
+      "valid": false,
+      "reason": "badVersion",
+      "theme": null,
+      "field": "formatVersion",
+      "jsonSchema": "same",
+      "note": "formatVersion is a string."
+    },
+    {
+      "file": "fail/themes-0.json",
+      "valid": false,
+      "reason": "themeCount",
+      "theme": null,
+      "field": "themes",
+      "jsonSchema": "same",
+      "note": "No themes."
+    },
+    {
+      "file": "fail/themes-33.json",
+      "valid": false,
+      "reason": "themeCount",
+      "theme": null,
+      "field": "themes",
+      "jsonSchema": "same",
+      "note": "One more than a file holds."
+    },
+    {
+      "file": "fail/themes-missing.json",
+      "valid": false,
+      "reason": "missingField",
+      "theme": null,
+      "field": "themes",
+      "jsonSchema": "same",
+      "note": "No themes key."
+    },
+    {
+      "file": "fail/unknown-top-field.json",
+      "valid": false,
+      "reason": "unknownField",
+      "theme": null,
+      "field": "comment",
+      "jsonSchema": "same",
+      "note": "A key the document does not have."
+    },
+    {
+      "file": "fail/schema-other-url.json",
+      "valid": false,
+      "reason": "badSchema",
+      "theme": null,
+      "field": "$schema",
+      "jsonSchema": "same",
+      "note": "\"$schema\" may only be the v1 schema's URL."
+    },
+    {
+      "file": "fail/unknown-theme-field.json",
+      "valid": false,
+      "reason": "unknownField",
+      "theme": 0,
+      "field": "url",
+      "jsonSchema": "same",
+      "note": "An author URL: the format has none."
+    },
+    {
+      "file": "fail/unknown-theme-field-received.json",
+      "valid": false,
+      "reason": "unknownField",
+      "theme": 0,
+      "field": "received",
+      "jsonSchema": "same",
+      "note": "The app's received mark is never written."
+    },
+    {
+      "file": "fail/unknown-based-on-field.json",
+      "valid": false,
+      "reason": "unknownField",
+      "theme": 0,
+      "field": "basedOn.url",
+      "jsonSchema": "same",
+      "note": "A key 元にしたテーマ does not have."
+    },
+    {
+      "file": "fail/unknown-color.json",
+      "valid": false,
+      "reason": "unknownField",
+      "theme": 0,
+      "field": "colors.purple",
+      "jsonSchema": "same",
+      "note": "Windows Terminal's name for magenta is not a v1 colour."
+    },
+    {
+      "file": "fail/bad-color-short.json",
+      "valid": false,
+      "reason": "badColor",
+      "theme": 0,
+      "field": "colors.red",
+      "jsonSchema": "same",
+      "note": "#RGB is not accepted."
+    },
+    {
+      "file": "fail/bad-color-no-hash.json",
+      "valid": false,
+      "reason": "badColor",
+      "theme": 0,
+      "field": "colors.background",
+      "jsonSchema": "same",
+      "note": "No #."
+    },
+    {
+      "file": "fail/bad-color-number.json",
+      "valid": false,
+      "reason": "badColor",
+      "theme": 0,
+      "field": "colors.cursor",
+      "jsonSchema": "same",
+      "note": "A number, not a string."
+    },
+    {
+      "file": "fail/bad-color-space.json",
+      "valid": false,
+      "reason": "badColor",
+      "theme": 0,
+      "field": "colors.green",
+      "jsonSchema": "same",
+      "note": "Surrounding spaces are not trimmed in colours."
+    },
+    {
+      "file": "fail/bad-color-not-hex.json",
+      "valid": false,
+      "reason": "badColor",
+      "theme": 0,
+      "field": "colors.blue",
+      "jsonSchema": "same",
+      "note": "Not hexadecimal."
+    },
+    {
+      "file": "fail/missing-foreground.json",
+      "valid": false,
+      "reason": "missingColor",
+      "theme": 0,
+      "field": "colors.foreground",
+      "jsonSchema": "same",
+      "note": "前景 is required."
+    },
+    {
+      "file": "fail/missing-ansi.json",
+      "valid": false,
+      "reason": "missingColor",
+      "theme": 0,
+      "field": "colors.brightBlue",
+      "jsonSchema": "same",
+      "note": "All 16 ANSI colours are required."
+    },
+    {
+      "file": "fail/second-theme-missing-background.json",
+      "valid": false,
+      "reason": "missingColor",
+      "theme": 1,
+      "field": "colors.background",
+      "jsonSchema": "same",
+      "note": "The second theme is at fault."
+    },
+    {
+      "file": "fail/name-control-character.json",
+      "valid": false,
+      "reason": "badText",
+      "theme": 0,
+      "field": "name",
+      "textProblem": "forbiddenCharacter",
+      "jsonSchema": "same",
+      "note": "U+0007 in the name."
+    },
+    {
+      "file": "fail/name-newline.json",
+      "valid": false,
+      "reason": "badText",
+      "theme": 0,
+      "field": "name",
+      "textProblem": "forbiddenCharacter",
+      "jsonSchema": "same",
+      "note": "U+000A in the name."
+    },
+    {
+      "file": "fail/name-c1-control.json",
+      "valid": false,
+      "reason": "badText",
+      "theme": 0,
+      "field": "name",
+      "textProblem": "forbiddenCharacter",
+      "jsonSchema": "same",
+      "note": "U+0085 (C1 control) in the name."
+    },
+    {
+      "file": "fail/name-rlo.json",
+      "valid": false,
+      "reason": "badText",
+      "theme": 0,
+      "field": "name",
+      "textProblem": "forbiddenCharacter",
+      "jsonSchema": "same",
+      "note": "U+202E RIGHT-TO-LEFT OVERRIDE in the name."
+    },
+    {
+      "file": "fail/author-lrm.json",
+      "valid": false,
+      "reason": "badText",
+      "theme": 0,
+      "field": "author",
+      "textProblem": "forbiddenCharacter",
+      "jsonSchema": "same",
+      "note": "U+200E LEFT-TO-RIGHT MARK in the author."
+    },
+    {
+      "file": "fail/author-isolate.json",
+      "valid": false,
+      "reason": "badText",
+      "theme": 0,
+      "field": "author",
+      "textProblem": "forbiddenCharacter",
+      "jsonSchema": "same",
+      "note": "U+2067/U+2069 isolates in the author."
+    },
+    {
+      "file": "fail/name-41-code-points.json",
+      "valid": false,
+      "reason": "badText",
+      "theme": 0,
+      "field": "name",
+      "textProblem": "tooLong",
+      "jsonSchema": "same",
+      "note": "41 code points."
+    },
+    {
+      "file": "fail/name-41-astral.json",
+      "valid": false,
+      "reason": "badText",
+      "theme": 0,
+      "field": "name",
+      "textProblem": "tooLong",
+      "jsonSchema": "same",
+      "note": "41 code points (82 UTF-16 units)."
+    },
+    {
+      "file": "fail/name-blank.json",
+      "valid": false,
+      "reason": "badText",
+      "theme": 0,
+      "field": "name",
+      "textProblem": "empty",
+      "jsonSchema": "not-expressible",
+      "note": "Only spaces: nothing left once trimmed. A pattern can only approximate the trim (whitespace sets differ)."
+    },
+    {
+      "file": "fail/author-empty.json",
+      "valid": false,
+      "reason": "badText",
+      "theme": 0,
+      "field": "author",
+      "textProblem": "empty",
+      "jsonSchema": "same",
+      "note": "Empty author."
+    },
+    {
+      "file": "fail/based-on-author-rlo.json",
+      "valid": false,
+      "reason": "badText",
+      "theme": 0,
+      "field": "basedOn.author",
+      "textProblem": "forbiddenCharacter",
+      "jsonSchema": "same",
+      "note": "The rule covers 元にしたテーマ too."
+    },
+    {
+      "file": "fail/unknown-license.json",
+      "valid": false,
+      "reason": "badLicense",
+      "theme": 0,
+      "field": "license",
+      "jsonSchema": "same",
+      "note": "Only CC0-1.0, CC-BY-4.0 and MIT."
+    },
+    {
+      "file": "fail/license-lowercase.json",
+      "valid": false,
+      "reason": "badLicense",
+      "theme": 0,
+      "field": "license",
+      "jsonSchema": "same",
+      "note": "SPDX IDs as written: case matters."
+    },
+    {
+      "file": "fail/based-on-unknown-license.json",
+      "valid": false,
+      "reason": "badLicense",
+      "theme": 0,
+      "field": "basedOn.license",
+      "jsonSchema": "same",
+      "note": "元にしたテーマ's licence too."
+    },
+    {
+      "file": "fail/missing-license.json",
+      "valid": false,
+      "reason": "missingField",
+      "theme": 0,
+      "field": "license",
+      "jsonSchema": "same",
+      "note": "No licence."
+    },
+    {
+      "file": "fail/missing-author.json",
+      "valid": false,
+      "reason": "missingField",
+      "theme": 0,
+      "field": "author",
+      "jsonSchema": "same",
+      "note": "No author."
+    },
+    {
+      "file": "fail/missing-id.json",
+      "valid": false,
+      "reason": "missingField",
+      "theme": 0,
+      "field": "id",
+      "jsonSchema": "same",
+      "note": "No ID."
+    },
+    {
+      "file": "fail/missing-colors.json",
+      "valid": false,
+      "reason": "missingField",
+      "theme": 0,
+      "field": "colors",
+      "jsonSchema": "same",
+      "note": "No colours."
+    },
+    {
+      "file": "fail/based-on-missing-name.json",
+      "valid": false,
+      "reason": "missingField",
+      "theme": 0,
+      "field": "basedOn.name",
+      "jsonSchema": "same",
+      "note": "元にしたテーマ needs a name."
+    },
+    {
+      "file": "fail/based-on-null.json",
+      "valid": false,
+      "reason": "wrongType",
+      "theme": 0,
+      "field": "basedOn",
+      "jsonSchema": "same",
+      "note": "null is not an object: leave basedOn out instead."
+    },
+    {
+      "file": "fail/name-number.json",
+      "valid": false,
+      "reason": "wrongType",
+      "theme": 0,
+      "field": "name",
+      "jsonSchema": "same",
+      "note": "A number for the name."
+    },
+    {
+      "file": "fail/theme-not-object.json",
+      "valid": false,
+      "reason": "wrongType",
+      "theme": 0,
+      "field": null,
+      "jsonSchema": "same",
+      "note": "A theme that is a string."
+    },
+    {
+      "file": "fail/themes-not-array.json",
+      "valid": false,
+      "reason": "wrongType",
+      "theme": null,
+      "field": "themes",
+      "jsonSchema": "same",
+      "note": "themes is one object, not an array."
+    },
+    {
+      "file": "fail/id-uppercase.json",
+      "valid": false,
+      "reason": "badId",
+      "theme": 0,
+      "field": "id",
+      "jsonSchema": "same",
+      "note": "UUIDs are written lowercase."
+    },
+    {
+      "file": "fail/id-v1.json",
+      "valid": false,
+      "reason": "badId",
+      "theme": 0,
+      "field": "id",
+      "jsonSchema": "same",
+      "note": "A version 1 UUID."
+    },
+    {
+      "file": "fail/id-not-uuid.json",
+      "valid": false,
+      "reason": "badId",
+      "theme": 0,
+      "field": "id",
+      "jsonSchema": "same",
+      "note": "Not a UUID."
+    },
+    {
+      "file": "fail/duplicate-ids.json",
+      "valid": false,
+      "reason": "duplicateId",
+      "theme": 1,
+      "field": "id",
+      "jsonSchema": "not-expressible",
+      "note": "Two themes of one file share an ID. JSON Schema cannot compare a property across array items."
+    }
+  ]
+}

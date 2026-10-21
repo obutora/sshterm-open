@@ -1,0 +1,220 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sshterm.iru-yo.com/themes/schema/v1.json",
+  "title": "SSH Term themes, format v1",
+  "description": "Terminal colour themes for SSH Term. The format and the rules a schema cannot say (64 KB per file, names trimmed, IDs unique in a file): https://sshterm.iru-yo.com/themes/format",
+  "type": "object",
+  "required": [
+    "format",
+    "formatVersion",
+    "themes"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "const": "https://sshterm.iru-yo.com/themes/schema/v1.json",
+      "description": "Optional, for editors. Only this URL."
+    },
+    "format": {
+      "const": "ssh-term-theme"
+    },
+    "formatVersion": {
+      "const": 1
+    },
+    "themes": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 32,
+      "items": {
+        "$ref": "#/$defs/theme"
+      },
+      "description": "1 to 32 themes, each with its own id."
+    }
+  },
+  "$defs": {
+    "theme": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "author",
+        "license",
+        "colors"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "description": "A UUID v4 in lowercase. A new theme gets a new random one; a theme sent again with the same id may replace the one people have."
+        },
+        "name": {
+          "$ref": "#/$defs/text"
+        },
+        "author": {
+          "$ref": "#/$defs/text"
+        },
+        "license": {
+          "$ref": "#/$defs/license"
+        },
+        "basedOn": {
+          "type": "object",
+          "required": [
+            "name"
+          ],
+          "additionalProperties": false,
+          "description": "The theme this one was made from, one step back. For a preset, its name alone.",
+          "properties": {
+            "name": {
+              "$ref": "#/$defs/text"
+            },
+            "author": {
+              "$ref": "#/$defs/text"
+            },
+            "license": {
+              "$ref": "#/$defs/license"
+            }
+          }
+        },
+        "colors": {
+          "type": "object",
+          "required": [
+            "foreground",
+            "background",
+            "black",
+            "red",
+            "green",
+            "yellow",
+            "blue",
+            "magenta",
+            "cyan",
+            "white",
+            "brightBlack",
+            "brightRed",
+            "brightGreen",
+            "brightYellow",
+            "brightBlue",
+            "brightMagenta",
+            "brightCyan",
+            "brightWhite"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "foreground": {
+              "$ref": "#/$defs/color",
+              "description": "Foreground. Required."
+            },
+            "background": {
+              "$ref": "#/$defs/color",
+              "description": "Background. Required."
+            },
+            "cursor": {
+              "$ref": "#/$defs/color",
+              "description": "Cursor. Optional; the foreground when missing."
+            },
+            "selection": {
+              "$ref": "#/$defs/color",
+              "description": "Selection. Optional; the foreground at 40% opacity (alpha 66) when missing."
+            },
+            "black": {
+              "$ref": "#/$defs/color",
+              "description": "ANSI 0. Required."
+            },
+            "red": {
+              "$ref": "#/$defs/color",
+              "description": "ANSI 1. Required."
+            },
+            "green": {
+              "$ref": "#/$defs/color",
+              "description": "ANSI 2. Required."
+            },
+            "yellow": {
+              "$ref": "#/$defs/color",
+              "description": "ANSI 3. Required."
+            },
+            "blue": {
+              "$ref": "#/$defs/color",
+              "description": "ANSI 4. Required."
+            },
+            "magenta": {
+              "$ref": "#/$defs/color",
+              "description": "ANSI 5. Required."
+            },
+            "cyan": {
+              "$ref": "#/$defs/color",
+              "description": "ANSI 6. Required."
+            },
+            "white": {
+              "$ref": "#/$defs/color",
+              "description": "ANSI 7. Required."
+            },
+            "brightBlack": {
+              "$ref": "#/$defs/color",
+              "description": "ANSI 8. Required."
+            },
+            "brightRed": {
+              "$ref": "#/$defs/color",
+              "description": "ANSI 9. Required."
+            },
+            "brightGreen": {
+              "$ref": "#/$defs/color",
+              "description": "ANSI 10. Required."
+            },
+            "brightYellow": {
+              "$ref": "#/$defs/color",
+              "description": "ANSI 11. Required."
+            },
+            "brightBlue": {
+              "$ref": "#/$defs/color",
+              "description": "ANSI 12. Required."
+            },
+            "brightMagenta": {
+              "$ref": "#/$defs/color",
+              "description": "ANSI 13. Required."
+            },
+            "brightCyan": {
+              "$ref": "#/$defs/color",
+              "description": "ANSI 14. Required."
+            },
+            "brightWhite": {
+              "$ref": "#/$defs/color",
+              "description": "ANSI 15. Required."
+            },
+            "searchHitBackground": {
+              "$ref": "#/$defs/color",
+              "description": "Background of search hits. Optional; #FFB86C when missing."
+            },
+            "searchHitBackgroundCurrent": {
+              "$ref": "#/$defs/color",
+              "description": "Background of the current search hit. Optional; #FF79C6 when missing."
+            },
+            "searchHitForeground": {
+              "$ref": "#/$defs/color",
+              "description": "Text of search hits. Optional; #282A36 when missing."
+            }
+          }
+        }
+      }
+    },
+    "text": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 40,
+      "pattern": "^[^\\u0000-\\u001F\\u007F-\\u009F\\u061C\\u200E\\u200F\\u202A-\\u202E\\u2066-\\u2069]*[^\\s\\u0000-\\u001F\\u007F-\\u009F\\u061C\\u200E\\u200F\\u202A-\\u202E\\u2066-\\u2069][^\\u0000-\\u001F\\u007F-\\u009F\\u061C\\u200E\\u200F\\u202A-\\u202E\\u2066-\\u2069]*$",
+      "description": "Plain text: 1-40 code points once the surrounding white space is trimmed (the app keeps the trimmed text). No control characters (U+0000-U+001F, U+007F-U+009F) and none that turn the direction (U+061C, U+200E, U+200F, U+202A-U+202E, U+2066-U+2069)."
+    },
+    "license": {
+      "enum": [
+        "CC0-1.0",
+        "CC-BY-4.0",
+        "MIT"
+      ],
+      "description": "SPDX ID, as written."
+    },
+    "color": {
+      "type": "string",
+      "pattern": "^#[0-9A-Fa-f]{6}([0-9A-Fa-f]{2})?$",
+      "description": "#RRGGBB or #RRGGBBAA (alpha last, as in CSS)."
+    }
+  }
+}
