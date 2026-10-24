@@ -1,197 +1,9 @@
-/* The theme gallery (/themes/ and /themes/<id>/). The colours of each 見本
-   come from the build's colors.css: custom properties --t-<colour key> on
-   .t-<id> (no inline styles: the CSP allows only the site's own files). */
+/* The theme gallery (/themes/ and /themes/<id>/), on top of /sheet.css. The
+   colours of each 見本 come from the build's colors.css: custom properties
+   --t-<colour key> on .t-<id> (no inline styles: the CSP allows only the
+   site's own files). */
 
-:root {
-  --bg: #f6f7f9;
-  --fg: #1d2129;
-  --muted: #5b6270;
-  --line: #d9dde3;
-  --card: #fff;
-  --accent: #6d4fd8;
-  --on-accent: #fff;
-  color-scheme: light dark;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #1e1f29;
-    --fg: #f1f2f6;
-    --muted: #a7abbb;
-    --line: #3a3c4e;
-    --card: #262836;
-    --accent: #bd93f9;
-    --on-accent: #1e1f29;
-  }
-}
-
-* {
-  box-sizing: border-box;
-}
-
-[hidden] {
-  display: none !important;
-}
-
-html {
-  -webkit-text-size-adjust: 100%;
-}
-
-body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--fg);
-  font: 16px/1.6 system-ui, -apple-system, "Segoe UI", "Hiragino Sans", "Noto Sans CJK JP", sans-serif;
-}
-
-main {
-  max-width: 60rem;
-  margin: 0 auto;
-  padding: 2rem 1.25rem 4rem;
-}
-
-h1 {
-  margin: 0 0 0.75rem;
-  font-size: 1.6rem;
-  line-height: 1.3;
-  overflow-wrap: anywhere;
-}
-
-h2 {
-  margin: 0;
-  font-size: 1rem;
-  overflow-wrap: anywhere;
-}
-
-a {
-  color: var(--accent);
-}
-
-a:focus-visible,
-input:focus-visible,
-select:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-}
-
-.prompt {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  color: var(--accent);
-}
-
-.lead,
-.note {
-  color: var(--muted);
-}
-
-.back {
-  margin: 0 0 1rem;
-}
-
-/* The list */
-
-.filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem 1.5rem;
-  margin: 1.5rem 0 1rem;
-}
-
-.filters label {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: var(--muted);
-}
-
-.filters input,
-.filters select {
-  padding: 0.4rem 0.6rem;
-  border: 1px solid var(--line);
-  border-radius: 0.5rem;
-  background: var(--card);
-  color: var(--fg);
-  font: inherit;
-}
-
-.cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
-  gap: 1rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.cards > li {
-  padding: 0.75rem;
-  border: 1px solid var(--line);
-  border-radius: 0.75rem;
-  background: var(--card);
-}
-
-.cards a {
-  color: inherit;
-  text-decoration: none;
-}
-
-.cards .name {
-  margin-top: 0.6rem;
-}
-
-.cards a:hover .name {
-  text-decoration: underline;
-}
-
-.meta {
-  margin: 0.15rem 0 0;
-  color: var(--muted);
-  font-size: 0.9rem;
-  overflow-wrap: anywhere;
-}
-
-/* 見本 */
-
-.mini,
-.terminal {
-  border-radius: 0.5rem;
-  background: var(--t-background);
-  color: var(--t-foreground);
-  font: 13px/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-}
-
-.line {
-  white-space: pre;
-}
-
-.mini {
-  padding: 0.6rem 0.7rem;
-}
-
-.terminal {
-  margin: 1rem 0 1.5rem;
-  padding: 0.75rem 0.9rem;
-  overflow-x: auto;
-}
-
-.swatches,
-.palette {
-  display: grid;
-  grid-template-columns: repeat(8, 1fr);
-  gap: 0.25rem;
-  margin-top: 0.5rem;
-}
-
-.swatches > span,
-.palette > span {
-  height: 0.9rem;
-  border-radius: 0.2rem;
-}
-
-.palette > span {
-  height: 1.25rem;
-}
-
+.c-foreground { color: var(--t-foreground); }
 .c-black { color: var(--t-black); }
 .c-red { color: var(--t-red); }
 .c-green { color: var(--t-green); }
@@ -209,91 +21,523 @@ select:focus-visible {
 .c-brightCyan { color: var(--t-brightCyan); }
 .c-brightWhite { color: var(--t-brightWhite); }
 
-.sw-black { background: var(--t-black); }
-.sw-red { background: var(--t-red); }
-.sw-green { background: var(--t-green); }
-.sw-yellow { background: var(--t-yellow); }
-.sw-blue { background: var(--t-blue); }
-.sw-magenta { background: var(--t-magenta); }
-.sw-cyan { background: var(--t-cyan); }
-.sw-white { background: var(--t-white); }
-.sw-brightBlack { background: var(--t-brightBlack); }
-.sw-brightRed { background: var(--t-brightRed); }
-.sw-brightGreen { background: var(--t-brightGreen); }
-.sw-brightYellow { background: var(--t-brightYellow); }
-.sw-brightBlue { background: var(--t-brightBlue); }
-.sw-brightMagenta { background: var(--t-brightMagenta); }
-.sw-brightCyan { background: var(--t-brightCyan); }
-.sw-brightWhite { background: var(--t-brightWhite); }
+.b-selection { background: var(--t-selection); }
+.b-cursor { background: var(--t-cursor); }
+.b-black { background: var(--t-black); }
+.b-red { background: var(--t-red); }
+.b-green { background: var(--t-green); }
+.b-yellow { background: var(--t-yellow); }
+.b-blue { background: var(--t-blue); }
+.b-magenta { background: var(--t-magenta); }
+.b-cyan { background: var(--t-cyan); }
+.b-white { background: var(--t-white); }
+.b-brightBlack { background: var(--t-brightBlack); }
+.b-brightRed { background: var(--t-brightRed); }
+.b-brightGreen { background: var(--t-brightGreen); }
+.b-brightYellow { background: var(--t-brightYellow); }
+.b-brightBlue { background: var(--t-brightBlue); }
+.b-brightMagenta { background: var(--t-brightMagenta); }
+.b-brightCyan { background: var(--t-brightCyan); }
+.b-brightWhite { background: var(--t-brightWhite); }
 
-.sel { background: var(--t-selection); }
-.cur { background: var(--t-cursor); }
+.terminal {
+  background: var(--t-background);
+  color: var(--t-foreground);
+}
 
-/* A theme's page */
+/* ── The list ───────────────────────────────────────────────────────────── */
 
-.facts {
+/* The filters: the name, then the backgrounds as a row of cells. */
+
+.filters {
   display: grid;
-  grid-template-columns: max-content 1fr;
-  gap: 0.35rem 1rem;
-  margin: 0 0 1.5rem;
+  border-bottom: 1px solid var(--rule);
 }
 
-.facts > div {
-  display: contents;
+.search {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--rule);
 }
 
-.facts dt {
+.search > span,
+.tones label {
+  font: 500 11px/1.3 var(--mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.search > span {
+  padding-left: var(--pad);
   color: var(--muted);
+  white-space: nowrap;
 }
 
-.facts dd {
+.search input {
+  flex: 1;
+  min-width: 0;
+  height: 52px;
+  padding: 0 var(--pad);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--ink);
+  font: 16px var(--sans);
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.search input:focus-visible {
+  outline: 0;
+  box-shadow: inset 0 -2px 0 var(--accent);
+}
+
+.tones {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  min-width: 0;
   margin: 0;
-  overflow-wrap: anywhere;
+  padding: 0;
+  border: 0;
 }
 
-.button {
-  display: inline-block;
-  padding: 0.8rem 1.4rem;
-  border-radius: 0.75rem;
+.tones legend {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.tones label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  height: 52px;
+  padding: 0 var(--pad);
+  cursor: pointer;
+}
+
+.tones label + label {
+  border-left: 1px solid var(--rule);
+}
+
+.tones input {
+  flex: none;
+  width: 9px;
+  height: 9px;
+  margin: 0;
+  border: 1px solid currentColor;
+  border-radius: 0;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.tones input:checked {
+  border-color: var(--accent);
   background: var(--accent);
-  color: var(--on-accent);
-  font-weight: 600;
+}
+
+.tones input:focus-visible {
+  outline-offset: 3px;
+}
+
+.tones label:has(input:checked) {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.tones .n {
+  margin-left: auto;
+  opacity: 0.6;
+}
+
+@media (min-width: 900px) {
+  .filters {
+    grid-template-columns: minmax(0, 1fr) minmax(380px, 520px);
+  }
+
+  .search {
+    border-bottom: 0;
+  }
+
+  .tones {
+    border-left: 1px solid var(--rule);
+  }
+}
+
+/* The plates: each theme painted whole, its 16 colours down the left edge,
+   its 見本 above and its title block below. Every third plate, from the first,
+   is large: across the sheet on a phone; two cells square on a wide screen,
+   left and right in turn, so the plates lock together like bricks. */
+
+.plates {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-flow: row dense;
+  gap: 1px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* The rules between plates: each plate's outline over the 1px gaps, so a
+   cell the last row leaves empty stays paper. */
+.plates > li {
+  display: flex;
+  min-width: 0;
+  outline: 1px solid var(--rule);
+}
+
+.plates > li:nth-child(3n+1) {
+  grid-column: 1 / -1;
+}
+
+.plates a {
+  display: flex;
+  flex: 1;
+  min-width: 0;
   text-decoration: none;
 }
 
-.button:active {
-  opacity: 0.85;
+.plate {
+  --dim: color-mix(in srgb, var(--t-foreground) 76%, var(--t-background));
+  --hair: color-mix(in srgb, var(--t-foreground) 24%, var(--t-background));
+  container-type: inline-size;
+  position: relative;
+  flex: 1;
+  display: grid;
+  grid-template-columns: 8px minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) auto;
+  min-width: 0;
+  background: var(--t-background);
+  color: var(--t-foreground);
 }
 
-.qr {
-  margin: 1.5rem 0;
+/* The vermilion marker of the plate under the pointer. */
+.plate::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 10px;
+  height: 10px;
+  background: var(--accent);
+  opacity: 0;
 }
 
-.qr img {
+.plates a:hover .plate::after,
+.plates a:focus-visible .plate::after {
+  opacity: 1;
+}
+
+.strip {
+  grid-column: 1;
+  grid-row: 1 / -1;
+  display: grid;
+  grid-template-rows: repeat(16, minmax(0, 1fr));
+}
+
+.mini {
+  grid-column: 2;
+  padding: 14px 10px 16px 12px;
+  overflow: hidden;
+  font: 10.5px/1.6 var(--mono);
+}
+
+/* A small plate: the git diff and its prompt. */
+.mini .line:nth-child(-n+2),
+.mini .line:nth-child(n+7) {
+  display: none;
+}
+
+.caption {
+  grid-column: 2;
+  padding: 10px 10px 14px 12px;
+  border-top: 1px solid var(--hair);
+}
+
+.head,
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 10px;
+  margin: 0;
+  font: 500 10px/1.5 var(--mono);
+  letter-spacing: 0.05em;
+}
+
+.head {
+  color: var(--dim);
+}
+
+.head > span + span::before,
+.license::before {
+  content: "/";
+  margin-right: 10px;
+  opacity: 0.6;
+}
+
+.meta > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.plate .name {
+  margin: 6px 0 8px;
+  font-size: clamp(19px, 9cqi, 30px);
+  line-height: 1;
+  letter-spacing: -0.035em;
+}
+
+.plates a:hover .name {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+/* A large plate: the whole 見本, and the name as the sheet's headline. */
+
+.plates > li:nth-child(3n+1) .plate {
+  grid-template-columns: 14px minmax(0, 1fr);
+}
+
+.plates > li:nth-child(3n+1) .mini {
+  padding: 18px var(--pad) 22px;
+  font-size: clamp(12px, 2.3cqi, 17px);
+}
+
+.plates > li:nth-child(3n+1) .mini .line {
   display: block;
-  border-radius: 0.5rem;
 }
 
-.qr figcaption {
-  margin-top: 0.5rem;
-  color: var(--muted);
-  font-size: 0.9rem;
+.plates > li:nth-child(3n+1) .caption {
+  padding: 14px var(--pad) 18px;
+}
+
+.plates > li:nth-child(3n+1) .head,
+.plates > li:nth-child(3n+1) .meta {
+  font-size: 11px;
+}
+
+.plates > li:nth-child(3n+1) .name {
+  margin: 8px 0 10px;
+  font-size: clamp(30px, 8.4cqi, 68px);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+}
+
+@media (min-width: 760px) {
+  .plates {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .plates > li:nth-child(3n+1) {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+
+  .plates > li:nth-child(6n+4) {
+    grid-column: 3 / span 2;
+  }
+
+  /* A large plate that would close the sheet alone lies flat: one row high,
+     its 見本 cut to the git diff as a small plate's. */
+  .plates > li:nth-child(6n+4):last-child {
+    grid-row: span 1;
+  }
+
+  .plates > li:nth-child(6n+4):last-child .mini .line:nth-child(-n+2),
+  .plates > li:nth-child(6n+4):last-child .mini .line:nth-child(n+7) {
+    display: none;
+  }
+
+  .plate {
+    grid-template-columns: 10px minmax(0, 1fr);
+  }
+
+  .mini {
+    padding: 18px 16px 20px;
+    font-size: clamp(11px, 3.5cqi, 13px);
+  }
+
+  .caption {
+    padding: 12px 16px 18px;
+  }
+
+  .head,
+  .meta {
+    font-size: 11px;
+  }
+
+  .plates > li:nth-child(3n+1) .plate {
+    grid-template-columns: 18px minmax(0, 1fr);
+  }
+
+  .plates > li:nth-child(3n+1) .mini {
+    padding: 28px 28px 24px;
+  }
+
+  .plates > li:nth-child(3n+1) .caption {
+    padding: 18px 28px 24px;
+  }
 }
 
 /* 投稿と取り下げ */
 
 .about {
-  margin-top: 2.5rem;
-  padding-top: 1.25rem;
-  border-top: 1px solid var(--line);
-  color: var(--muted);
+  display: grid;
+  border-top: 1px solid var(--rule);
+  margin-top: -1px;
+}
+
+.about section {
+  padding: 26px var(--pad) 30px;
+}
+
+.about section + section {
+  border-top: 1px solid var(--rule);
 }
 
 .about h2 {
-  margin-top: 1rem;
-  color: var(--fg);
+  margin: 10px 0 12px;
+  text-transform: uppercase;
 }
 
 .about p {
-  margin: 0.35rem 0;
+  max-width: 36em;
+  margin: 0 0 20px;
+  color: var(--muted);
+}
+
+@media (min-width: 768px) {
+  .about {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .about section + section {
+    border-top: 0;
+    border-left: 1px solid var(--rule);
+  }
+}
+
+/* ── A theme's page ─────────────────────────────────────────────────────── */
+
+/* The facts: cells of a label over its value, two to a row on a phone; on a
+   wide screen, the cells of the title block's last row, beside the button. */
+
+.facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 0;
+}
+
+.facts > div {
+  min-width: 0;
+  padding: 14px var(--pad) 16px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.facts > div:nth-child(even) {
+  border-left: 1px solid var(--rule);
+}
+
+.facts > div:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+
+.facts dt,
+.facts dd {
+  margin: 0;
+}
+
+.facts dt {
+  margin-bottom: 4px;
+  font: 500 10px/1.4 var(--mono);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.facts dd {
+  overflow-wrap: anywhere;
+}
+
+.qr {
+  display: grid;
+  grid-template-columns: 104px minmax(0, 1fr);
+  align-items: center;
+  gap: 16px;
+  margin: 0;
+  padding: 18px var(--pad);
+  border-bottom: 1px solid var(--rule);
+}
+
+.qr img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.qr figcaption {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.file {
+  margin: 20px var(--pad) 28px;
+}
+
+@media (min-width: 960px) {
+  .facts {
+    display: flex;
+  }
+
+  .facts > div {
+    flex: 1 1 0;
+    padding: 18px var(--pad);
+    border-bottom: 0;
+  }
+
+  .facts > div + div {
+    border-left: 1px solid var(--rule);
+  }
+
+  .facts dt {
+    margin-bottom: 6px;
+    font-size: 11px;
+  }
+
+  .facts dd {
+    font-size: 17px;
+    line-height: 1.3;
+  }
+
+  .board > .aside {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .qr {
+    grid-template-columns: 1fr;
+    align-content: start;
+    gap: 14px;
+    padding: 32px var(--pad) 0;
+    border-bottom: 0;
+  }
+
+  .qr img {
+    width: 168px;
+  }
+
+  .qr figcaption {
+    max-width: 22em;
+  }
+
+  .file {
+    margin: 24px var(--pad) 28px;
+  }
 }

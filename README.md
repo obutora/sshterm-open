@@ -79,9 +79,13 @@ QR Code).
   goes, and stops past 64KB. The document must hold exactly one theme and
   pass the app's rules (`theme-format.js`); otherwise only the broken-link
   line shows: no 見本 and no button.
-- The 見本 is a terminal-like frame in the theme's foreground, background,
-  cursor, selection and 16 ANSI colours, with the name, author, licence and
-  the theme it was based on. Text goes in with `textContent` only.
+- The 見本 is a terminal (a prompt, `ls`, `git diff`, a status line, the
+  selection and the cursor) drawn in the theme's colours, every one of the
+  16 ANSI colours in its text, and a key of the 16 colours numbered 00–15
+  with their values. The whole page is printed in the theme: its background
+  is the paper, its foreground the ink. With the 見本 come the name, author,
+  licence and the theme it was based on. Text goes in with `textContent`
+  only.
 - An "Open in SSH Term" button opens `sshtermx://theme?t=<the same t>`, where
   the app shows its import screen. The page never goes there by itself, on
   any device. If the page is still in front about 2 seconds after the tap,
@@ -89,7 +93,7 @@ QR Code).
   does. On a computer it says to open the link on a phone.
 - Languages, the CSP, `noindex` and `no-referrer` are the same as `/open`
   (the `/*` block of `_headers`); it loads only its own `theme.js`,
-  `theme-format.js`, `common.js`, `open.css` and `theme.css`.
+  `theme-format.js`, `common.js`, `sheet.css` and `theme.css`.
 
 `public/theme-format.js` holds the format v1 rules as the app has them
 (`validateThemeDocument`, `validateThemeBytes`, `decodeThemeLink`,
@@ -119,13 +123,16 @@ its `main` changes.
   which sshterm-themes' check vendors. Unlike that check, the build does not
   run the JSON Schema (ajv): `validateThemeBytes` already holds every rule
   the schema has.
-- The list (`/themes/`) shows each theme's small 見本, name, author and
-  licence, in the order the themes came to `main` (the commit on `main` that
-  first added the file; a moved file keeps its date). Its own JS filters by
+- The list (`/themes/`) shows each theme as a plate painted in its colours:
+  its 見本, its 16 colours, name, author and licence; every third plate, from
+  the first, is large. The plates come in the order the themes came to
+  `main` (the commit on `main` that first added the file; a moved file keeps
+  its date). Its own JS filters by
   name and by a dark or light background: dark is a background whose
   relative luminance is under √(1.05 × 0.05) − 0.05 ≈ 0.179, where white
   and black text contrast equally. That splits the app's 16 presets 8 and 8.
-- Each theme's page (`/themes/<id>/`) has the large 見本, the author,
+- Each theme's page (`/themes/<id>/`) is printed in the theme. It has the
+  large 見本 with its 16 colours numbered 00–15, the name, the author,
   licence, the theme it was based on, the GitHub account that sent it
   (`https://github.com/<login>`, apart from the author the theme names), an
   "Open in SSH Term" button with the theme's link (`/theme#t=…`), the same
@@ -140,7 +147,8 @@ its `main` changes.
   only; the CSP is the same as everywhere.
 - A theme taken down from sshterm-themes leaves the site at the next build.
   Themes already imported and theme links already shared stay: a link
-  carries the whole theme. The pages say so.
+  carries the whole theme. The list says so; each theme's page links to how
+  to send a theme and to asking for a take-down.
 
 The build's output (`public/themes/index.html`, `colors.css`,
 `sitemap.xml` and one directory per theme) is not committed.
@@ -151,7 +159,9 @@ The build's output (`public/themes/index.html`, `colors.css`,
   `npm run build`, output directory `public`). `/open` serves `open.html`,
   `/app` serves `app.html`, `/theme` serves `theme.html`. `common.js` holds
   what the pages share: the platform by user agent, the language and filling
-  in the strings.
+  in the strings. `sheet.css` is the look the theme pages share (`/theme`,
+  the gallery and the format page): the paper, the rules, the type, the
+  button and the 見本.
 - `test/`: `npm test` (Node 22+) checks the link, platform and language
   rules in `public/open.js` and `public/common.js`, and the store URLs in
   `public/app.js`; the theme page and `public/theme-format.js` (with

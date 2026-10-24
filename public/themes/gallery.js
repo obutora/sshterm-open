@@ -163,19 +163,20 @@ export function main(env = globalThis) {
   const filters = doc.getElementById('filters');
   if (!filters) return;
   const query = doc.getElementById('q');
-  const tone = doc.getElementById('tone');
+  const tones = [...filters.querySelectorAll('input[name="tone"]')];
   const cards = [...doc.querySelectorAll('#themes > li')];
   const apply = () => {
+    const tone = tones.find((radio) => radio.checked)?.value ?? '';
     let shown = 0;
     for (const card of cards) {
       const theme = { name: card.querySelector('.name').textContent, tone: card.dataset.tone };
-      card.hidden = !shows(theme, { query: query.value, tone: tone.value });
+      card.hidden = !shows(theme, { query: query.value, tone });
       if (!card.hidden) shown++;
     }
     doc.getElementById('none').hidden = shown > 0;
   };
   query.addEventListener('input', apply);
-  tone.addEventListener('change', apply);
+  for (const radio of tones) radio.addEventListener('change', apply);
   filters.hidden = false;
   apply();
 }

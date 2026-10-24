@@ -142,7 +142,7 @@ test('the page loads only its own script and styles', () => {
   const html = readFileSync(new URL('../public/theme.html', import.meta.url), 'utf8');
   const srcs = [...html.matchAll(/(?:src|href)="([^"]+)"/g)].map((m) => m[1])
     .filter((u) => !u.startsWith('https://apps.apple.com') && !u.startsWith('https://play.google.com'));
-  assert.deepEqual(srcs, ['/open.css', '/theme.css', '/theme.js']);
+  assert.deepEqual(srcs, ['/sheet.css', '/theme.css', '/theme.js']);
   assert.doesNotMatch(html, /style=|<script>/);
   const js = readFileSync(new URL('../public/theme.js', import.meta.url), 'utf8');
   assert.doesNotMatch(js, /innerHTML|insertAdjacentHTML|outerHTML|location\.(replace|assign|href\s*=)/);

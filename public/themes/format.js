@@ -66,6 +66,7 @@ export const STRINGS = {
     exampleTitle: 'Example',
     example: 'A file with one theme:',
     download: 'Download example.json',
+    back: 'All themes',
   },
   ja: {
     htmlLang: 'ja',
@@ -128,6 +129,7 @@ export const STRINGS = {
     exampleTitle: '例',
     example: 'テーマを 1 つ入れたファイル:',
     download: 'example.json をダウンロード',
+    back: 'テーマの一覧',
   },
   ko: {
     htmlLang: 'ko',
@@ -190,6 +192,7 @@ export const STRINGS = {
     exampleTitle: '예',
     example: '테마 하나가 든 파일:',
     download: 'example.json 내려받기',
+    back: '모든 테마',
   },
   zh: {
     htmlLang: 'zh-Hans',
@@ -252,6 +255,7 @@ export const STRINGS = {
     exampleTitle: '示例',
     example: '包含一个主题的文件：',
     download: '下载 example.json',
+    back: '所有主题',
   },
   zh_Hant: {
     htmlLang: 'zh-Hant',
@@ -314,6 +318,7 @@ export const STRINGS = {
     exampleTitle: '範例',
     example: '包含一個主題的檔案：',
     download: '下載 example.json',
+    back: '所有主題',
   },
 };
 
