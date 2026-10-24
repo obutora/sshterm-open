@@ -1,0 +1,513 @@
+/* The drafting sheet the theme pages share (/themes/, /themes/<id>/,
+   /themes/format and /theme): paper, one ink, one vermilion, hairline rules.
+   System fonts only: the CSP loads nothing but the site's own files. */
+
+:root {
+  --paper: #f2f0ea;
+  --ink: #1b1b19;
+  --muted: #6a6862;
+  --rule: #cbc7bc;
+  --rule-soft: #dedad0;
+  --accent: #d23d08;
+  --on-accent: #fff;
+  --sans: "Helvetica Neue", Helvetica, Arial, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans CJK JP", sans-serif;
+  --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Roboto Mono", monospace;
+  --pad: 14px;
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #141413;
+    --ink: #eae7df;
+    --muted: #9b988f;
+    --rule: #3a3935;
+    --rule-soft: #2a2926;
+    --accent: #ff5a1f;
+    --on-accent: #141413;
+  }
+}
+
+@media (min-width: 768px) {
+  :root {
+    --pad: 24px;
+  }
+}
+
+/* A theme's own page is printed in the theme: its 背景 is the paper, its 前景
+   the ink. The page sets --t-<colour key> (gallery: colors.css; /theme: JS).
+   The vermilion stays the same in light and dark: it is the one colour on the
+   page that is not the theme's. */
+.theme {
+  --paper: var(--t-background);
+  --ink: var(--t-foreground);
+  --muted: color-mix(in srgb, var(--t-foreground) 74%, var(--t-background));
+  --rule: color-mix(in srgb, var(--t-foreground) 26%, var(--t-background));
+  --rule-soft: color-mix(in srgb, var(--t-foreground) 12%, var(--t-background));
+  --accent: #d63c06;
+  --on-accent: #fff;
+}
+
+.theme.dark {
+  color-scheme: dark;
+}
+
+.theme.light {
+  color-scheme: light;
+}
+
+:lang(ko) {
+  --sans: "Helvetica Neue", Helvetica, Arial, "Apple SD Gothic Neo", "Noto Sans CJK KR", sans-serif;
+}
+
+:lang(zh-Hans) {
+  --sans: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Noto Sans CJK SC", sans-serif;
+}
+
+:lang(zh-Hant) {
+  --sans: "Helvetica Neue", Helvetica, Arial, "PingFang TC", "Noto Sans CJK TC", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 15px/1.55 var(--sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* The sheet: a hairline frame around the page, as tall as the screen. */
+
+.sheet {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 16px);
+  min-height: calc(100dvh - 16px);
+  margin: 8px;
+  border: 1px solid var(--rule);
+}
+
+@media (min-width: 768px) {
+  .sheet {
+    min-height: calc(100vh - 28px);
+    min-height: calc(100dvh - 28px);
+    margin: 14px;
+  }
+}
+
+/* The bar at the top: the mark, then cells. */
+
+.bar {
+  display: flex;
+  min-height: 48px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.mark {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-right: auto;
+  padding: 0 var(--pad);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.glyph {
+  display: inline-grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border: 1.5px solid currentColor;
+  font: 700 10px/1 var(--mono);
+  letter-spacing: -0.04em;
+}
+
+.bar > :not(.mark) {
+  display: flex;
+  align-items: center;
+  padding: 0 var(--pad);
+  border-left: 1px solid var(--rule);
+}
+
+.label,
+.coord,
+.bar > :not(.mark) {
+  font: 500 11px/1.4 var(--mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.bar > a {
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.back::before {
+  content: "←";
+  margin-right: 8px;
+}
+
+/* Headings: a tight grotesque, capitals where the script has them. */
+
+h1,
+h2 {
+  margin: 0;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+h1 {
+  font-size: clamp(42px, 11vw, 132px);
+  line-height: 0.9;
+  letter-spacing: -0.045em;
+  text-transform: uppercase;
+}
+
+h2 {
+  font-size: 22px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+:lang(ja) :is(h1, h2),
+:lang(ko) :is(h1, h2),
+:lang(zh) :is(h1, h2) {
+  letter-spacing: -0.02em;
+  line-height: 1.08;
+}
+
+.note {
+  margin: 0;
+  padding: 28px var(--pad);
+  color: var(--muted);
+}
+
+/* The head of a page: the title, and its lede beside it on a wide screen. */
+
+.hero {
+  display: grid;
+  border-bottom: 1px solid var(--rule);
+}
+
+.hero h1 {
+  padding: 40px var(--pad) 18px;
+}
+
+.lede {
+  max-width: 34em;
+  margin: 0;
+  padding: 0 var(--pad) 26px;
+}
+
+@media (min-width: 900px) {
+  .hero {
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 380px);
+  }
+
+  .hero h1 {
+    padding: 72px var(--pad) 28px;
+  }
+
+  .lede {
+    align-self: end;
+    padding: 24px var(--pad) 30px;
+    border-left: 1px solid var(--rule);
+  }
+}
+
+/* The vermilion button: a square marker, the words, the arrow. */
+
+.button {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 60px;
+  padding: 0 0 0 var(--pad);
+  background: var(--accent);
+  color: var(--on-accent);
+  font: 700 13px/1.3 var(--mono);
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.button::before {
+  content: "";
+  width: 9px;
+  height: 9px;
+  flex: none;
+  background: var(--on-accent);
+}
+
+.button::after {
+  content: "→";
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 60px;
+  align-self: stretch;
+  margin-left: auto;
+  font: 400 22px/1 var(--sans);
+}
+
+.button:active {
+  opacity: 0.88;
+}
+
+/* A link that goes somewhere: capitals and an arrow cell. */
+
+.go,
+.file a {
+  display: inline-flex;
+  align-items: center;
+  padding-left: 12px;
+  min-height: 40px;
+  border: 1px solid var(--rule);
+  font: 600 11px/1.3 var(--mono);
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.go::after,
+.file a::after {
+  content: "→";
+  display: grid;
+  place-items: center;
+  align-self: stretch;
+  flex: none;
+  margin-left: 12px;
+  width: 40px;
+  border-left: 1px solid var(--rule);
+  font: 400 15px/1 var(--sans);
+}
+
+.go:hover,
+.go:focus-visible,
+.file a:hover,
+.file a:focus-visible {
+  border-color: var(--ink);
+}
+
+/* The 見本: a terminal's screen and the 16 colours numbered 00–15. On a
+   phone the colours are chips under the screen that take whatever height the
+   board leaves; wider, they run down the screen's left edge as a proof's
+   colour bar. */
+
+.terminal {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(44px, 1fr);
+  row-gap: 18px;
+  font: clamp(12.5px, 3.6vw, 15px)/1.6 var(--mono);
+  text-align: left;
+}
+
+.screen {
+  overflow-x: auto;
+}
+
+.line {
+  white-space: pre;
+}
+
+.palette {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(20px, 1fr));
+  gap: 3px;
+}
+
+.swatch {
+  position: relative;
+  display: block;
+  box-shadow: inset 0 0 0 1px rgb(127 127 127 / 0.25);
+}
+
+.swatch .index {
+  display: none;
+}
+
+@media (min-width: 600px) {
+  .terminal {
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-rows: none;
+    column-gap: 16px;
+  }
+
+  .screen {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .palette {
+    grid-column: 1;
+    grid-row: 1;
+    grid-template-columns: none;
+    grid-template-rows: repeat(16, minmax(0, 1fr));
+    gap: 2px;
+    width: 58px;
+    padding-left: 24px;
+  }
+
+  .swatch .index {
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: calc(100% + 6px);
+    font-size: 9px;
+    line-height: 1;
+    opacity: 0.7;
+    transform: translateY(-50%);
+  }
+}
+
+/* A theme's page and /theme: one board, printed in the theme. The 見本 is the
+   drawing at the top; under it the title block: the name across the sheet,
+   then the facts and the button as cells of one row. */
+
+.board {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "spec" "title" "button" "facts" "aside";
+  grid-template-rows: 1fr;
+  grid-auto-rows: auto;
+}
+
+.board > .specimen { grid-area: spec; }
+.board > .title { grid-area: title; }
+.board > .button { grid-area: button; }
+.board > .facts,
+.board > .cells { grid-area: facts; }
+.board > .aside { grid-area: aside; }
+
+.specimen {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 20px var(--pad);
+  border-bottom: 1px solid var(--rule);
+}
+
+@media (min-width: 600px) {
+  .specimen {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+.specimen .terminal {
+  flex: 1;
+  min-width: 0;
+}
+
+.board > .title {
+  padding: 18px var(--pad) 22px;
+}
+
+.title .label {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 12px;
+  margin: 0 0 12px;
+}
+
+.title .label > span + span::before {
+  content: "/";
+  margin-right: 12px;
+  opacity: 0.5;
+}
+
+h1.name {
+  font-size: clamp(38px, 10vw, 120px);
+  line-height: 0.92;
+  letter-spacing: -0.045em;
+  text-transform: none;
+}
+
+@media (min-width: 960px) {
+  .board {
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 380px);
+    grid-template-rows: 1fr auto auto;
+    grid-template-areas: "spec aside" "title title" "facts button";
+  }
+
+  .specimen {
+    padding: 48px 56px;
+  }
+
+  .specimen .terminal {
+    font-size: clamp(16px, 1.75vw, 27px);
+    column-gap: 28px;
+  }
+
+  .board > .aside {
+    border-bottom: 1px solid var(--rule);
+    border-left: 1px solid var(--rule);
+  }
+
+  .board > .title {
+    padding: 26px var(--pad) 30px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  h1.name {
+    font-size: clamp(38px, 8.6vw, 128px);
+  }
+
+  .board > .button {
+    min-height: 84px;
+    border-left: 1px solid var(--rule);
+  }
+}
+
+/* The sheet's foot. */
+
+.foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 20px;
+  margin-top: auto;
+  padding: 14px var(--pad);
+  border-top: 1px solid var(--rule);
+}
+
+.foot > a:not(.go) {
+  font: 500 11px/1.4 var(--mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-underline-offset: 3px;
+}
+
+.foot .coord {
+  margin-left: auto;
+}

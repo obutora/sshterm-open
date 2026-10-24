@@ -125,9 +125,9 @@ test('a theme that breaks the rules fails the build, and public/ stays as it was
 });
 
 const TAGS = new Set(['html', 'head', 'meta', 'title', 'link', 'script', 'body', 'main', 'h1', 'h2', 'p', 'span', 'a',
-  'div', 'ul', 'li', 'label', 'input', 'select', 'option', 'dl', 'dt', 'dd', 'figure', 'img', 'figcaption', 'section']);
+  'div', 'ul', 'li', 'label', 'input', 'fieldset', 'legend', 'dl', 'dt', 'dd', 'figure', 'img', 'figcaption', 'section']);
 const ATTRS = new Set(['lang', 'charset', 'name', 'content', 'rel', 'href', 'src', 'type', 'class', 'id', 'hidden',
-  'data-t', 'data-tone', 'aria-hidden', 'value', 'autocomplete', 'spellcheck', 'width', 'height', 'alt', 'download']);
+  'data-t', 'data-tone', 'aria-hidden', 'value', 'checked', 'autocomplete', 'spellcheck', 'width', 'height', 'alt', 'download']);
 
 /** Every tag of [html]: [{tag, attrs: [[name, value]]}], failing on anything not markup the build writes. */
 function tags(html) {

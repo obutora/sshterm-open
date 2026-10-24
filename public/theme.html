@@ -6,22 +6,33 @@
 <meta name="color-scheme" content="light dark">
 <meta name="robots" content="noindex">
 <title>SSH Term</title>
-<link rel="stylesheet" href="/open.css">
+<link rel="stylesheet" href="/sheet.css">
 <link rel="stylesheet" href="/theme.css">
 <script type="module" src="/theme.js"></script>
 </head>
-<body>
-<main>
-  <h1><span class="prompt" aria-hidden="true">&gt;_</span> SSH Term</h1>
+<body id="page">
+<div class="sheet">
+  <div class="bar">
+    <span class="mark"><span class="glyph" aria-hidden="true">&gt;_</span>SSH Term</span>
+  </div>
   <p id="invalid" class="note" data-t="invalid" hidden></p>
-  <section id="theme" hidden>
-    <h2 id="name"></h2>
-    <p class="meta"><span id="author"></span> · <span id="license"></span></p>
-    <p id="basedOn" class="meta" hidden></p>
-    <div id="sample" class="terminal" aria-hidden="true"></div>
+  <section id="theme" class="board" hidden>
+    <div class="specimen">
+      <div id="sample" class="terminal" aria-hidden="true"></div>
+    </div>
+    <div class="aside">
+      <div id="legend" class="legend" aria-hidden="true"></div>
+      <p id="desktop" class="note" data-t="desktop" hidden></p>
+    </div>
+    <div class="title">
+      <h1 id="name" class="name"></h1>
+    </div>
+    <a id="open" class="button" data-t="open" hidden></a>
+    <div class="cells">
+      <p class="meta"><span id="author"></span><span id="license"></span></p>
+      <p id="basedOn" class="meta" hidden></p>
+    </div>
   </section>
-  <p id="desktop" class="note" data-t="desktop" hidden></p>
-  <a id="open" class="button" data-t="open" hidden></a>
   <section id="trouble" hidden>
     <h2 data-t="trouble"></h2>
     <ul>
@@ -34,6 +45,6 @@
     </p>
   </section>
   <noscript><p class="note">Turn on JavaScript to see this SSH Term theme.</p></noscript>
-</main>
+</div>
 </body>
 </html>

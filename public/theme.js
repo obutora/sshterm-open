@@ -6,7 +6,7 @@
 // page never goes there on its own. It stores nothing and loads nothing else.
 
 import { localize, pickLang, platformOf } from './common.js';
-import { decodeThemeLink } from './theme-format.js';
+import { ANSI_KEYS, decodeThemeLink } from './theme-format.js';
 
 /** The t of a location.hash, or null when it is missing or repeated. */
 export function paramFromHash(hash) {
@@ -94,46 +94,66 @@ export function basedOnText(basedOn) {
   return more ? `${basedOn.name} (${more})` : basedOn.name;
 }
 
-/** The 見本's lines: [text, colour key | null (前景), extra class][]. The gallery's pages draw the same. */
+const PROMPT = [['~/tide', 'blue'], [' main', 'magenta'], [' $ ', 'green']];
+
+/**
+ * The 見本's lines: [text, colour key | null (前景), background key][], a
+ * prompt, ls, git diff, a status line and the cursor: every one of the 16
+ * colours in text, with the selection and the cursor. The gallery's pages
+ * draw the same.
+ */
 export const SAMPLE = [
-  [['~/dev ', 'blue'], ['$ ', 'green'], ['ls', null]],
+  [...PROMPT, ['ls', null]],
   [['README.md  ', null], ['src/  ', 'brightBlue'], ['run.sh  ', 'brightGreen'], ['notes.txt', 'yellow']],
-  [['~/dev ', 'blue'], ['$ ', 'green'], ['git status', null, 'selection']],
-  [['modified: ', 'red'], ['src/app.js', 'magenta']],
-  [['ok ', 'cyan'], ['warning ', 'brightYellow'], ['error', 'brightRed']],
-  [['~/dev ', 'blue'], ['$ ', 'green'], [' ', null, 'cursor']],
+  [...PROMPT, ['git diff', null, 'selection']],
+  [['@@ -3 +3 @@', 'cyan'], [' colors', 'brightCyan']],
+  [['-  "red": "#CC3333"', 'red']],
+  [['+  "red": "#FF5555"', 'green']],
+  [['error ', 'brightRed'], ['warn ', 'brightYellow'], ['info ', 'brightMagenta'], ['# 2s', 'brightBlack']],
+  [[' 0:zsh* ', 'brightWhite', 'black'], [' 1:vim ', 'white', 'black']],
+  [...PROMPT, [' ', null, 'cursor']],
 ];
 
-/** Draws [theme] into [frame] (the terminal-like box) with doc's elements. */
-function drawSample(doc, frame, theme) {
+/**
+ * Draws [theme] with doc's elements: its lines into [frame] (the
+ * terminal-like box), and its 16 colours into [legend], each numbered 00–15
+ * with its value.
+ */
+function drawSample(doc, frame, legend, theme) {
   const c = theme.colors;
   frame.style.setProperty('background-color', c.background);
   frame.style.setProperty('color', c.foreground);
+  const screen = doc.createElement('div');
+  screen.className = 'screen';
   for (const line of SAMPLE) {
     const row = doc.createElement('div');
     row.className = 'line';
-    for (const [text, key, extra] of line) {
+    for (const [text, key, back] of line) {
       const span = doc.createElement('span');
       span.textContent = text;
       if (key) span.style.setProperty('color', c[key]);
-      if (extra === 'selection') span.style.setProperty('background-color', c.selection);
-      if (extra === 'cursor') span.style.setProperty('background-color', c.cursor);
+      if (back) span.style.setProperty('background-color', c[back]);
       row.append(span);
     }
-    frame.append(row);
+    screen.append(row);
   }
-  const palette = doc.createElement('div');
-  palette.className = 'palette';
-  for (const key of ['black', 'red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'white',
-    'brightBlack', 'brightRed', 'brightGreen', 'brightYellow',
-    'brightBlue', 'brightMagenta', 'brightCyan', 'brightWhite']) {
+  frame.append(screen);
+  for (const [i, key] of ANSI_KEYS.entries()) {
+    const entry = doc.createElement('div');
+    entry.className = 'entry';
     const swatch = doc.createElement('span');
     swatch.className = 'swatch';
     swatch.title = key;
     swatch.style.setProperty('background-color', c[key]);
-    palette.append(swatch);
+    const index = doc.createElement('span');
+    index.className = 'index';
+    index.textContent = String(i).padStart(2, '0');
+    const value = doc.createElement('span');
+    value.className = 'value';
+    value.textContent = c[key].toUpperCase();
+    entry.append(swatch, index, value);
+    legend.append(entry);
   }
-  frame.append(palette);
 }
 
 /**
@@ -160,7 +180,12 @@ export async function main(env = globalThis) {
     $('basedOn').textContent = t.basedOn.replace('{}', basedOnText(theme.basedOn));
     $('basedOn').hidden = false;
   }
-  drawSample(doc, $('sample'), theme);
+  drawSample(doc, $('sample'), $('legend'), theme);
+  // The page is printed in the theme (sheet.css's .theme): its 背景 and 前景.
+  const page = $('page');
+  page.style.setProperty('--t-background', theme.colors.background);
+  page.style.setProperty('--t-foreground', theme.colors.foreground);
+  page.className = 'theme';
   $('theme').hidden = false;
 
   const button = $('open');

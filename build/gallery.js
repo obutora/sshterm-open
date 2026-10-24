@@ -236,8 +236,8 @@ const EN = STRINGS.en;
 const t = (tag, key, attrs = '') => html`<${new Html(tag)}${new Html(attrs)} data-t="${key}">${EN[key]}</${new Html(tag)}>`;
 
 /** The colours of a theme as custom properties of .t-<id>, for its 見本. */
-function colorRule(theme, keys) {
-  const props = keys.map((key) => {
+function colorRule(theme) {
+  const props = SAMPLE_COLORS.map((key) => {
     const color = theme.colors[key];
     if (!isColor(color)) throw new Error(`not a colour: ${color}`);
     return `--t-${key}:${color};`;
@@ -245,10 +245,16 @@ function colorRule(theme, keys) {
   return `.t-${theme.id}{${props.join('')}}\n`;
 }
 
-const LIST_COLORS = ['background', 'foreground', ...ANSI_KEYS.slice(0, 8)];
-const PAGE_COLORS = COLOR_KEYS.slice(0, 20);
+/** 前景, 背景, カーソル, 選択 and the 16 ANSI: what a 見本 draws. */
+const SAMPLE_COLORS = COLOR_KEYS.slice(0, 20);
 
-function shell({ title, description, canonical, css, body, titleKey }) {
+/** A list entry's number: its place in the list, from 1, as three digits. */
+const number = (index) => String(index + 1).padStart(3, '0');
+
+/** The UTC day of an ISO date as YYYY.MM.DD. */
+const day = (iso) => new Date(iso).toISOString().slice(0, 10).replaceAll('-', '.');
+
+function shell({ title, description, canonical, css, body, titleKey, page, links = '' }) {
   const titleTag = titleKey ? html`<title data-t="${titleKey}">${title}</title>` : html`<title>${title}</title>`;
   return html`<!doctype html>
 <html lang="en">
@@ -260,55 +266,102 @@ ${titleTag}
 <meta name="description" content="${description}">
 <link rel="canonical" href="${canonical}">
 <link rel="icon" href="/icon.png">
+<link rel="stylesheet" href="/sheet.css">
 <link rel="stylesheet" href="/themes/gallery.css">
 ${css.map((href) => html`<link rel="stylesheet" href="${href}">\n`)}<script type="module" src="/themes/gallery.js"></script>
 </head>
-<body>
-<main>
+<body class="${page}">
+<div class="sheet">
 ${body}
-</main>
+${footer(links)}
+</div>
 </body>
 </html>
 `.text;
 }
 
-function about() {
-  return html`<section class="about">
-  ${t('h2', 'sendTitle')}
-  ${t('p', 'send')}
-  <p><a href="${CONTRIBUTING}" data-t="sendLink">${EN.sendLink}</a></p>
-  ${t('h2', 'takedownTitle')}
-  ${t('p', 'takedown')}
-  <p><a href="${TAKEDOWN}" data-t="takedownLink">${EN.takedownLink}</a></p>
-  <p><a href="/themes/format" data-t="formatLink">${EN.formatLink}</a></p>
-</section>`;
+/** The sheet's top bar: the mark (to the list) and [right], a cell at the end. */
+function bar(right) {
+  return html`<div class="bar">
+  <a class="mark" href="/themes/"><span class="glyph" aria-hidden="true">&gt;_</span>SSH Term</a>
+  ${right}
+</div>`;
 }
 
-function card({ theme }) {
+/** The sheet's foot: the file format, [links] after it, the site's address at the end. */
+function footer(links) {
+  return html`<div class="foot">
+  <a class="go" href="/themes/format" data-t="formatLink">${EN.formatLink}</a>
+  ${links}
+  <span class="coord">sshterm.iru-yo.com/themes</span>
+</div>`;
+}
+
+function about() {
+  return html`<div class="about">
+  <section>
+    <p class="label">01</p>
+    ${t('h2', 'sendTitle')}
+    ${t('p', 'send')}
+    <a class="go" href="${CONTRIBUTING}" data-t="sendLink">${EN.sendLink}</a>
+  </section>
+  <section>
+    <p class="label">02</p>
+    ${t('h2', 'takedownTitle')}
+    ${t('p', 'takedown')}
+    <a class="go" href="${TAKEDOWN}" data-t="takedownLink">${EN.takedownLink}</a>
+  </section>
+</div>`;
+}
+
+/** [sampleLines] (SAMPLE's) as lines of spans of the 見本's colour classes. */
+function lines(sampleLines) {
+  return sampleLines.map((line) => html`<div class="line">${line.map(([text, key, back]) => {
+    const classes = [key && `c-${key}`, back && `b-${back}`].filter(Boolean);
+    return classes.length ? html`<span class="${classes.join(' ')}">${text}</span>` : html`<span>${text}</span>`;
+  })}</div>`);
+}
+
+/**
+ * A list entry: a plate painted in the theme. Its 16 colours run down the
+ * left edge, the 見本 fills the plate, and the title block (number, name,
+ * author, licence) closes it at the foot. Every third plate, from the first,
+ * is drawn large (gallery.css); a small one shows only the git diff lines.
+ */
+function card({ theme, added }, index) {
   return html`  <li data-tone="${toneOf(theme.colors)}">
     <a href="/themes/${theme.id}/">
-      <div class="mini t-${theme.id}" aria-hidden="true">
-        <div class="line"><span class="c-blue">~</span> <span class="c-green">$</span> ls</div>
-        <div class="swatches">${ANSI_KEYS.slice(0, 8).map((key) => html`<span class="sw-${key}"></span>`)}</div>
+      <div class="plate t-${theme.id}">
+        <div class="strip" aria-hidden="true">${ANSI_KEYS.map((key) => html`<span class="b-${key}"></span>`)}</div>
+        <div class="mini" aria-hidden="true">${lines(SAMPLE)}</div>
+        <div class="caption">
+          <p class="head"><span>${number(index)}</span><span>${day(added)}</span></p>
+          <h2 class="name">${theme.name}</h2>
+          <p class="meta"><span class="author">${theme.author}</span><span class="license">${theme.license}</span></p>
+        </div>
       </div>
-      <h2 class="name">${theme.name}</h2>
     </a>
-    <p class="meta"><span class="author">${theme.author}</span> · <span class="license">${theme.license}</span></p>
   </li>
 `;
 }
 
+/** A radio of the background filter: [key] its label, [count] the themes it shows. */
+function toneChoice(value, key, count) {
+  return html`<label><input type="radio" name="tone" value="${value}"${new Html(value ? '' : ' checked')}>${t('span', key)}<span class="n">${String(count).padStart(2, '0')}</span></label>`;
+}
+
 function indexPage(entries) {
+  const dark = entries.filter((e) => toneOf(e.theme.colors) === 'dark').length;
   const list = entries.length
     ? html`<div id="filters" class="filters" hidden>
-  <label>${t('span', 'search')} <input id="q" type="search" autocomplete="off" spellcheck="false"></label>
-  <label>${t('span', 'tone')} <select id="tone">
-    ${t('option', 'toneAll', ' value=""')}
-    ${t('option', 'toneDark', ' value="dark"')}
-    ${t('option', 'toneLight', ' value="light"')}
-  </select></label>
+  <label class="search">${t('span', 'search')}<input id="q" type="search" autocomplete="off" spellcheck="false"></label>
+  <fieldset class="tones">${t('legend', 'tone')}
+    ${toneChoice('', 'toneAll', entries.length)}
+    ${toneChoice('dark', 'toneDark', dark)}
+    ${toneChoice('light', 'toneLight', entries.length - dark)}
+  </fieldset>
 </div>
-<ul id="themes" class="cards">
+<ul id="themes" class="plates">
 ${entries.map(card)}</ul>
 ${t('p', 'noMatch', ' id="none" class="note" hidden')}`
     : t('p', 'empty', ' class="note"');
@@ -318,20 +371,22 @@ ${t('p', 'noMatch', ' id="none" class="note" hidden')}`
     description: EN.intro,
     canonical: `${SITE}/themes/`,
     css: ['/themes/colors.css'],
-    body: html`<h1><span class="prompt" aria-hidden="true">&gt;_</span> ${t('span', 'title')}</h1>
-${t('p', 'intro', ' class="lead"')}
+    page: 'list',
+    body: html`${bar('')}
+<div class="hero">
+  ${t('h1', 'title')}
+  ${t('p', 'intro', ' class="lede"')}
+</div>
 ${list}
 ${about()}`,
   });
 }
 
+/** A theme's large 見本: the 16 colours numbered 00–15 down its edge, then the lines. */
 function sample(theme) {
-  const lines = SAMPLE.map((line) => html`<div class="line">${line.map(([text, key, extra]) => {
-    const classes = [key && `c-${key}`, extra === 'selection' && 'sel', extra === 'cursor' && 'cur'].filter(Boolean);
-    return classes.length ? html`<span class="${classes.join(' ')}">${text}</span>` : html`<span>${text}</span>`;
-  })}</div>\n`);
   return html`<div class="terminal t-${theme.id}" aria-hidden="true">
-${lines}<div class="palette">${ANSI_KEYS.map((key) => html`<span class="sw-${key}"></span>`)}</div>
+<div class="screen">${lines(SAMPLE)}</div>
+<div class="palette">${ANSI_KEYS.map((key, i) => html`<span class="swatch b-${key}"><span class="index">${String(i).padStart(2, '0')}</span></span>`)}</div>
 </div>`;
 }
 
@@ -339,24 +394,36 @@ function fact(key, value) {
   return html`  <div>${t('dt', key)}<dd>${value}</dd></div>\n`;
 }
 
-function themePage({ login, theme }, link) {
+function themePage({ login, theme, added }, index, link) {
+  const tone = toneOf(theme.colors);
   return shell({
     title: `${theme.name} · SSH Term`,
     description: `${theme.name} by ${theme.author}: a terminal color theme for SSH Term (${theme.license}).`,
     canonical: `${SITE}/themes/${theme.id}/`,
     css: [`/themes/${theme.id}/colors.css`],
-    body: html`<p class="back"><span class="prompt" aria-hidden="true">&gt;_</span> <a href="/themes/" data-t="back">${EN.back}</a></p>
-<h1 class="name">${theme.name}</h1>
+    page: `theme ${tone} t-${theme.id}`,
+    links: html`<a href="${CONTRIBUTING}" data-t="sendLink">${EN.sendLink}</a>
+  <a href="${TAKEDOWN}" data-t="takedownLink">${EN.takedownLink}</a>`,
+    body: html`${bar(html`<a class="back" href="/themes/" data-t="back">${EN.back}</a>`)}
+<div class="board">
+<figure class="specimen">
 ${sample(theme)}
+</figure>
+<div class="title">
+  <p class="label"><span>${number(index)}</span><span>${day(added)}</span>${t('span', tone === 'dark' ? 'toneDark' : 'toneLight')}</p>
+  <h1 class="name">${theme.name}</h1>
+</div>
+<a class="button" href="${link.slice(SITE.length)}" data-t="open">${EN.open}</a>
 <dl class="facts">
 ${fact('author', theme.author)}${fact('license', theme.license)}${theme.basedOn ? fact('basedOn', basedOnText(theme.basedOn)) : ''}${fact('sentBy', html`<a href="https://github.com/${login}" rel="ugc">@${login}</a>`)}</dl>
-<p><a class="button" href="${link.slice(SITE.length)}" data-t="open">${EN.open}</a></p>
+<div class="aside">
 <figure class="qr">
   <img src="/themes/${theme.id}/qr.svg" width="264" height="264" alt="">
   ${t('figcaption', 'qr')}
 </figure>
-<p><a href="/themes/${theme.id}/${theme.id}.json" download data-t="download">${EN.download}</a></p>
-${about()}`,
+<p class="file"><a href="/themes/${theme.id}/${theme.id}.json" download data-t="download">${EN.download}</a></p>
+</div>
+</div>`,
   });
 }
 
@@ -413,15 +480,15 @@ export async function siteFiles(entries) {
   const files = new Map();
   const [index, colors, map] = LIST_FILES;
   files.set(`themes/${index}`, indexPage(entries));
-  files.set(`themes/${colors}`, entries.map((e) => colorRule(e.theme, LIST_COLORS)).join(''));
+  files.set(`themes/${colors}`, entries.map((e) => colorRule(e.theme)).join(''));
   files.set(`themes/${map}`, sitemap(entries));
-  for (const entry of entries) {
+  for (const [i, entry] of entries.entries()) {
     const { theme } = entry;
     const doc = { format: FORMAT, formatVersion: FORMAT_VERSION, themes: [ordered(theme)] };
     const link = `${SITE}/theme#t=${await encodeThemeLink(doc)}`;
     const dir = `themes/${theme.id}`;
-    files.set(`${dir}/index.html`, themePage(entry, link));
-    files.set(`${dir}/colors.css`, colorRule(theme, PAGE_COLORS));
+    files.set(`${dir}/index.html`, themePage(entry, i, link));
+    files.set(`${dir}/colors.css`, colorRule(theme));
     files.set(`${dir}/qr.svg`, qrSvg(link));
     files.set(`${dir}/${theme.id}.json`, `${JSON.stringify({ $schema: SCHEMA_URL, ...doc }, null, 2)}\n`);
   }

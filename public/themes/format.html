@@ -6,14 +6,24 @@
 <meta name="color-scheme" content="light dark">
 <title>SSH Term theme format v1</title>
 <link rel="icon" href="/icon.png">
+<link rel="stylesheet" href="/sheet.css">
 <link rel="stylesheet" href="/themes/format.css">
 <script type="module" src="/themes/format.js"></script>
 </head>
 <body>
+<div class="sheet">
+<div class="bar">
+  <a class="mark" href="/themes/"><span class="glyph" aria-hidden="true">&gt;_</span>SSH Term</a>
+  <a class="back" href="/themes/" data-t="back">All themes</a>
+</div>
+<div class="hero">
+  <h1 data-t="title">SSH Term theme format v1</h1>
+  <div class="lede">
+    <p data-t="intro">SSH Term reads terminal color themes as JSON in this format, from a file, the clipboard or a theme link. You can write one by hand or make one with your own tool.</p>
+    <p class="schema"><span data-t="schemaLead">JSON Schema (2020-12):</span> <a href="/themes/schema/v1.json"><code>https://sshterm.iru-yo.com/themes/schema/v1.json</code></a></p>
+  </div>
+</div>
 <main>
-  <h1><span class="prompt" aria-hidden="true">&gt;_</span> <span data-t="title">SSH Term theme format v1</span></h1>
-  <p data-t="intro">SSH Term reads terminal color themes as JSON in this format, from a file, the clipboard or a theme link. You can write one by hand or make one with your own tool.</p>
-  <p><span data-t="schemaLead">JSON Schema (2020-12):</span> <a href="/themes/schema/v1.json"><code>https://sshterm.iru-yo.com/themes/schema/v1.json</code></a></p>
 
   <section>
     <h2 data-t="editorTitle">Checking in an editor</h2>
@@ -214,8 +224,12 @@ def theme_link(theme):
   ]
 }
 </code></pre>
-    <p><a href="/themes/example.json" download data-t="download">Download example.json</a></p>
+    <p class="file"><a href="/themes/example.json" download data-t="download">Download example.json</a></p>
   </section>
 </main>
+<div class="foot">
+  <span class="coord">sshterm.iru-yo.com/themes/format</span>
+</div>
+</div>
 </body>
 </html>
