@@ -141,9 +141,7 @@ its `main` changes.
   reader's language (the five of `/open`). Names and authors are never
   translated, and every text goes into the HTML escaped. Colours come from
   the build's `colors.css` files as custom properties: the pages load only
-  the site's own JS, CSS and SVG, and its icon. The pages link a
-  `colors.css` with a hash of its content (`colors.css?v=…`): browsers keep
-  CSS for hours, and without it a theme added since would show no colours.
+  the site's own JS, CSS and SVG, and its icon.
 - `/themes/sitemap.xml` lists the gallery, and `robots.txt` points to it.
   `_headers` removes `X-Robots-Tag: noindex` from `/themes` and `/themes/*`
   only; the CSP is the same as everywhere.
@@ -164,6 +162,15 @@ The build's output (`public/themes/index.html`, `colors.css`,
   in the strings. `sheet.css` is the look the theme pages share (`/theme`,
   the gallery and the format page): the paper, the rules, the type, the
   button and the 見本.
+- Versions: the zone lets browsers keep `.css`, `.js`, `.png` and `.svg` for
+  4 hours without asking (a lower `Cache-Control` from Pages cannot shorten
+  it), while pages are asked for every time. So on Pages (`CF_PAGES` set)
+  `npm run build` ends with `build/stamp.js`: every page's root-relative
+  link to those files and every module's relative import gets
+  `?v=<hash of the file as served>`, a module's hash covering its imports'.
+  A changed file gets a new URL and the browser loads it; an unchanged one
+  keeps its URL and stays cached. It rewrites `public/` in place, so a local
+  `npm run build` skips it; a link to a missing file fails the build.
 - `test/`: `npm test` (Node 22+) checks the link, platform and language
   rules in `public/open.js` and `public/common.js`, and the store URLs in
   `public/app.js`; the theme page and `public/theme-format.js` (with
@@ -172,7 +179,8 @@ The build's output (`public/themes/index.html`, `colors.css`,
   and `format.css`); `schema/v1.json` is the schema and `example.json` the
   example file shown on the page. `gallery.js` and `gallery.css` are the
   gallery's.
-- `build/`: the gallery's build (`gallery.js`; `main.js` is `npm run build`).
+- `build/`: the gallery's build (`gallery.js`), the links' versions
+  (`stamp.js`); `main.js` is `npm run build`.
 - `test/theme-schema.test.js` replays the app's examples against the schema
   (skipping those the manifest marks `not-expressible`);
   `test/theme-format-page.test.js` checks the page's strings, that it loads
@@ -183,4 +191,5 @@ The build's output (`public/themes/index.html`, `colors.css`,
   `test/gallery-rules.test.js` checks the rules one by one;
   `test/gallery-page.test.js` the strings, the filters and `_headers` as
   Pages applies it. `test/fixtures/presets.json` holds the colours of the
-  app's 16 presets.
+  app's 16 presets. `test/stamp.test.js` checks the versions, also on a
+  copy of `public/` with a built gallery.

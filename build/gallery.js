@@ -5,7 +5,6 @@
 // The pages load only the site's own JS, CSS and SVG, and its icon.
 
 import { execFileSync } from 'node:child_process';
-import { createHash } from 'node:crypto';
 import { mkdirSync, mkdtempSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
@@ -249,15 +248,6 @@ function colorRule(theme) {
 /** 前景, 背景, カーソル, 選択 and the 16 ANSI: what a 見本 draws. */
 const SAMPLE_COLORS = COLOR_KEYS.slice(0, 20);
 
-/**
- * [path] with its [content]'s hash as the query: the pages link a colors.css
- * by it, so a browser that kept the last build's file (the CDN lets it keep
- * CSS for hours) loads the new one when the colours change.
- */
-function versioned(path, content) {
-  return `${path}?v=${createHash('sha256').update(content).digest('hex').slice(0, 12)}`;
-}
-
 /** A list entry's number: its place in the list, from 1, as three digits. */
 const number = (index) => String(index + 1).padStart(3, '0');
 
@@ -360,7 +350,7 @@ function toneChoice(value, key, count) {
   return html`<label><input type="radio" name="tone" value="${value}"${new Html(value ? '' : ' checked')}>${t('span', key)}<span class="n">${String(count).padStart(2, '0')}</span></label>`;
 }
 
-function indexPage(entries, colorsHref) {
+function indexPage(entries) {
   const dark = entries.filter((e) => toneOf(e.theme.colors) === 'dark').length;
   const list = entries.length
     ? html`<div id="filters" class="filters" hidden>
@@ -380,7 +370,7 @@ ${t('p', 'noMatch', ' id="none" class="note" hidden')}`
     titleKey: 'title',
     description: EN.intro,
     canonical: `${SITE}/themes/`,
-    css: [colorsHref],
+    css: ['/themes/colors.css'],
     page: 'list',
     body: html`${bar('')}
 <div class="hero">
@@ -404,13 +394,13 @@ function fact(key, value) {
   return html`  <div>${t('dt', key)}<dd>${value}</dd></div>\n`;
 }
 
-function themePage({ login, theme, added }, index, link, colorsHref) {
+function themePage({ login, theme, added }, index, link) {
   const tone = toneOf(theme.colors);
   return shell({
     title: `${theme.name} · SSH Term`,
     description: `${theme.name} by ${theme.author}: a terminal color theme for SSH Term (${theme.license}).`,
     canonical: `${SITE}/themes/${theme.id}/`,
-    css: [colorsHref],
+    css: [`/themes/${theme.id}/colors.css`],
     page: `theme ${tone} t-${theme.id}`,
     links: html`<a href="${CONTRIBUTING}" data-t="sendLink">${EN.sendLink}</a>
   <a href="${TAKEDOWN}" data-t="takedownLink">${EN.takedownLink}</a>`,
@@ -489,18 +479,16 @@ const LIST_FILES = ['index.html', 'colors.css', 'sitemap.xml'];
 export async function siteFiles(entries) {
   const files = new Map();
   const [index, colors, map] = LIST_FILES;
-  const listColors = entries.map((e) => colorRule(e.theme)).join('');
-  files.set(`themes/${index}`, indexPage(entries, versioned(`/themes/${colors}`, listColors)));
-  files.set(`themes/${colors}`, listColors);
+  files.set(`themes/${index}`, indexPage(entries));
+  files.set(`themes/${colors}`, entries.map((e) => colorRule(e.theme)).join(''));
   files.set(`themes/${map}`, sitemap(entries));
   for (const [i, entry] of entries.entries()) {
     const { theme } = entry;
     const doc = { format: FORMAT, formatVersion: FORMAT_VERSION, themes: [ordered(theme)] };
     const link = `${SITE}/theme#t=${await encodeThemeLink(doc)}`;
     const dir = `themes/${theme.id}`;
-    const themeColors = colorRule(theme);
-    files.set(`${dir}/index.html`, themePage(entry, i, link, versioned(`/${dir}/colors.css`, themeColors)));
-    files.set(`${dir}/colors.css`, themeColors);
+    files.set(`${dir}/index.html`, themePage(entry, i, link));
+    files.set(`${dir}/colors.css`, colorRule(theme));
     files.set(`${dir}/qr.svg`, qrSvg(link));
     files.set(`${dir}/${theme.id}.json`, `${JSON.stringify({ $schema: SCHEMA_URL, ...doc }, null, 2)}\n`);
   }
