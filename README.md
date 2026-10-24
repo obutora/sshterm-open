@@ -141,7 +141,9 @@ its `main` changes.
   reader's language (the five of `/open`). Names and authors are never
   translated, and every text goes into the HTML escaped. Colours come from
   the build's `colors.css` files as custom properties: the pages load only
-  the site's own JS, CSS and SVG, and its icon.
+  the site's own JS, CSS and SVG, and its icon. The pages link a
+  `colors.css` with a hash of its content (`colors.css?v=…`): browsers keep
+  CSS for hours, and without it a theme added since would show no colours.
 - `/themes/sitemap.xml` lists the gallery, and `robots.txt` points to it.
   `_headers` removes `X-Robots-Tag: noindex` from `/themes` and `/themes/*`
   only; the CSP is the same as everywhere.

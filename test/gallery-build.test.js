@@ -190,6 +190,25 @@ test("a theme's page opens it as a theme link, offers its file and names who sen
   assert.ok(has('themes/colors.css'));
 });
 
+test('the pages link colors.css by a version that changes with the colours', async () => {
+  const tide = { [`themes/octocat/${TIDE}.json`]: themeFile({ id: TIDE, name: 'Tide' }) };
+  const reef = { [`themes/octocat/${REEF}.json`]: themeFile({ id: REEF, name: 'Reef', colors: { ...PRESETS.dark.dracula.colors, background: '#101010' } }) };
+  const href = (html, path) => html.match(new RegExp(`<link rel="stylesheet" href="(${path}\\?v=[0-9a-f]{12})">`))?.[1];
+  const one = await build([{ date: '2026-02-01T00:00:00Z', files: tide }]);
+  const two = await build([{ date: '2026-02-01T00:00:00Z', files: tide }, { date: '2026-02-02T00:00:00Z', files: reef }]);
+
+  const listOne = href(one.read('themes/index.html'), '/themes/colors.css');
+  const listTwo = href(two.read('themes/index.html'), '/themes/colors.css');
+  assert.ok(listOne && listTwo, 'the list links its colors.css with a version');
+  // A browser that kept the first build's colors.css must load Reef's colours.
+  assert.notEqual(listOne, listTwo);
+
+  const page = (b) => href(b.read(`themes/${TIDE}/index.html`), `/themes/${TIDE}/colors.css`);
+  assert.ok(page(one), "a theme's page links its colors.css with a version");
+  // Tide's own colours did not change, so its page keeps the cached file.
+  assert.equal(page(one), page(two));
+});
+
 function unescape(text) {
   return text.replaceAll('&lt;', '<').replaceAll('&gt;', '>').replaceAll('&quot;', '"').replaceAll('&#x27;', "'").replaceAll('&amp;', '&');
 }
@@ -224,7 +243,9 @@ test('the pages load only the site’s own files and nothing inline', async () =
     assert.ok(loads.includes('/themes/gallery.js') && loads.includes('/themes/gallery.css'));
     for (const url of loads) {
       assert.match(url, /^\/(?!\/)/, url);
-      assert.ok(committed(url) || has(url.slice(1)), `${url} is neither in public/ nor built`);
+      // A ?v= query versions a file; the file served is the path's.
+      const path = url.split('?')[0];
+      assert.ok(committed(path) || has(path.slice(1)), `${url} is neither in public/ nor built`);
     }
     assert.doesNotMatch(html, /<script(?![^>]*\bsrc=)/);
     assert.doesNotMatch(html, /<style|\sstyle=|\son\w+=/);
