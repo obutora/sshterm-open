@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Privacy Policy · SSH Term</title>
+<link rel="icon" href="/icon.png">
+<link rel="alternate" hreflang="ja" href="https://sshterm.iru-yo.com/ja/privacy">
+<link rel="stylesheet" href="/sheet.css">
+<link rel="stylesheet" href="/legal.css">
+</head>
+<body>
+<div class="sheet">
+<div class="bar">
+  <a class="mark" href="/app"><span class="glyph" aria-hidden="true">&gt;_</span>SSH Term</a>
+  <a href="/ja/privacy" hreflang="ja" lang="ja">日本語</a>
+</div>
+<div class="hero">
+  <h1>Privacy Policy</h1>
+  <div class="lede">
+    <p>SSH Term sends none of your data to the operator’s servers. There is no account to sign up for.</p>
+    <p>It has no analytics, advertising, tracking or crash-reporting SDK. Your connection details, passwords and SSH keys stay on your device, encrypted.</p>
+    <p class="dates">Effective: November 5, 2026</p>
+  </div>
+</div>
+<main>
+
+  <section>
+    <h2>Operator and scope</h2>
+    <p>This policy applies to the following, provided by Hagakun (“the operator”):</p>
+    <ul>
+      <li>the iOS and Android app SSH Term (shown as SSH Term X on iOS, <code>com.obuto.sshterm</code>)</li>
+      <li>stagent, the agent the app installs on your host</li>
+      <li>this site (<code>sshterm.iru-yo.com</code>)</li>
+    </ul>
+    <p>This policy is also published in Japanese. If the two versions differ, the Japanese version prevails.</p>
+  </section>
+
+  <section>
+    <h2>Data kept on your device</h2>
+    <p>The data the app handles stays on your device. None of it reaches the operator.</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Data</th><th>How it is kept</th></tr></thead>
+        <tbody>
+        <tr><td>Connection profiles (host name, port, user name, password), SSH keys, command history, notification settings (ntfy topic and token, chat destination URLs)</td><td>Encrypted with AES. The encryption key is kept in the Keychain (iOS) or Keystore (Android).</td></tr>
+        <tr><td>App settings, custom themes, file browser bookmarks, verified host keys, the app-lock PIN</td><td>Kept on the device. The PIN is kept as a hash, never the PIN itself.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <ul>
+      <li>On Android, your device backup (Google’s backup) may include the app’s data. The key to the encrypted data is not included, so it cannot be read on another device.</li>
+      <li>The settings backup (JSON) and the private key backup are written only when you ask, to the place you choose. The settings backup is not encrypted, but it leaves out connection profiles, SSH keys, passwords, the PIN, the ntfy token and chat URLs. The private key backup is encrypted with a passphrase you set.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Where the app connects</h2>
+    <p>The app connects only to these:</p>
+    <ul>
+      <li><strong>The SSH servers you specify</strong>: what you type, files and commands go straight from your device to that server.</li>
+      <li><strong>Google Fonts</strong> (<code>fonts.gstatic.com</code>): the first time a Google Fonts typeface is used, its file is downloaded. Google receives your IP address and other connection details, handled under <a href="https://policies.google.com/privacy">Google’s Privacy Policy</a>.</li>
+      <li><strong>The App Store and Google Play</strong>: to show and buy tips (in-app purchases) and to open the review prompt.</li>
+      <li><strong>GitHub</strong> (releases of <code>github.com/obutora/stagent</code>): when stagent is installed, your host downloads it. Only if the host cannot, your device downloads it and sends it to the host over SFTP.</li>
+    </ul>
+    <p>Links such as the theme gallery, the contact form and guides open in your browser only when you tap them.</p>
+  </section>
+
+  <section>
+    <h2>Notifications (stagent)</h2>
+    <p>Push and chat notifications are sent by stagent on your host, not by your device, and only to the destinations you set up: ntfy (default server <code>ntfy.sh</code>), Slack, Discord, Telegram or a generic webhook.</p>
+    <ul>
+      <li>A notification holds the host’s name (your connection profile’s name), the task name, the agent name, the working directory’s name, a schedule’s name, fixed text (such as “waiting for approval”) and, while waiting for approval, the tool name (for example <code>Bash</code>). It never holds terminal output.</li>
+      <li>The host and session IDs in a notification’s link go after the <code>#</code> of <code>https://sshterm.iru-yo.com/open#…</code>, so they never reach this site’s server.</li>
+      <li>Notifications pass through those services and stay in their history, under each service’s own terms and privacy policy.</li>
+      <li>stagent sends nothing to the operator. It has no update check or telemetry.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>This site</h2>
+    <p>This site is served by Cloudflare Pages. It uses no cookies, analytics or advertising, and its pages load nothing but the site’s own files.</p>
+    <p>What notification links (<code>/open</code>) and theme links (<code>/theme</code>) carry goes after the <code>#</code> in the URL, so it never reaches the server. To serve the site, Cloudflare may process connection records such as IP addresses.</p>
+  </section>
+
+  <section>
+    <h2>Purchases</h2>
+    <p>Buying the app and tips (consumable in-app purchases) happens in the App Store or Google Play. Apple and Google handle payment details; the operator never receives them. The purchase state is checked only on your device.</p>
+  </section>
+
+  <section>
+    <h2>Device permissions</h2>
+    <ul>
+      <li>Network and local network: to connect to SSH servers.</li>
+      <li>Foreground service and notifications (Android): to keep SSH connections while you switch apps, and to show their state in a notification.</li>
+      <li>Photos (iOS): to send photos and files you pick to a server, or to use one as a background image.</li>
+      <li>Face ID and fingerprint: to unlock the app. Biometric data is handled by the OS; the app never receives it.</li>
+    </ul>
+    <p>The app does not use the camera, location or contacts.</p>
+  </section>
+
+  <section>
+    <h2>Crash information</h2>
+    <p>There is no crash-reporting SDK. The error screen only copies a report to your clipboard and sends it nowhere. The operator sees only the reports Apple and Google aggregate when you allow sharing with them in your device settings.</p>
+  </section>
+
+  <section>
+    <h2>Retention and deletion</h2>
+    <ul>
+      <li>Deleting the app deletes all of SSH Term’s data on your device. Delete any backups you wrote out yourself.</li>
+      <li>stagent and its settings are on your host; you can remove them there.</li>
+      <li>Delete notifications that reached ntfy, Slack, Discord or Telegram in those services.</li>
+      <li>What you write in the contact form (Google Forms) is used only to reply and to deal with your request.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Contact</h2>
+    <p>Operator: Hagakun</p>
+    <p>Contact us from the app’s Settings › Contact Us, or through the <a href="https://docs.google.com/forms/d/e/1FAIpQLSdo6BOnIdgMTB6wtFsWVibKebY0heAj4DxIinRj-4ppUIDH-g/viewform">contact form</a>.</p>
+  </section>
+
+  <section>
+    <h2>Changes</h2>
+    <p>When this policy changes, the date at the top is updated and the change is listed here.</p>
+    <ul>
+      <li>November 5, 2026: first published</li>
+    </ul>
+  </section>
+</main>
+<div class="foot">
+  <a href="/terms">Terms of Use</a>
+  <a href="/privacy">Privacy Policy</a>
+  <span class="coord">sshterm.iru-yo.com/privacy</span>
+</div>
+</div>
+</body>
+</html>

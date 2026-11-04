@@ -1,0 +1,115 @@
+/* The terms and the privacy policy (/terms, /privacy, /ja/terms, /ja/privacy),
+   on top of /sheet.css: each numbered article a row of the sheet, its title
+   in the left column on a wide screen. No script: the pages are plain text. */
+
+.hero h1 {
+  font-size: clamp(32px, 6.5vw, 84px);
+}
+
+.lede p {
+  margin: 0 0 12px;
+}
+
+.dates {
+  font: 500 11px/1.4 var(--mono);
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+main {
+  counter-reset: part;
+}
+
+main section {
+  counter-increment: part;
+  padding: 26px var(--pad) 30px;
+  border-bottom: 1px solid var(--rule);
+}
+
+main h2 {
+  margin: 0 0 16px;
+  font-size: 24px;
+}
+
+main h2::before {
+  content: counter(part, decimal-leading-zero);
+  display: block;
+  margin-bottom: 10px;
+  font: 500 11px/1.4 var(--mono);
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+main p,
+main ul,
+main ol {
+  max-width: 44em;
+  margin: 0 0 16px;
+}
+
+main ul,
+main ol {
+  padding-left: 1.2em;
+}
+
+li + li {
+  margin-top: 6px;
+}
+
+main a {
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+code {
+  font-family: var(--mono);
+  font-size: 0.86em;
+  overflow-wrap: anywhere;
+}
+
+.scroll {
+  max-width: 44em;
+  margin: 0 0 16px;
+  overflow-x: auto;
+  border-top: 1px solid var(--ink);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 9px 12px 9px 0;
+  border-bottom: 1px solid var(--rule);
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  font: 500 11px/1.4 var(--mono);
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+@media (min-width: 900px) {
+  main section {
+    display: grid;
+    grid-template-columns: minmax(200px, 30%) minmax(0, 1fr);
+    column-gap: var(--pad);
+  }
+
+  main section > * {
+    grid-column: 2;
+  }
+
+  main section > h2 {
+    grid-column: 1;
+    grid-row: 1 / span 20;
+    align-self: start;
+    position: sticky;
+    top: 24px;
+  }
+}

@@ -153,15 +153,27 @@ its `main` changes.
 The build's output (`public/themes/index.html`, `colors.css`,
 `sitemap.xml` and one directory per theme) is not committed.
 
+## The terms and the privacy policy
+
+`https://sshterm.iru-yo.com/terms` and `/privacy` (English), and
+`/ja/terms` and `/ja/privacy` (Japanese, which prevails), are SSH Term's
+terms of use and privacy policy: the URLs to give the App Store and Google
+Play. They are plain HTML with no script, on `sheet.css` and `legal.css`,
+and keep `/*`'s headers (CSP, `noindex`). The privacy policy states the
+app's and stagent's data flows (where the app connects, what notifications
+carry, what stays on the device); change it, its date and its history in
+both languages when those flows change.
+
 ## Layout
 
 - `public/`: the site, deployed to Cloudflare Pages (build command
   `npm run build`, output directory `public`). `/open` serves `open.html`,
-  `/app` serves `app.html`, `/theme` serves `theme.html`. `common.js` holds
-  what the pages share: the platform by user agent, the language and filling
-  in the strings. `sheet.css` is the look the theme pages share (`/theme`,
-  the gallery and the format page): the paper, the rules, the type, the
-  button and the 見本.
+  `/app` serves `app.html`, `/theme` serves `theme.html`, `/terms` and
+  `/privacy` serve `terms.html` and `privacy.html` (`ja/` the Japanese).
+  `common.js` holds what the pages share: the platform by user agent, the
+  language and filling in the strings. `sheet.css` is the look the theme
+  pages share (`/theme`, the gallery and the format page) and the terms and
+  privacy policy use: the paper, the rules, the type, the button and the 見本.
 - Versions: the zone lets browsers keep `.css`, `.js`, `.png` and `.svg` for
   4 hours without asking (a lower `Cache-Control` from Pages cannot shorten
   it), while pages are asked for every time. So on Pages (`CF_PAGES` set)
