@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>プライバシーポリシー · SSH Term</title>
+<link rel="icon" href="/icon.png">
+<link rel="alternate" hreflang="en" href="https://sshterm.iru-yo.com/privacy">
+<link rel="stylesheet" href="/sheet.css">
+<link rel="stylesheet" href="/legal.css">
+</head>
+<body>
+<div class="sheet">
+<div class="bar">
+  <a class="mark" href="/app"><span class="glyph" aria-hidden="true">&gt;_</span>SSH Term</a>
+  <a href="/privacy" hreflang="en" lang="en">English</a>
+</div>
+<div class="hero">
+  <h1>プライバシーポリシー</h1>
+  <div class="lede">
+    <p>SSH Term は、あなたのデータを運営者のサーバーに送りません。アカウントの登録もありません。</p>
+    <p>アクセス解析・広告・追跡・クラッシュレポートの SDK は入れていません。接続先の情報、パスワード、SSH 鍵は端末の中に暗号化して置きます。</p>
+    <p class="dates">制定日：2026年11月5日</p>
+  </div>
+</div>
+<main>
+
+  <section>
+    <h2>運営者と対象</h2>
+    <p>このポリシーは、Hagakun（以下「運営者」）が提供する次のものに適用します。</p>
+    <ul>
+      <li>iOS と Android のアプリ SSH Term（iOS での表示名は SSH Term X、<code>com.obuto.sshterm</code>）</li>
+      <li>アプリがあなたのホストに入れるエージェント stagent</li>
+      <li>このサイト（<code>sshterm.iru-yo.com</code>）</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>端末に置くデータ</h2>
+    <p>アプリが扱うデータは、端末の中に置きます。運営者には届きません。</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>データ</th><th>置き方</th></tr></thead>
+        <tbody>
+        <tr><td>接続プロファイル（ホスト名・ポート・ユーザー名・パスワード）、SSH 鍵、コマンドの履歴、通知の設定（ntfy のトピックとトークン、チャットの通知先の URL）</td><td>AES で暗号化して置きます。暗号化の鍵は Keychain（iOS）・Keystore（Android）に置きます。</td></tr>
+        <tr><td>アプリの設定、カスタムテーマ、ファイラのブックマーク、確かめたホスト鍵、アプリロックの PIN</td><td>端末の中に置きます。PIN はハッシュにして置き、PIN そのものは残しません。</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <ul>
+      <li>Android では、端末のバックアップ（Google のバックアップ）にアプリのデータが含まれることがあります。暗号化したデータの鍵は含まれないので、別の端末に戻しても読めません。</li>
+      <li>設定のバックアップ（JSON）と秘密鍵のバックアップは、あなたが操作したときだけ、あなたが選んだ場所に書き出します。設定のバックアップは暗号化しませんが、接続プロファイル・SSH 鍵・パスワード・PIN・ntfy のトークン・チャットの URL は入れません。秘密鍵のバックアップは、あなたが決めたパスフレーズで暗号化します。</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>アプリの通信先</h2>
+    <p>アプリが通信するのは次の先だけです。</p>
+    <ul>
+      <li><strong>あなたが指定した SSH サーバー</strong>：入力した文字、ファイル、コマンドは、端末からそのサーバーに直接送ります。</li>
+      <li><strong>Google Fonts</strong>（<code>fonts.gstatic.com</code>）：Google Fonts の書体を初めて使うときに、書体のファイルを取得します。このとき Google には IP アドレスなどの通信の情報が届き、<a href="https://policies.google.com/privacy?hl=ja">Google のプライバシーポリシー</a>に従って扱われます。</li>
+      <li><strong>App Store・Google Play</strong>：応援（アプリ内課金）の商品の表示と購入、レビューの画面を開くときに使います。</li>
+      <li><strong>GitHub</strong>（<code>github.com/obutora/stagent</code> のリリース）：stagent を入れるときに、まずホストが取得します。ホストから取得できないときだけ、端末が取得して SFTP でホストに送ります。</li>
+    </ul>
+    <p>テーマギャラリー、お問い合わせのフォーム、ガイドなどのリンクは、あなたがタップしたときに外部のブラウザで開くだけです。</p>
+  </section>
+
+  <section>
+    <h2>通知（stagent）</h2>
+    <p>プッシュ通知やチャットへの通知は、端末ではなく、あなたのホストで動く stagent が送ります。送り先は、あなたが設定したものだけです：ntfy（既定のサーバーは <code>ntfy.sh</code>）、Slack、Discord、Telegram、汎用の webhook。</p>
+    <ul>
+      <li>通知に入るのは、ホストの名前（接続プロファイルの名前）、タスク名、エージェント名、作業ディレクトリの名前、定期実行の名前、決まった文言（「承認待ち」など）と、承認待ちのときのツール名（例：<code>Bash</code>）です。端末の出力は入れません。</li>
+      <li>通知のリンクに入るホストとセッションの ID は、<code>https://sshterm.iru-yo.com/open#…</code> の <code>#</code> の後ろに入るので、このサイトのサーバーには届きません。</li>
+      <li>通知の中身は、各サービスを通り、その履歴に残ります。扱いは各サービスの規約とプライバシーポリシーに従います。</li>
+      <li>stagent は運営者のサーバーに何も送りません。更新の確認やテレメトリもありません。</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>このサイト</h2>
+    <p>このサイトは Cloudflare Pages で配信しています。Cookie、アクセス解析、広告は使いません。ページは、サイト自身のファイルのほかに何も読み込みません。</p>
+    <p>通知のリンク（<code>/open</code>）とテーマのリンク（<code>/theme</code>）の中身は、URL の <code>#</code> の後ろに入るので、サーバーには届きません。配信のために、Cloudflare が IP アドレスなどの通信の記録を扱うことがあります。</p>
+  </section>
+
+  <section>
+    <h2>購入</h2>
+    <p>アプリの購入と応援（消耗型のアプリ内課金）は、App Store または Google Play で行います。支払いの情報は Apple・Google が扱い、運営者は受け取りません。購入の状態は端末の中でだけ確かめます。</p>
+  </section>
+
+  <section>
+    <h2>端末の権限</h2>
+    <ul>
+      <li>ネットワーク・ローカルネットワーク：SSH サーバーに接続するため。</li>
+      <li>フォアグラウンドサービスと通知（Android）：アプリを切り替えている間も SSH の接続を保ち、その状態を通知に出すため。</li>
+      <li>写真（iOS）：あなたが選んだ写真やファイルを、サーバーへの送信や背景の画像に使うため。</li>
+      <li>Face ID・指紋：アプリのロックを解くため。生体の情報は OS が扱い、アプリは受け取りません。</li>
+    </ul>
+    <p>カメラ、位置情報、連絡先は使いません。</p>
+  </section>
+
+  <section>
+    <h2>クラッシュの情報</h2>
+    <p>クラッシュレポートの SDK は入れていません。エラーの画面は、報告の文をクリップボードにコピーするだけで、どこにも送りません。運営者が見るのは、あなたが端末の設定で Apple・Google への共有を許したときに各社が集計するレポートだけです。</p>
+  </section>
+
+  <section>
+    <h2>保持と削除</h2>
+    <ul>
+      <li>アプリを削除すると、端末の中の SSH Term のデータはすべて消えます。書き出したバックアップは、あなたが消してください。</li>
+      <li>stagent とその設定は、あなたのホストにあります。ホストから消せます。</li>
+      <li>ntfy・Slack・Discord・Telegram に届いた通知は、各サービスで消してください。</li>
+      <li>お問い合わせのフォーム（Google フォーム）に書いた内容は、返信と対応のためだけに使います。</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>お問い合わせ</h2>
+    <p>運営者：Hagakun</p>
+    <p>お問い合わせは、アプリの 設定 › お問い合わせ、または<a href="https://docs.google.com/forms/d/e/1FAIpQLSdo6BOnIdgMTB6wtFsWVibKebY0heAj4DxIinRj-4ppUIDH-g/viewform">お問い合わせのフォーム</a>から受け付けます。</p>
+  </section>
+
+  <section>
+    <h2>変更の履歴</h2>
+    <p>このポリシーを変えたときは、ページの上の日付を更新し、ここに書きます。</p>
+    <ul>
+      <li>2026年11月5日：制定</li>
+    </ul>
+  </section>
+</main>
+<div class="foot">
+  <a href="/ja/terms">利用規約</a>
+  <a href="/ja/privacy">プライバシーポリシー</a>
+  <span class="coord">sshterm.iru-yo.com/ja/privacy</span>
+</div>
+</div>
+</body>
+</html>
