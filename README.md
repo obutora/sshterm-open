@@ -180,6 +180,22 @@ Plain HTML with no script, on `sheet.css`, `legal.css` and `desktop.css`.
 The Mac download, the Microsoft Store link and the purchase are greyed out
 as 準備中 / Coming soon until the downloads and the checkout exist.
 
+## The purchase-complete page
+
+`https://sshterm.iru-yo.com/desktop/purchased` (English) and
+`/ja/desktop/purchased` (Japanese) are where Stripe's Checkout comes back
+to, with `?session_id=cs_…`. `purchased.js` sends that id and the page's
+language to the license Worker on the same origin (`POST /api/license`, in
+`obutora/agent-orchestra` at `_OUTPUT_APPS/ssh-term/workers/license/`),
+which checks the payment with Stripe, returns the license key and emails
+the same key in that language. The page shows the key with a copy button
+and an "Open in SSH Term Desktop" button with the key's link
+(`sshterm-desktop://license/<key>`, and nothing else is ever put on it).
+The same session always gives the same key, so a reload shows it again.
+An unpaid session, a missing id and a failure each say so and show no key.
+The page stores nothing. `_headers` adds `connect-src 'self'` to the CSP of
+these two pages only.
+
 ## Layout
 
 - `public/`: the site, deployed to Cloudflare Pages (build command
