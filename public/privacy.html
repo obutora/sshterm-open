@@ -19,9 +19,9 @@
 <div class="hero">
   <h1>Privacy Policy</h1>
   <div class="lede">
-    <p>SSH Term sends none of your data to the operator’s servers. There is no account to sign up for.</p>
+    <p>SSH Term sends none of your data to the operator’s servers. There is no account to sign up for. Only when you buy SSH Term Desktop does what is listed below pass through the operator’s Worker, to make and deliver your license key. The Worker stores nothing.</p>
     <p>It has no analytics, advertising, tracking or crash-reporting SDK. Your connection details, passwords and SSH keys stay on your device, encrypted.</p>
-    <p class="dates">Effective: November 5, 2026</p>
+    <p class="dates">Effective: November 5, 2026 · Revised: November 12, 2026</p>
   </div>
 </div>
 <main>
@@ -30,16 +30,18 @@
     <h2>Operator and scope</h2>
     <p>This policy applies to the following, provided by iruyo software (“the operator”):</p>
     <ul>
-      <li>the iOS and Android app SSH Term (shown as SSH Term X on iOS, <code>com.obuto.sshterm</code>)</li>
+      <li>the iOS and Android app SSH Term (the mobile app; shown as SSH Term X on iOS, <code>com.obuto.sshterm</code>)</li>
+      <li>the Mac and Windows app SSH Term Desktop</li>
       <li>stagent, the agent the app installs on your host</li>
+      <li>the Worker that makes and delivers SSH Term Desktop license keys (under <code>sshterm.iru-yo.com</code>)</li>
       <li>this site (<code>sshterm.iru-yo.com</code>)</li>
     </ul>
     <p>This policy is also published in Japanese. If the two versions differ, the Japanese version prevails.</p>
   </section>
 
   <section>
-    <h2>Data kept on your device</h2>
-    <p>The data the app handles stays on your device. None of it reaches the operator.</p>
+    <h2>Mobile app: data kept on your device</h2>
+    <p>The data the mobile app handles stays on your device. None of it reaches the operator.</p>
     <div class="scroll">
       <table>
         <thead><tr><th>Data</th><th>How it is kept</th></tr></thead>
@@ -56,8 +58,8 @@
   </section>
 
   <section>
-    <h2>Where the app connects</h2>
-    <p>The app connects only to these:</p>
+    <h2>Where the mobile app connects</h2>
+    <p>The mobile app connects only to these:</p>
     <ul>
       <li><strong>The SSH servers you specify</strong>: what you type, files and commands go straight from your device to that server.</li>
       <li><strong>Google Fonts</strong> (<code>fonts.gstatic.com</code>): the first time a Google Fonts typeface is used, its file is downloaded. Google receives your IP address and other connection details, handled under <a href="https://policies.google.com/privacy">Google’s Privacy Policy</a>.</li>
@@ -79,18 +81,50 @@
   </section>
 
   <section>
+    <h2>SSH Term Desktop</h2>
+    <p>The data SSH Term Desktop handles stays on your own machine. None of it reaches the operator.</p>
+    <ul>
+      <li>It only reads your hosts from <code>~/.ssh/config</code> and never changes it. It also only reads the known_hosts in <code>~/.ssh</code>, and keeps the keys of hosts you newly trust in the app. Passwords are kept in the OS’s credential store. It holds no SSH keys of its own; it uses those in <code>~/.ssh</code> and your ssh-agent.</li>
+      <li>It connects only to the SSH servers you specify, to GitHub when stagent is installed (releases of <code>github.com/obutora/stagent</code>), and, on Mac, to GitHub to check for and download updates (releases of <code>github.com/obutora/sshterm-desktop</code>). On Windows, the Microsoft Store updates it. stagent on your own machine is started without going through the network.</li>
+      <li>System notifications are shown by the app on your own machine. It writes nothing to stagent’s notification destinations (such as ntfy).</li>
+      <li>The trial is counted only inside the app. License keys are checked with a public key built into the app, so after you buy, the app never goes online for the key. A key holds no email address.</li>
+      <li>There is no crash-reporting SDK.</li>
+    </ul>
+  </section>
+
+  <section>
     <h2>This site</h2>
     <p>This site is served by Cloudflare Pages. It uses no cookies, analytics or advertising, and its pages load nothing but the site’s own files.</p>
     <p>What notification links (<code>/open</code>) and theme links (<code>/theme</code>) carry goes after the <code>#</code> in the URL, so it never reaches the server. To serve the site, Cloudflare may process connection records such as IP addresses.</p>
   </section>
 
   <section>
-    <h2>Purchases</h2>
-    <p>Buying the app and tips (consumable in-app purchases) happens in the App Store or Google Play. Apple and Google handle payment details; the operator never receives them. The purchase state is checked only on your device.</p>
+    <h2>Mobile app purchases</h2>
+    <p>Buying the mobile app and tips (consumable in-app purchases) happens in the App Store or Google Play. Apple and Google handle payment details; the operator never receives them. The purchase state is checked only on your device.</p>
   </section>
 
   <section>
-    <h2>Device permissions</h2>
+    <h2>SSH Term Desktop purchases</h2>
+    <p>Buying SSH Term Desktop passes data to the following. The operator stores none of it on its own servers.</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Recipient</th><th>What it receives</th><th>What for</th></tr></thead>
+        <tbody>
+        <tr><td>Stripe and Link (the seller)</td><td>What you enter at checkout (email address, payment details, country and so on)</td><td>Payment, receipts, tax and refunds, handled under <a href="https://link.com/privacy">Link’s Privacy Policy</a> and <a href="https://stripe.com/privacy">Stripe’s Privacy Policy</a>.</td></tr>
+        <tr><td>The operator’s Worker (Cloudflare Workers)</td><td>From the page you land on after buying, the Checkout Session ID. From Stripe, that purchase’s email address and payment status. On the resend page, the email address you enter.</td><td>To ask Stripe whether the purchase is paid, make the license key, return it and send it by email. It has no database and stores nothing.</td></tr>
+        <tr><td>Cloudflare Email Service</td><td>The recipient’s email address and the message (the license key)</td><td>To send the key from <code>license@sshterm.iru-yo.com</code>, handled under <a href="https://www.cloudflare.com/privacypolicy/">Cloudflare’s Privacy Policy</a>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <ul>
+      <li>Card and other payment details never reach the operator.</li>
+      <li>The purchase record (email address, country, amount and so on) stays with Stripe. The operator may look at it in Stripe’s dashboard to answer questions and handle refunds.</li>
+      <li>The Worker and the email run on Cloudflare, so Cloudflare may process connection records such as IP addresses.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Mobile app device permissions</h2>
     <ul>
       <li>Network and local network: to connect to SSH servers.</li>
       <li>Foreground service and notifications (Android): to keep SSH connections while you switch apps, and to show their state in a notification.</li>
@@ -101,16 +135,17 @@
   </section>
 
   <section>
-    <h2>Crash information</h2>
+    <h2>Mobile app crash information</h2>
     <p>There is no crash-reporting SDK. The error screen only copies a report to your clipboard and sends it nowhere. The operator sees only the reports Apple and Google aggregate when you allow sharing with them in your device settings.</p>
   </section>
 
   <section>
     <h2>Retention and deletion</h2>
     <ul>
-      <li>Deleting the app deletes all of SSH Term’s data on your device. Delete any backups you wrote out yourself.</li>
+      <li>Deleting the mobile app deletes all of SSH Term’s data on your device. Delete any backups you wrote out yourself.</li>
       <li>stagent and its settings are on your host; you can remove them there.</li>
       <li>Delete notifications that reached ntfy, Slack, Discord or Telegram in those services.</li>
+      <li>The operator’s Worker stores nothing. SSH Term Desktop purchase records stay with Stripe under Link’s and Stripe’s policies. Delete the key email from your mailbox yourself.</li>
       <li>What you write in the contact form (Google Forms) is used only to reply and to deal with your request.</li>
     </ul>
   </section>
@@ -125,6 +160,7 @@
     <h2>Changes</h2>
     <p>When this policy changes, the date at the top is updated and the change is listed here.</p>
     <ul>
+      <li>November 12, 2026: added SSH Term Desktop and its purchase (Stripe and Link, the operator’s Worker, Cloudflare Email Service)</li>
       <li>November 5, 2026: first published</li>
     </ul>
   </section>

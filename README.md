@@ -158,22 +158,40 @@ The build's output (`public/themes/index.html`, `colors.css`,
 `https://sshterm.iru-yo.com/terms` and `/privacy` (English), and
 `/ja/terms` and `/ja/privacy` (Japanese, which prevails), are SSH Term's
 terms of use and privacy policy: the URLs to give the App Store and Google
-Play. They are plain HTML with no script, on `sheet.css` and `legal.css`,
-and keep `/*`'s headers (CSP, `noindex`). The privacy policy states the
-app's and stagent's data flows (where the app connects, what notifications
-carry, what stays on the device); change it, its date and its history in
-both languages when those flows change.
+Play, and Stripe for SSH Term Desktop. They are plain HTML with no script, on
+`sheet.css` and `legal.css`, and keep `/*`'s headers (CSP, `noindex`). They
+cover the mobile app and SSH Term Desktop. The terms hold SSH Term
+Desktop's one-time purchase, its 14-day trial and its refunds (within 14
+days of purchase; Stripe may refund within 60 days; the key keeps working
+either way). The privacy policy states the apps', stagent's and the license
+Worker's data flows (where each app connects, what notifications carry, what
+stays on the device, what Stripe and Link, the Worker and Cloudflare Email
+Service receive when someone buys SSH Term Desktop); change it, its date and
+its history in both languages when those flows change.
+
+## The SSH Term Desktop sales page
+
+`https://sshterm.iru-yo.com/desktop` (English) and `/ja/desktop` (Japanese)
+sell SSH Term Desktop, the Mac and Windows app: what it does, the
+requirements, the price (¥1,500 / $9.99, other currencies by Stripe's
+Adaptive Pricing), the 14-day trial, the license key (any number of the
+buyer's own Macs and Windows PCs, separate from the mobile app) and refunds.
+Plain HTML with no script, on `sheet.css`, `legal.css` and `desktop.css`.
+The Mac download, the Microsoft Store link and the purchase are greyed out
+as 準備中 / Coming soon until the downloads and the checkout exist.
 
 ## Layout
 
 - `public/`: the site, deployed to Cloudflare Pages (build command
   `npm run build`, output directory `public`). `/open` serves `open.html`,
-  `/app` serves `app.html`, `/theme` serves `theme.html`, `/terms` and
-  `/privacy` serve `terms.html` and `privacy.html` (`ja/` the Japanese).
+  `/app` serves `app.html`, `/theme` serves `theme.html`, `/terms`,
+  `/privacy` and `/desktop` serve `terms.html`, `privacy.html` and
+  `desktop.html` (`ja/` the Japanese).
   `common.js` holds what the pages share: the platform by user agent, the
   language and filling in the strings. `sheet.css` is the look the theme
-  pages share (`/theme`, the gallery and the format page) and the terms and
-  privacy policy use: the paper, the rules, the type, the button and the 見本.
+  pages share (`/theme`, the gallery and the format page) and the terms,
+  privacy policy and sales page use: the paper, the rules, the type, the
+  button and the 見本.
 - Versions: the zone lets browsers keep `.css`, `.js`, `.png` and `.svg` for
   4 hours without asking (a lower `Cache-Control` from Pages cannot shorten
   it), while pages are asked for every time. So on Pages (`CF_PAGES` set)
