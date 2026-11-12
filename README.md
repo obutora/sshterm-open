@@ -196,6 +196,26 @@ An unpaid session, a missing id and a failure each say so and show no key.
 The page stores nothing. `_headers` adds `connect-src 'self'` to the CSP of
 these two pages only.
 
+## The resend page
+
+`https://sshterm.iru-yo.com/desktop/resend` (English) and
+`/ja/desktop/resend` (Japanese) are for someone who lost their license key.
+They enter the email address they bought with and pass a Cloudflare
+Turnstile check; `resend.js` sends the address, the page's language and the
+Turnstile token to the license Worker (`POST /api/license/resend`). The
+Worker limits how often one IP address can send, checks the token, and
+answers the same whether or not the address bought: it emails the same key
+as the purchase to the entered address only. So the page always says "if
+this address bought, the key is on its way"; too many tries, a failed check
+and a failure each say so. A token works once, so the widget is reset after
+every send. The page stores nothing. `_headers` lets these two pages load
+Turnstile's script and frame from `challenges.cloudflare.com` and connect to
+their own origin; no other page may.
+
+The Turnstile site key is the `data-sitekey` of both pages. Until the real
+widget exists (hostname `sshterm.iru-yo.com`, action `resend`) it is
+Cloudflare's always-passing test key `1x00000000000000000000AA`.
+
 ## Layout
 
 - `public/`: the site, deployed to Cloudflare Pages (build command

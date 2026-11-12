@@ -100,3 +100,30 @@
   border: 1px solid var(--rule);
   cursor: pointer;
 }
+
+/* The resend page (/desktop/resend): the email field and the send button. */
+
+.license input[type="email"] {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  font: inherit;
+  color: inherit;
+  background: var(--rule-soft);
+  border: 1px solid var(--rule);
+}
+
+.license #send {
+  align-self: flex-start;
+  padding: 8px 18px;
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 1px solid var(--rule);
+  cursor: pointer;
+}
+
+.license #send:disabled {
+  opacity: 0.5;
+  cursor: default;
+}

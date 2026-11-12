@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>ライセンスキーの送り直し · SSH Term Desktop</title>
+<link rel="icon" href="/icon.png">
+<link rel="stylesheet" href="/sheet.css">
+<link rel="stylesheet" href="/legal.css">
+<link rel="stylesheet" href="/desktop.css">
+<script type="module" src="/resend.js"></script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+</head>
+<body>
+<div class="sheet">
+<div class="bar">
+  <a class="mark" href="/ja/desktop"><span class="glyph" aria-hidden="true">&gt;_</span>SSH Term Desktop</a>
+</div>
+<div class="hero">
+  <h1>ライセンスキーの送り直し</h1>
+</div>
+<main>
+  <section>
+    <p>ライセンスキーをなくしたら、SSH Term Desktop を買ったときのメールアドレスを入れてください。同じキーを、そのアドレスに送り直します。</p>
+    <noscript><p>このページを使うには JavaScript をオンにしてください。</p></noscript>
+    <form id="form" class="license">
+      <label class="label" for="email">メールアドレス</label>
+      <input id="email" type="email" name="email" autocomplete="email" maxlength="254" required>
+      <div class="cf-turnstile" data-sitekey="1x00000000000000000000AA" data-action="resend" data-language="ja"></div>
+      <button id="send" type="submit">キーを送る</button>
+    </form>
+    <p id="status" aria-live="polite"></p>
+    <p>キーは、入れたアドレスで SSH Term Desktop が買われているときだけ、そのアドレスにだけ送ります。買われているかどうかにかかわらず、このページの答えは同じです。ボットを防ぐために Cloudflare Turnstile を使い、1 つの IP アドレスから送れる回数を絞っています。何も保存しません。<a href="/ja/privacy">プライバシーポリシー</a>を見てください。</p>
+  </section>
+</main>
+<div class="foot">
+  <a href="/ja/terms">利用規約</a>
+  <a href="/ja/privacy">プライバシーポリシー</a>
+  <span class="coord">sshterm.iru-yo.com/ja/desktop/resend</span>
+</div>
+</div>
+</body>
+</html>
