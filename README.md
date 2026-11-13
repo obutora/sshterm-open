@@ -212,9 +212,9 @@ every send. The page stores nothing. `_headers` lets these two pages load
 Turnstile's script and frame from `challenges.cloudflare.com` and connect to
 their own origin; no other page may.
 
-The Turnstile site key is the `data-sitekey` of both pages. Until the real
-widget exists (hostname `sshterm.iru-yo.com`, action `resend`) it is
-Cloudflare's always-passing test key `1x00000000000000000000AA`.
+The Turnstile site key is the `data-sitekey` of both pages: the widget
+`sshterm-resend` (hostname `sshterm.iru-yo.com`, Managed mode), whose secret
+key is the Worker's `TURNSTILE_SECRET_KEY`.
 
 ## Layout
 
