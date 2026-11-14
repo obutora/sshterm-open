@@ -19,9 +19,9 @@
 <div class="hero">
   <h1>プライバシーポリシー</h1>
   <div class="lede">
-    <p>SSH Term は、あなたのデータを運営者のサーバーに送りません。アカウントの登録もありません。</p>
+    <p>SSH Term は、あなたのデータを運営者のサーバーに送りません。アカウントの登録もありません。デスクトップ版を買うときだけ、ライセンスキーを作って届けるために、下に書くものが運営者の Worker を通ります。Worker は何も保存しません。</p>
     <p>アクセス解析・広告・追跡・クラッシュレポートの SDK は入れていません。接続先の情報、パスワード、SSH 鍵は端末の中に暗号化して置きます。</p>
-    <p class="dates">制定日：2026年11月5日</p>
+    <p class="dates">制定日：2026年11月5日 · 改定日：2026年11月12日</p>
   </div>
 </div>
 <main>
@@ -30,15 +30,17 @@
     <h2>運営者と対象</h2>
     <p>このポリシーは、iruyo software（以下「運営者」）が提供する次のものに適用します。</p>
     <ul>
-      <li>iOS と Android のアプリ SSH Term（iOS での表示名は SSH Term X、<code>com.obuto.sshterm</code>）</li>
+      <li>iOS と Android のアプリ SSH Term（スマホ版。iOS での表示名は SSH Term X、<code>com.obuto.sshterm</code>）</li>
+      <li>Mac と Windows のアプリ SSH Term Desktop（デスクトップ版）</li>
       <li>アプリがあなたのホストに入れるエージェント stagent</li>
+      <li>デスクトップ版のライセンスキーを作って届ける Worker（<code>sshterm.iru-yo.com</code> の下）</li>
       <li>このサイト（<code>sshterm.iru-yo.com</code>）</li>
     </ul>
   </section>
 
   <section>
-    <h2>端末に置くデータ</h2>
-    <p>アプリが扱うデータは、端末の中に置きます。運営者には届きません。</p>
+    <h2>スマホ版：端末に置くデータ</h2>
+    <p>スマホ版が扱うデータは、端末の中に置きます。運営者には届きません。</p>
     <div class="scroll">
       <table>
         <thead><tr><th>データ</th><th>置き方</th></tr></thead>
@@ -55,8 +57,8 @@
   </section>
 
   <section>
-    <h2>アプリの通信先</h2>
-    <p>アプリが通信するのは次の先だけです。</p>
+    <h2>スマホ版の通信先</h2>
+    <p>スマホ版が通信するのは次の先だけです。</p>
     <ul>
       <li><strong>あなたが指定した SSH サーバー</strong>：入力した文字、ファイル、コマンドは、端末からそのサーバーに直接送ります。</li>
       <li><strong>Google Fonts</strong>（<code>fonts.gstatic.com</code>）：Google Fonts の書体を初めて使うときに、書体のファイルを取得します。このとき Google には IP アドレスなどの通信の情報が届き、<a href="https://policies.google.com/privacy?hl=ja">Google のプライバシーポリシー</a>に従って扱われます。</li>
@@ -78,18 +80,50 @@
   </section>
 
   <section>
+    <h2>デスクトップ版</h2>
+    <p>デスクトップ版が扱うデータは、手元のマシンの中に置きます。運営者には届きません。</p>
+    <ul>
+      <li>接続先は <code>~/.ssh/config</code> から読むだけで、書き換えません。<code>~/.ssh</code> の known_hosts も読むだけで、新しく信じたホストの鍵はアプリの中に置きます。パスワードは OS の保管庫に置きます。SSH 鍵はアプリの中に持たず、<code>~/.ssh</code> と ssh-agent のものを使います。</li>
+      <li>通信するのは、あなたが指定した SSH サーバー、stagent を入れるときの GitHub（<code>github.com/obutora/stagent</code> のリリース）、Mac で更新を確かめて取得するときの GitHub（<code>github.com/obutora/sshterm-desktop</code> のリリース）だけです。Windows の更新は Microsoft Store が行います。手元のマシンの stagent は、ネットワークを通さずに起こします。</li>
+      <li>OS の通知は、アプリが手元のマシンで出します。stagent の通知の送り先（ntfy など）には何も書きません。</li>
+      <li>試用の期間は、アプリの中だけで数えます。ライセンスキーはアプリに埋め込んだ公開鍵で確かめるので、購入のあと、アプリがキーのために外へ通信することはありません。キーにメールアドレスは入りません。</li>
+      <li>クラッシュレポートの SDK は入れていません。</li>
+    </ul>
+  </section>
+
+  <section>
     <h2>このサイト</h2>
     <p>このサイトは Cloudflare Pages で配信しています。Cookie、アクセス解析、広告は使いません。ページは、サイト自身のファイルのほかに何も読み込みません。</p>
     <p>通知のリンク（<code>/open</code>）とテーマのリンク（<code>/theme</code>）の中身は、URL の <code>#</code> の後ろに入るので、サーバーには届きません。配信のために、Cloudflare が IP アドレスなどの通信の記録を扱うことがあります。</p>
   </section>
 
   <section>
-    <h2>購入</h2>
-    <p>アプリの購入と応援（消耗型のアプリ内課金）は、App Store または Google Play で行います。支払いの情報は Apple・Google が扱い、運営者は受け取りません。購入の状態は端末の中でだけ確かめます。</p>
+    <h2>スマホ版の購入</h2>
+    <p>スマホ版の購入と応援（消耗型のアプリ内課金）は、App Store または Google Play で行います。支払いの情報は Apple・Google が扱い、運営者は受け取りません。購入の状態は端末の中でだけ確かめます。</p>
   </section>
 
   <section>
-    <h2>端末の権限</h2>
+    <h2>デスクトップ版の購入</h2>
+    <p>デスクトップ版の購入では、次の先にデータが渡ります。運営者は、どれも自分のサーバーに保存しません。</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>渡る先</th><th>渡るもの</th><th>使い道</th></tr></thead>
+        <tbody>
+        <tr><td>Stripe と Link（販売者）</td><td>決済の画面で入れたもの（メールアドレス、支払いの情報、国など）</td><td>決済、領収書、税、返金。<a href="https://link.com/privacy">Link のプライバシーポリシー</a>と <a href="https://stripe.com/privacy">Stripe のプライバシーポリシー</a>に従って扱われます。</td></tr>
+        <tr><td>運営者の Worker（Cloudflare Workers）</td><td>購入が終わったページから、Checkout Session の id。Stripe から、その購入のメールアドレスと支払いの状態。送り直しのページでは、あなたが入れたメールアドレス。</td><td>支払い済みかを Stripe に確かめ、ライセンスキーを作って返し、メールで送るため。データベースを持たず、何も保存しません。</td></tr>
+        <tr><td>Cloudflare Email Service</td><td>送り先のメールアドレスと、メールの本文（ライセンスキー）</td><td><code>license@sshterm.iru-yo.com</code> からキーのメールを送るため。<a href="https://www.cloudflare.com/ja-jp/privacypolicy/">Cloudflare のプライバシーポリシー</a>に従って扱われます。</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <ul>
+      <li>カードなどの支払いの情報は、運営者には届きません。</li>
+      <li>購入の記録（メールアドレス、国、金額など）は Stripe に残ります。運営者は、問い合わせと返金に応えるために、Stripe の管理画面でそれを見ることがあります。</li>
+      <li>Worker とメールは Cloudflare の上で動くので、Cloudflare が IP アドレスなどの通信の記録を扱うことがあります。</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>スマホ版の端末の権限</h2>
     <ul>
       <li>ネットワーク・ローカルネットワーク：SSH サーバーに接続するため。</li>
       <li>フォアグラウンドサービスと通知（Android）：アプリを切り替えている間も SSH の接続を保ち、その状態を通知に出すため。</li>
@@ -100,16 +134,17 @@
   </section>
 
   <section>
-    <h2>クラッシュの情報</h2>
+    <h2>スマホ版のクラッシュの情報</h2>
     <p>クラッシュレポートの SDK は入れていません。エラーの画面は、報告の文をクリップボードにコピーするだけで、どこにも送りません。運営者が見るのは、あなたが端末の設定で Apple・Google への共有を許したときに各社が集計するレポートだけです。</p>
   </section>
 
   <section>
     <h2>保持と削除</h2>
     <ul>
-      <li>アプリを削除すると、端末の中の SSH Term のデータはすべて消えます。書き出したバックアップは、あなたが消してください。</li>
+      <li>スマホ版を削除すると、端末の中の SSH Term のデータはすべて消えます。書き出したバックアップは、あなたが消してください。</li>
       <li>stagent とその設定は、あなたのホストにあります。ホストから消せます。</li>
       <li>ntfy・Slack・Discord・Telegram に届いた通知は、各サービスで消してください。</li>
+      <li>運営者の Worker は何も保存しません。デスクトップ版の購入の記録は、Link と Stripe のポリシーに従って Stripe に残ります。キーのメールは、あなたのメールボックスから消してください。</li>
       <li>お問い合わせのフォーム（Google フォーム）に書いた内容は、返信と対応のためだけに使います。</li>
     </ul>
   </section>
@@ -124,6 +159,7 @@
     <h2>変更の履歴</h2>
     <p>このポリシーを変えたときは、ページの上の日付を更新し、ここに書きます。</p>
     <ul>
+      <li>2026年11月12日：デスクトップ版（SSH Term Desktop）と、その購入（Stripe と Link、運営者の Worker、Cloudflare Email Service）を足した</li>
       <li>2026年11月5日：制定</li>
     </ul>
   </section>

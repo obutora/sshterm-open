@@ -1,6 +1,7 @@
 /* The terms and the privacy policy (/terms, /privacy, /ja/terms, /ja/privacy),
-   on top of /sheet.css: each numbered article a row of the sheet, its title
-   in the left column on a wide screen. No script: the pages are plain text. */
+   and the sales page of SSH Term Desktop (/desktop, /ja/desktop), on top of
+   /sheet.css: each numbered article a row of the sheet, its title in the left
+   column on a wide screen. No script: the pages are plain text. */
 
 .hero h1 {
   font-size: clamp(32px, 6.5vw, 84px);
