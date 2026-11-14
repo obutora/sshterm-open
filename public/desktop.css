@@ -68,3 +68,35 @@
     border-left: 1px solid var(--rule);
   }
 }
+
+/* The purchase-complete page (/desktop/purchased): the key in a box that
+   wraps it whole, a copy button, and the "Open in the app" button. */
+
+.license {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.license textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
+  font: inherit;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  word-break: break-all;
+  resize: none;
+  color: inherit;
+  background: var(--rule-soft);
+  border: 1px solid var(--rule);
+}
+
+.license #copy {
+  align-self: flex-start;
+  padding: 6px 14px;
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 1px solid var(--rule);
+  cursor: pointer;
+}
