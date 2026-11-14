@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Resend your license key · SSH Term Desktop</title>
+<link rel="icon" href="/icon.png">
+<link rel="stylesheet" href="/sheet.css">
+<link rel="stylesheet" href="/legal.css">
+<link rel="stylesheet" href="/desktop.css">
+<script type="module" src="/resend.js"></script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+</head>
+<body>
+<div class="sheet">
+<div class="bar">
+  <a class="mark" href="/desktop"><span class="glyph" aria-hidden="true">&gt;_</span>SSH Term Desktop</a>
+</div>
+<div class="hero">
+  <h1>Resend your license key</h1>
+</div>
+<main>
+  <section>
+    <p>Lost your license key? Enter the email address you bought SSH Term Desktop with, and we will send the same key to it again.</p>
+    <noscript><p>Turn on JavaScript to use this page.</p></noscript>
+    <form id="form" class="license">
+      <label class="label" for="email">Email address</label>
+      <input id="email" type="email" name="email" autocomplete="email" maxlength="254" required>
+      <div class="cf-turnstile" data-sitekey="0x4AAAAAAF_lx14ffX3d8qPO" data-action="resend"></div>
+      <button id="send" type="submit">Send the key</button>
+    </form>
+    <p id="status" aria-live="polite"></p>
+    <p>The key is sent only to the address you enter, and only if SSH Term Desktop was bought with it. This page says the same thing either way. We use Cloudflare Turnstile to keep bots out, and limit how often one IP address can send. Nothing is stored. See the <a href="/privacy">Privacy Policy</a>.</p>
+  </section>
+</main>
+<div class="foot">
+  <a href="/terms">Terms of Use</a>
+  <a href="/privacy">Privacy Policy</a>
+  <span class="coord">sshterm.iru-yo.com/desktop/resend</span>
+</div>
+</div>
+</body>
+</html>

@@ -21,7 +21,7 @@
   <div class="lede">
     <p>SSH Term sends none of your data to the operator’s servers. There is no account to sign up for. Only when you buy SSH Term Desktop does what is listed below pass through the operator’s Worker, to make and deliver your license key. The Worker stores nothing.</p>
     <p>It has no analytics, advertising, tracking or crash-reporting SDK. Your connection details, passwords and SSH keys stay on your device, encrypted.</p>
-    <p class="dates">Effective: November 5, 2026 · Revised: November 12, 2026</p>
+    <p class="dates">Effective: November 5, 2026 · Revised: November 13, 2026</p>
   </div>
 </div>
 <main>
@@ -111,8 +111,9 @@
         <thead><tr><th>Recipient</th><th>What it receives</th><th>What for</th></tr></thead>
         <tbody>
         <tr><td>Stripe and Link (the seller)</td><td>What you enter at checkout (email address, payment details, country and so on)</td><td>Payment, receipts, tax and refunds, handled under <a href="https://link.com/privacy">Link’s Privacy Policy</a> and <a href="https://stripe.com/privacy">Stripe’s Privacy Policy</a>.</td></tr>
-        <tr><td>The operator’s Worker (Cloudflare Workers)</td><td>From the page you land on after buying, the Checkout Session ID. From Stripe, that purchase’s email address and payment status. On the resend page, the email address you enter.</td><td>To ask Stripe whether the purchase is paid, make the license key, return it and send it by email. It has no database and stores nothing.</td></tr>
+        <tr><td>The operator’s Worker (Cloudflare Workers)</td><td>From the page you land on after buying, the Checkout Session ID. From Stripe, that purchase’s email address and payment status. On the resend page, the email address you enter and your IP address.</td><td>To ask Stripe whether the purchase is paid, make the license key, return it and send it by email. On the resend page, the IP address is used only to limit how many times one address can send in 10 minutes; the count is held in memory and dropped when the window ends. It has no database and stores nothing.</td></tr>
         <tr><td>Cloudflare Email Service</td><td>The recipient’s email address and the message (the license key)</td><td>To send the key from <code>license@sshterm.iru-yo.com</code>, handled under <a href="https://www.cloudflare.com/privacypolicy/">Cloudflare’s Privacy Policy</a>.</td></tr>
+        <tr><td>Cloudflare Turnstile (on the resend page only)</td><td>Signals from your browser and device, and your IP address, that Turnstile reads to tell people from bots</td><td>To keep bots from using the resend page, handled under <a href="https://www.cloudflare.com/turnstile-privacy-policy/">Cloudflare’s Turnstile Privacy Addendum</a>.</td></tr>
         </tbody>
       </table>
     </div>
@@ -160,6 +161,7 @@
     <h2>Changes</h2>
     <p>When this policy changes, the date at the top is updated and the change is listed here.</p>
     <ul>
+      <li>November 13, 2026: added the license key resend page (Cloudflare Turnstile, and the per-IP-address limit of the operator’s Worker)</li>
       <li>November 12, 2026: added SSH Term Desktop and its purchase (Stripe and Link, the operator’s Worker, Cloudflare Email Service)</li>
       <li>November 5, 2026: first published</li>
     </ul>

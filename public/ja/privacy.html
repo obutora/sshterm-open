@@ -21,7 +21,7 @@
   <div class="lede">
     <p>SSH Term は、あなたのデータを運営者のサーバーに送りません。アカウントの登録もありません。デスクトップ版を買うときだけ、ライセンスキーを作って届けるために、下に書くものが運営者の Worker を通ります。Worker は何も保存しません。</p>
     <p>アクセス解析・広告・追跡・クラッシュレポートの SDK は入れていません。接続先の情報、パスワード、SSH 鍵は端末の中に暗号化して置きます。</p>
-    <p class="dates">制定日：2026年11月5日 · 改定日：2026年11月12日</p>
+    <p class="dates">制定日：2026年11月5日 · 改定日：2026年11月13日</p>
   </div>
 </div>
 <main>
@@ -110,8 +110,9 @@
         <thead><tr><th>渡る先</th><th>渡るもの</th><th>使い道</th></tr></thead>
         <tbody>
         <tr><td>Stripe と Link（販売者）</td><td>決済の画面で入れたもの（メールアドレス、支払いの情報、国など）</td><td>決済、領収書、税、返金。<a href="https://link.com/privacy">Link のプライバシーポリシー</a>と <a href="https://stripe.com/privacy">Stripe のプライバシーポリシー</a>に従って扱われます。</td></tr>
-        <tr><td>運営者の Worker（Cloudflare Workers）</td><td>購入が終わったページから、Checkout Session の id。Stripe から、その購入のメールアドレスと支払いの状態。送り直しのページでは、あなたが入れたメールアドレス。</td><td>支払い済みかを Stripe に確かめ、ライセンスキーを作って返し、メールで送るため。データベースを持たず、何も保存しません。</td></tr>
+        <tr><td>運営者の Worker（Cloudflare Workers）</td><td>購入が終わったページから、Checkout Session の id。Stripe から、その購入のメールアドレスと支払いの状態。送り直しのページでは、あなたが入れたメールアドレスと、あなたの IP アドレス。</td><td>支払い済みかを Stripe に確かめ、ライセンスキーを作って返し、メールで送るため。送り直しのページでは、IP アドレスは 1 つのアドレスから 10 分に送れる回数を絞るためだけに使い、その数はメモリにだけ置いて、時間が過ぎれば消えます。データベースを持たず、何も保存しません。</td></tr>
         <tr><td>Cloudflare Email Service</td><td>送り先のメールアドレスと、メールの本文（ライセンスキー）</td><td><code>license@sshterm.iru-yo.com</code> からキーのメールを送るため。<a href="https://www.cloudflare.com/ja-jp/privacypolicy/">Cloudflare のプライバシーポリシー</a>に従って扱われます。</td></tr>
+        <tr><td>Cloudflare Turnstile（送り直しのページだけ）</td><td>人とボットを見分けるために Turnstile が読む、ブラウザーと端末の情報と、あなたの IP アドレス</td><td>ボットに送り直しのページを使わせないため。<a href="https://www.cloudflare.com/turnstile-privacy-policy/">Cloudflare の Turnstile のプライバシーの補足</a>に従って扱われます。</td></tr>
         </tbody>
       </table>
     </div>
@@ -159,6 +160,7 @@
     <h2>変更の履歴</h2>
     <p>このポリシーを変えたときは、ページの上の日付を更新し、ここに書きます。</p>
     <ul>
+      <li>2026年11月13日：ライセンスキーの送り直しのページ（Cloudflare Turnstile と、運営者の Worker の IP アドレスごとの回数の制限）を足した</li>
       <li>2026年11月12日：デスクトップ版（SSH Term Desktop）と、その購入（Stripe と Link、運営者の Worker、Cloudflare Email Service）を足した</li>
       <li>2026年11月5日：制定</li>
     </ul>
