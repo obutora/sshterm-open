@@ -4,11 +4,14 @@
 //   current.json   what the app reads: the open poll, recent results and
 //                  announcements, as of the time the build runs
 //   <id>.html      each poll that has opened: answered with #k=<token> until
-//                  its deadline, its results after
-//   index.html     the open poll and the past results
+//                  its deadline; after it, closed, and its results once they
+//                  are published
+//   index.html     the open poll and the closed ones
 //
-// The counts of a poll whose deadline has passed come from the site's own API
-// (GET /api/polls/<id>, which closes the poll if the cron Worker has not yet).
+// A poll's results are published only once the definition gives resultsAt
+// (the developer has checked the counts) and it is reached. Their counts come
+// from the site's own API (GET /api/polls/<id>, which closes the poll if the
+// cron Worker has not yet).
 // A definition that breaks a rule fails the build and writes nothing; the
 // Cloudflare Pages build is the deploy gate.
 
@@ -16,7 +19,7 @@ import { mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'nod
 import { join } from 'node:path';
 import Ajv2020Module from 'ajv/dist/2020.js';
 import { Html, html } from './html.js';
-import { DAY, RESULTS_DAYS, SITE, checkDefinition, isoTime, pollUrl } from '../polls/rules.js';
+import { DAY, RESULTS_DAYS, SITE, checkDefinition, isoTime, pollUrl, resultsPublished } from '../polls/rules.js';
 import { STRINGS, countsIn } from '../public/polls/polls.js';
 
 const Ajv2020 = Ajv2020Module.default ?? Ajv2020Module;
@@ -62,23 +65,27 @@ export function readDefinition(bytes) {
 
 // ── current.json ────────────────────────────────────────────────────────────
 
-const resultsUntil = (poll) => poll.closesAt + RESULTS_DAYS * DAY;
+/** The end of a poll's results in current.json; only for a poll with resultsAt. */
+const resultsUntil = (poll) => poll.resultsAt + RESULTS_DAYS * DAY;
 const isOpen = (poll, now) => poll.opensAt <= now && now < poll.closesAt;
-const showsResults = (poll, now) => poll.closesAt <= now && now < resultsUntil(poll);
-/** An announcement shows from its poll's results (the deadline) until its end. */
-const announces = (poll, now) => Boolean(poll.announcement) && poll.closesAt <= now && now < poll.announcement.until;
+const showsResults = (poll, now) => resultsPublished(poll, now) && now < resultsUntil(poll);
+/** An announcement shows from its poll's results (resultsAt) until its end. */
+const announces = (poll, now) => Boolean(poll.announcement) && resultsPublished(poll, now) && now < poll.announcement.until;
 const newestFirst = (a, b) => b.closesAt - a.closesAt;
 
 /**
  * current.json at [now] for [polls], [counts] holding the counts (by option)
- * of polls whose deadline has passed, by id. A poll in its 14 days of results
- * without counts is left out, and nextChangeAt asks for another build within
- * the hour.
+ * of polls whose results are published, by id. A poll in its 14 days of
+ * results without counts is left out, and nextChangeAt asks for another
+ * build within the hour. A poll without resultsAt has no results and no
+ * announcement in it.
  */
 export function currentJson({ polls, now, counts }) {
   const results = polls.filter((p) => showsResults(p, now)).sort(newestFirst);
   const missing = results.some((p) => !counts.has(p.id));
-  const times = polls.flatMap((p) => [p.opensAt, p.closesAt, resultsUntil(p), p.announcement?.until]);
+  const times = polls.flatMap((p) => (p.resultsAt === null
+    ? [p.opensAt, p.closesAt]
+    : [p.opensAt, p.closesAt, p.resultsAt, resultsUntil(p), p.announcement?.until]));
   if (missing) times.push(now + HOUR);
   const next = Math.min(...times.filter((t) => t !== undefined && t > now));
   return {
@@ -106,7 +113,7 @@ export function currentJson({ polls, now, counts }) {
       body: p.announcement.body,
       link: p.announcement.link,
       url: pollUrl(p.id),
-      from: isoTime(p.closesAt),
+      from: isoTime(p.resultsAt),
       until: isoTime(p.announcement.until),
     })),
   };
@@ -197,6 +204,7 @@ ${free ? html`    <label class="free" for="free">${pollText('span', free.label, 
 </section>
 <p id="status" class="status" aria-live="polite"></p>
 ${frameText('p', 'pending', html` id="pending" class="note" hidden`)}
+${frameText('p', 'checking', html` id="checking" class="note" hidden`)}
 <section id="results" hidden>
   ${frameText('h2', 'results')}
   <ol id="counts" class="counts"></ol>
@@ -211,6 +219,7 @@ ${pageData({
   options: poll.options,
   freeText: free ? { label: free.label, maxLength: free.maxLength } : null,
   closesAt: isoTime(poll.closesAt),
+  resultsAt: poll.resultsAt === null ? null : isoTime(poll.resultsAt),
   announcement: announces(poll, now)
     ? { title: poll.announcement.title, body: poll.announcement.body }
     : null,
@@ -241,8 +250,8 @@ function listPage(polls, now) {
   ${open.length ? html`<ul class="polls">\n${open.map(listItem)}</ul>` : frameText('p', 'noneOpen', html` class="note"`)}
 </section>
 <section>
-  ${frameText('h2', 'pastResults')}
-  ${closed.length ? html`<ul class="polls">\n${closed.map(listItem)}</ul>` : frameText('p', 'noResults', html` class="note"`)}
+  ${frameText('h2', 'closedPolls')}
+  ${closed.length ? html`<ul class="polls">\n${closed.map(listItem)}</ul>` : frameText('p', 'noneClosed', html` class="note"`)}
 </section>
 </main>
 ${pageData({ titles: Object.fromEntries([...open, ...closed].map((p) => [p.id, p.title])) })}`,

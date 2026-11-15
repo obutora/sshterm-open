@@ -42,6 +42,9 @@ async function build(doc, now, { getCounts = async () => { throw new Error('no A
   };
 }
 
+/** Results published at the deadline: the developer checked the counts beforehand. */
+const CHECKED = { resultsAt: '2026-12-15T00:00:00Z' };
+
 const problemsOf = (bytes) => {
   try {
     readDefinition(bytes);
@@ -76,6 +79,7 @@ test('the schema refuses what the rules refuse, where a schema can say it', () =
     poll({ id: 'Bad Id' }),
     poll({ id: 'index' }),
     poll({ opensAt: '2026-12-01' }),
+    poll({ resultsAt: '2026-12-16' }),
     poll({ extra: true }),
     poll({ announcement: { title: { en: 'a'.repeat(41) }, body: { en: 'b' } } }),
     poll({ announcement: { title: { en: 'a' }, body: { en: 'b'.repeat(301) } } }),
@@ -136,9 +140,42 @@ test('while open: the poll in current.json, its page saying the results come aft
   assert.match(site.read('polls/index.html'), /<a href="\/polls\/next-feature">/);
 });
 
+test('after the deadline, without resultsAt: the API is not asked; no count in current.json, the list or the page', async () => {
+  let asked = 0;
+  const site = await build(definition(poll({ announcement: { title: { en: 'Done' }, body: { en: 'Thanks.' } } })), CLOSES_MS + DAY, {
+    getCounts: async () => { asked++; return [9, 9, 9]; },
+  });
+  assert.equal(asked, 0);
+  const doc = site.json('polls/current.json');
+  assert.deepEqual([doc.polls, doc.results, doc.announcements, doc.nextChangeAt], [[], [], [], null]);
+  const page = site.read('polls/next-feature.html');
+  assert.match(page, /id="checking"[^>]*data-t="checking"|data-t="checking"[^>]*id="checking"/);
+  assert.match(page, /"resultsAt":null/);
+  assert.doesNotMatch(page, /id="announcement"/);
+  assert.match(site.read('polls/index.html'), /<a href="\/polls\/next-feature">/);
+  for (const file of ['polls/current.json', 'polls/index.html', 'polls/next-feature.html']) {
+    assert.doesNotMatch(site.read(file), /"counts":|"total":|\b9\b/, file);
+  }
+});
+
+test('with resultsAt: the counts are asked for from resultsAt only; the page knows when', async () => {
+  const later = definition(poll({ resultsAt: '2026-12-16T00:00:00Z' }));
+  let asked = 0;
+  const getCounts = async () => { asked++; return [4, 1, 0]; };
+  const before = await build(later, CLOSES_MS + 60_000, { getCounts });
+  assert.equal(asked, 0);
+  assert.equal(before.json('polls/current.json').nextChangeAt, '2026-12-16T00:00:00Z');
+  assert.match(before.read('polls/next-feature.html'), /"resultsAt":"2026-12-16T00:00:00Z"/);
+  const from = await build(later, CLOSES_MS + DAY, { getCounts });
+  assert.equal(asked, 1);
+  assert.deepEqual(from.json('polls/current.json').results.map((r) => [r.closedAt, r.until, r.total]), [
+    ['2026-12-15T00:00:00Z', '2026-12-30T00:00:00Z', 5],
+  ]);
+});
+
 test('after the deadline: the counts from the API in current.json; the page fetches them', async () => {
   const asked = [];
-  const site = await build(definition(poll()), CLOSES_MS + 60_000, {
+  const site = await build(definition(poll(CHECKED)), CLOSES_MS + 60_000, {
     getCounts: async (p) => { asked.push(p.id); return [4, 1, 0]; },
   });
   assert.deepEqual(asked, ['next-feature']);
@@ -151,7 +188,7 @@ test('after the deadline: the counts from the API in current.json; the page fetc
 
 test('when the API gives no counts the build goes on without the results, and says so', async () => {
   const logs = [];
-  const site = await build(definition(poll()), CLOSES_MS + 60_000, { logs });
+  const site = await build(definition(poll(CHECKED)), CLOSES_MS + 60_000, { logs });
   assert.deepEqual(site.json('polls/current.json').results, []);
   assert.ok(logs.some((l) => /no counts for next-feature/.test(l)), logs.join('\n'));
 });
@@ -177,6 +214,7 @@ test('the counts are read from GET /api/polls/<id> only when closed and as long 
 
 test('the pages load only the site’s own files, run no inline script and have no inline style', async () => {
   const site = await build(definition(poll({
+    ...CHECKED,
     freeText: { label: { en: 'Why?' } },
     announcement: { title: { en: 'Done' }, body: { en: 'Thanks.' }, link: 'https://discord.gg/abc' },
   })), CLOSES_MS + 1, { getCounts: async () => [1, 1, 1] });

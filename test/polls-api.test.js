@@ -9,17 +9,19 @@ import { closeDue, purgeFreeText } from '../polls/store.js';
 import { FakeD1 } from './fake-d1.js';
 import { CLOSES_MS, DAY, OPENS_MS, definition, poll, token } from './polls-fixtures.js';
 
-const POLLS = checkDefinition(definition(poll({ freeText: { label: { en: 'Anything else?' }, maxLength: 20 } }))).polls;
+const FREE_TEXT = { label: { en: 'Anything else?' }, maxLength: 20 };
+/** The poll with its results published at the deadline (resultsAt), as the tests below read them. */
+const POLLS = checkDefinition(definition(poll({ freeText: FREE_TEXT, resultsAt: '2026-12-15T00:00:00Z' }))).polls;
 const ID = 'next-feature';
 const OPEN = OPENS_MS + DAY;
 const URL_ = `https://sshterm.iru-yo.com/api/polls/${ID}`;
 
-function setup() {
+function setup(polls = POLLS) {
   const db = new FakeD1();
   const call = async (method, { now = OPEN, body, id = ID, headers = {} } = {}) => {
     const init = { method, headers: { 'content-type': 'application/json', ...headers } };
     if (body !== undefined) init.body = typeof body === 'string' || body instanceof Uint8Array ? body : JSON.stringify(body);
-    const res = await handlePoll({ request: new Request(URL_, init), db, polls: POLLS, id, now });
+    const res = await handlePoll({ request: new Request(URL_, init), db, polls, id, now });
     return { status: res.status, body: res.status === 204 ? null : await res.json(), headers: res.headers };
   };
   return {
@@ -118,6 +120,23 @@ test('until the deadline no count is given anywhere; after it the counts are', a
   assert.equal(before.headers.get('cache-control'), 'no-store');
   const after = await get({ now: CLOSES_MS });
   assert.deepEqual(after.body, { id: ID, state: 'closed', closesAt: '2026-12-15T00:00:00Z', total: 3, counts: [2, 0, 1] });
+});
+
+test('without resultsAt the deadline closes the poll but gives no count; with it, the counts come from resultsAt', async () => {
+  const closed = { id: ID, state: 'closed', closesAt: '2026-12-15T00:00:00Z' };
+  const unchecked = setup(checkDefinition(definition(poll({ freeText: FREE_TEXT }))).polls);
+  await unchecked.post({ token: token(1), choice: 1, freeText: 'hi' });
+  for (const now of [CLOSES_MS, CLOSES_MS + 365 * DAY]) assert.deepEqual((await unchecked.get({ now })).body, closed);
+  // The deadline processing ran all the same: counts in tallies, no answer's row left.
+  assert.deepEqual(unchecked.db.rows('votes'), []);
+  assert.deepEqual(unchecked.db.rows('tallies'), [{ poll_id: ID, choice: 1, count: 1 }]);
+  assert.deepEqual(unchecked.db.rows('free_texts').map((r) => r.text), ['hi']);
+
+  const later = setup(checkDefinition(definition(poll({ resultsAt: '2026-12-17T00:00:00Z' }))).polls);
+  await later.post({ token: token(1), choice: 2 });
+  assert.deepEqual((await later.get({ now: CLOSES_MS })).body, closed);
+  assert.deepEqual((await later.get({ now: CLOSES_MS + 2 * DAY - 1 })).body, closed);
+  assert.deepEqual((await later.get({ now: CLOSES_MS + 2 * DAY })).body, { ...closed, total: 1, counts: [0, 0, 1] });
 });
 
 test('after the poll is closed, reading its results writes nothing to the database', async () => {

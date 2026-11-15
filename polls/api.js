@@ -2,9 +2,12 @@
 // (functions/api/polls/[id].js) on the D1 database of polls/store.js.
 //
 //   GET   {id, state: "open", closesAt} until the deadline: no count, ever;
-//         {id, state: "closed", closesAt, total, counts} after it (closing
-//         the poll first if the cron Worker has not yet; once it is closed,
-//         reading writes nothing).
+//         {id, state: "closed", closesAt} after it, until the results are
+//         published (resultsAt in the definition, set once the developer
+//         has checked the counts); {id, state: "closed", closesAt, total,
+//         counts} from then. After the deadline it closes the poll first if
+//         the cron Worker has not yet; once it is closed, reading writes
+//         nothing.
 //   POST  {token, choice, freeText?}: stores the token's answer, replacing
 //         its earlier one, until the deadline (409 after it).
 //
@@ -14,7 +17,7 @@
 // refused before it is read.
 
 import { TOKEN } from '../public/polls/token.js';
-import { checkFreeText, isoTime, tokenHash } from './rules.js';
+import { checkFreeText, isoTime, resultsPublished, tokenHash } from './rules.js';
 import { closePoll, countsOf, isClosed, vote } from './store.js';
 
 /** The largest body taken, in bytes: 1000 code points of 4 bytes, escaped, and the rest. */
@@ -80,10 +83,10 @@ export async function handlePoll({ request, db, polls, id, now }) {
   if (request.method === 'GET' || request.method === 'HEAD') {
     if (open) return json(200, { id: poll.id, state: 'open', closesAt: isoTime(poll.closesAt) });
     if (!await isClosed(db, poll.id)) await closePoll(db, poll, now);
+    const closed = { id: poll.id, state: 'closed', closesAt: isoTime(poll.closesAt) };
+    if (!resultsPublished(poll, now)) return json(200, closed);
     const counts = await countsOf(db, poll.id, poll.options.length);
-    return json(200, {
-      id: poll.id, state: 'closed', closesAt: isoTime(poll.closesAt), total: counts.reduce((a, b) => a + b, 0), counts,
-    });
+    return json(200, { ...closed, total: counts.reduce((a, b) => a + b, 0), counts });
   }
   if (request.method === 'POST') {
     if (!open) return json(409, { error: 'closed' });

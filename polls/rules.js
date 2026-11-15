@@ -25,9 +25,9 @@ export const FREE_TEXT_MAX = 1000;
 export const DAY = 24 * 60 * 60 * 1000;
 /** A poll is open this long when the definition gives no deadline. */
 export const OPEN_DAYS = 14;
-/** current.json shows a poll's results this long after its deadline. */
+/** current.json shows a poll's results this long from their publication (resultsAt). */
 export const RESULTS_DAYS = 14;
-/** An announcement is shown this long from its poll's deadline (the results) when the definition gives no end. */
+/** An announcement is shown this long from its poll's results (resultsAt) when the definition gives no end. */
 export const ANNOUNCEMENT_DAYS = 30;
 /** Free text is deleted this long after the poll's deadline. */
 export const FREE_TEXT_DAYS = 90;
@@ -54,6 +54,9 @@ export const pollUrl = (id) => `${SITE}/polls/${id}`;
 
 /** [ms] as the polls write times (current.json, the API, the pages): UTC, to the second. */
 export const isoTime = (ms) => new Date(ms).toISOString().slice(0, 19) + 'Z';
+
+/** True once [poll]'s results are published at [now]: its resultsAt is set and reached. */
+export const resultsPublished = (poll, now) => poll.resultsAt !== null && poll.resultsAt <= now;
 
 /** [time] (ISO 8601 with a zone) in ms since the epoch, or null. */
 function parseTime(time) {
@@ -137,7 +140,7 @@ export function checkDefinition(doc) {
       continue;
     }
     const before = problems.length;
-    onlyKeys(value, ['id', 'title', 'options', 'freeText', 'opensAt', 'closesAt', 'announcement'], at);
+    onlyKeys(value, ['id', 'title', 'options', 'freeText', 'opensAt', 'closesAt', 'resultsAt', 'announcement'], at);
     const id = need(value, 'id', `${at}.id`, (v) => typeof v === 'string');
     if (id !== undefined && (!POLL_ID.test(id) || id.length > POLL_ID_MAX || RESERVED_IDS.includes(id))) {
       fail(`${at}.id`, 'badId');
@@ -174,6 +177,12 @@ export function checkDefinition(doc) {
         fail(`${at}.closesAt`, 'notAfterOpening');
       }
     }
+    // The results are published only once the developer has checked them and set resultsAt.
+    let resultsAt = null;
+    if (Object.hasOwn(value, 'resultsAt')) {
+      resultsAt = time(value, 'resultsAt', `${at}.resultsAt`);
+      if (resultsAt !== undefined && closesAt !== undefined && resultsAt < closesAt) fail(`${at}.resultsAt`, 'beforeDeadline');
+    }
     let announcement = null;
     if (Object.hasOwn(value, 'announcement')) {
       const map = need(value, 'announcement', `${at}.announcement`, isObject);
@@ -187,10 +196,14 @@ export function checkDefinition(doc) {
           link = map.link;
           if (!isAllowedLink(link)) fail(`${path}.link`, 'badLink');
         }
-        let until = closesAt === undefined ? undefined : closesAt + ANNOUNCEMENT_DAYS * DAY;
+        // It shows with the results; until they are published, its default end counts from the deadline.
+        const from = resultsAt === null ? closesAt : resultsAt;
+        let until = from === undefined ? undefined : from + ANNOUNCEMENT_DAYS * DAY;
         if (Object.hasOwn(map, 'until')) {
           until = time(map, 'until', `${path}.until`);
-          if (until !== undefined && closesAt !== undefined && until <= closesAt) fail(`${path}.until`, 'notAfterDeadline');
+          if (until !== undefined && from !== undefined && until <= from) {
+            fail(`${path}.until`, resultsAt === null ? 'notAfterDeadline' : 'notAfterResults');
+          }
         }
         announcement = { title: aTitle, body, link, until };
       }
@@ -205,7 +218,7 @@ export function checkDefinition(doc) {
       fail(`${at}.opensAt`, 'overlaps');
       continue;
     }
-    polls.push({ id, title, options, freeText, opensAt, closesAt, announcement });
+    polls.push({ id, title, options, freeText, opensAt, closesAt, resultsAt, announcement });
   }
   return problems.length ? { ok: false, problems } : { ok: true, polls };
 }

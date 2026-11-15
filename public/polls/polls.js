@@ -5,9 +5,11 @@
 // fragment never reaches the server: the page sends the token, the choice and
 // the free text to the Functions on the same origin (POST /api/polls/<id>).
 // Sending again with the same token replaces the answer, until the deadline.
-// Until the deadline the page shows no count; after it, it fetches the
-// results (GET /api/polls/<id>). It stores nothing, and puts every text in
-// with textContent.
+// Until the deadline the page shows no count. After it, the poll is closed;
+// once its results are published (resultsAt in the definition, set when the
+// developer has checked the counts) it fetches them (GET /api/polls/<id>),
+// until then it says they will come. It stores nothing, and puts every text
+// in with textContent.
 //
 // The frame is in English or Japanese; the poll's own texts are in the app's
 // six languages, English standing in for a missing one.
@@ -22,12 +24,12 @@ export const STRINGS = {
     poll: 'Poll',
     list: 'All polls',
     listTitle: 'SSH Term polls',
-    listLede: 'Questions from the developer of SSH Term. Answer from the app; the results are published here after each deadline.',
-    description: 'A poll from the developer of SSH Term. Answer from the app; the results are published here after the deadline.',
+    listLede: 'Questions from the developer of SSH Term. Answer from the app; the results are published here after each deadline, once the developer has checked them.',
+    description: 'A poll from the developer of SSH Term. Answer from the app; the results are published here after the deadline, once the developer has checked them.',
     openNow: 'Open now',
-    pastResults: 'Results',
+    closedPolls: 'Closed polls',
     noneOpen: 'No poll is open now.',
-    noResults: 'No results yet.',
+    noneClosed: 'No poll has closed yet.',
     terms: 'Terms of Use',
     privacy: 'Privacy Policy',
     deadline: 'Deadline',
@@ -35,7 +37,8 @@ export const STRINGS = {
     freeNote: 'Only the developer reads this. Do not write names, host names, IP addresses or the like.',
     send: 'Send',
     sendAgain: 'Send again',
-    pending: 'The results will be published here after the deadline.',
+    pending: 'The results will be published here after the deadline, once the developer has checked them.',
+    checking: 'The results will be published here after the developer checks them.',
     results: 'Results',
     announcement: 'Announcement',
     noscript: 'Turn on JavaScript to answer or to see the results.',
@@ -56,12 +59,12 @@ export const STRINGS = {
     poll: 'アンケート',
     list: 'アンケートの一覧',
     listTitle: 'SSH Term のアンケート',
-    listLede: 'SSH Term の開発者からのアンケートです。アプリから答えられます。結果は締め切りのあと、ここで公開します。',
-    description: 'SSH Term の開発者からのアンケートです。アプリから答えられます。結果は締め切りのあと、ここで公開します。',
+    listLede: 'SSH Term の開発者からのアンケートです。アプリから答えられます。結果は締め切りのあと、開発者が確認してから、ここで公開します。',
+    description: 'SSH Term の開発者からのアンケートです。アプリから答えられます。結果は締め切りのあと、開発者が確認してから、ここで公開します。',
     openNow: '受付中',
-    pastResults: '結果',
+    closedPolls: '締め切ったアンケート',
     noneOpen: 'いま受け付けているアンケートはありません。',
-    noResults: 'まだ結果はありません。',
+    noneClosed: 'まだ締め切ったアンケートはありません。',
     terms: '利用規約',
     privacy: 'プライバシーポリシー',
     deadline: '締め切り',
@@ -69,7 +72,8 @@ export const STRINGS = {
     freeNote: '開発者だけが読みます。名前・ホスト名・IP アドレスなどは書かないでください。',
     send: '送る',
     sendAgain: 'もう一度送る',
-    pending: '締め切りのあと、ここで公開します。',
+    pending: '締め切りのあと、開発者が確認してから、ここで公開します。',
+    checking: '結果は開発者が確認したあと、ここで公開します。',
     results: '結果',
     announcement: 'お知らせ',
     noscript: '答えるとき・結果を見るときは、JavaScript をオンにしてください。',
@@ -146,9 +150,19 @@ export async function runPoll({ document, location, navigator, fetch, now = Date
   const say = (text) => { $('status').textContent = text; };
   const api = `/api/polls/${encodeURIComponent(poll.id)}`;
 
-  const showResults = async () => {
+  const closed = () => {
     $('answer').hidden = true;
     $('pending').hidden = true;
+  };
+  /** Closed, the results not yet published: they come once the developer has checked them. */
+  const showChecking = () => {
+    closed();
+    $('checking').hidden = false;
+    say(frame.closed);
+  };
+
+  const showResults = async () => {
+    closed();
     let body;
     try {
       const res = await fetch(api, { headers: { accept: 'application/json' } });
@@ -156,6 +170,8 @@ export async function runPoll({ document, location, navigator, fetch, now = Date
     } catch {
       body = null;
     }
+    // Closed without counts: the API has not reached resultsAt yet (this clock is ahead).
+    if (body?.state === 'closed' && !Object.hasOwn(body, 'counts')) return showChecking();
     const counts = countsIn(body, poll.options.length);
     if (!counts) return say(frame.resultsFailed);
     const total = counts.reduce((a, b) => a + b, 0);
@@ -183,7 +199,10 @@ export async function runPoll({ document, location, navigator, fetch, now = Date
     say(frame.closed);
   };
 
-  if (now() >= closesAt) return showResults();
+  /** After the deadline: the results once published (resultsAt reached), else word that they will come. */
+  const afterDeadline = () => (poll.resultsAt !== null && now() >= Date.parse(poll.resultsAt) ? showResults() : showChecking());
+
+  if (now() >= closesAt) return afterDeadline();
 
   $('pending').hidden = false;
   const token = tokenFrom(location.hash);
@@ -215,7 +234,8 @@ export async function runPoll({ document, location, navigator, fetch, now = Date
       send.textContent = frame.sendAgain;
       return say(frame.sent);
     }
-    if (res?.status === 409) return showResults();
+    // The deadline overtook the send: the API says whether the results are out yet (this clock may be behind).
+    if (res?.status === 409) return poll.resultsAt === null ? showChecking() : showResults();
     if (res?.status === 429) return say(frame.tooMany);
     if (res?.status === 400 && poll.freeText) {
       const body = await res.json().catch(() => null);

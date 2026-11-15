@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://sshterm.iru-yo.com/polls/schema/definition.json",
   "title": "SSH Term polls: the definition file (polls/polls.json)",
-  "description": "Every poll (アンケート) of SSH Term, past and to come. polls/rules.js adds what a schema cannot say: lengths and blanks counted once trimmed, real dates, the deadline after the start, the announcement's end after the deadline, the link's host, unique ids and no two polls open at once.",
+  "description": "Every poll (アンケート) of SSH Term, past and to come. polls/rules.js adds what a schema cannot say: lengths and blanks counted once trimmed, real dates, the deadline after the start, resultsAt at or after the deadline, the announcement's end after resultsAt (after the deadline when there is none), the link's host, unique ids and no two polls open at once.",
   "type": "object",
   "required": ["polls"],
   "additionalProperties": false,
@@ -49,6 +49,10 @@
           "description": "The deadline; 14 days after opensAt when not given.",
           "$ref": "#/$defs/time"
         },
+        "resultsAt": {
+          "description": "When the results are published: the counts on the API and the poll's page, the results (14 days) and the announcement in current.json. At or after the deadline. Set it only once the developer has checked the counts; until it is set and reached, nothing about the counts is public.",
+          "$ref": "#/$defs/time"
+        },
         "announcement": {
           "description": "An optional announcement (お知らせ) that goes with the results.",
           "type": "object",
@@ -64,7 +68,7 @@
               "pattern": "^https://[^\\s\\u0000-\\u001f\\u007f-\\u009f\\u061c\\u200e\\u200f\\u202a-\\u202e\\u2066-\\u2069]+$"
             },
             "until": {
-              "description": "When the app and the results page stop showing it; 30 days after the deadline when not given, and after the deadline. It shows from the results (the deadline).",
+              "description": "When the app and the results page stop showing it; 30 days after resultsAt when not given, and after resultsAt (after the deadline while there is no resultsAt). It shows from the results (resultsAt).",
               "$ref": "#/$defs/time"
             }
           }
