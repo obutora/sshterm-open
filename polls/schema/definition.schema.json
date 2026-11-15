@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sshterm.iru-yo.com/polls/schema/definition.json",
+  "title": "SSH Term polls: the definition file (polls/polls.json)",
+  "description": "Every poll (アンケート) of SSH Term, past and to come. polls/rules.js adds what a schema cannot say: lengths and blanks counted once trimmed, real dates, the deadline after the start, the announcement's end after the deadline, the link's host, unique ids and no two polls open at once.",
+  "type": "object",
+  "required": ["polls"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "polls": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/poll" }
+    }
+  },
+  "$defs": {
+    "poll": {
+      "type": "object",
+      "required": ["id", "title", "options", "opensAt"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "description": "The page is /polls/<id>. Lowercase letters and digits joined by single hyphens; not \"index\".",
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "not": { "const": "index" }
+        },
+        "title": { "$ref": "#/$defs/title" },
+        "options": {
+          "description": "The answers, one of which is chosen.",
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 5,
+          "items": { "$ref": "#/$defs/option" }
+        },
+        "freeText": {
+          "description": "An optional free text field under the options.",
+          "type": "object",
+          "required": ["label"],
+          "additionalProperties": false,
+          "properties": {
+            "label": { "$ref": "#/$defs/freeTextLabel" },
+            "maxLength": { "type": "integer", "minimum": 1, "maximum": 1000, "default": 500 }
+          }
+        },
+        "opensAt": { "$ref": "#/$defs/time" },
+        "closesAt": {
+          "description": "The deadline; 14 days after opensAt when not given.",
+          "$ref": "#/$defs/time"
+        },
+        "announcement": {
+          "description": "An optional announcement (お知らせ) that goes with the results.",
+          "type": "object",
+          "required": ["title", "body"],
+          "additionalProperties": false,
+          "properties": {
+            "title": { "$ref": "#/$defs/announcementTitle" },
+            "body": { "$ref": "#/$defs/announcementBody" },
+            "link": {
+              "description": "https to one of the hosts polls/rules.js allows (LINK_HOSTS, the one list of them), with no userinfo or port.",
+              "type": "string",
+              "maxLength": 500,
+              "pattern": "^https://[^\\s\\u0000-\\u001f\\u007f-\\u009f\\u061c\\u200e\\u200f\\u202a-\\u202e\\u2066-\\u2069]+$"
+            },
+            "until": {
+              "description": "When the app and the results page stop showing it; 30 days after the deadline when not given, and after the deadline. It shows from the results (the deadline).",
+              "$ref": "#/$defs/time"
+            }
+          }
+        }
+      }
+    },
+    "time": {
+      "description": "ISO 8601 with a zone and no fractions of a second, e.g. 2026-12-01T00:00:00Z.",
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(?::\\d{2})?(?:Z|[+-]\\d{2}:\\d{2})$"
+    },
+    "langs": {
+      "description": "A text in the app's languages; en is required and stands in for a missing one.",
+      "type": "object",
+      "required": ["en"],
+      "propertyNames": { "enum": ["en", "ja", "ko", "vi", "zh", "zh_Hant"] }
+    },
+    "plain": {
+      "description": "No control characters and none that turn the direction (ADR 0015).",
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[^\\u0000-\\u001f\\u007f-\\u009f\\u061c\\u200e\\u200f\\u202a-\\u202e\\u2066-\\u2069]*$"
+    },
+    "title": {
+      "$ref": "#/$defs/langs", "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/plain", "type": "string", "maxLength": 60 }
+    },
+    "option": {
+      "$ref": "#/$defs/langs", "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/plain", "type": "string", "maxLength": 40 }
+    },
+    "freeTextLabel": {
+      "$ref": "#/$defs/langs", "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/plain", "type": "string", "maxLength": 80 }
+    },
+    "announcementTitle": {
+      "$ref": "#/$defs/langs", "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/plain", "type": "string", "maxLength": 40 }
+    },
+    "announcementBody": {
+      "$ref": "#/$defs/langs", "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/plain", "type": "string", "maxLength": 300 }
+    }
+  }
+}

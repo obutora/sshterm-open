@@ -1,0 +1,55 @@
+{
+  "$schema": "./schema/definition.schema.json",
+  "polls": [
+    {
+      "id": "discord-community",
+      "title": {
+        "en": "If there were a Discord community, would you join?",
+        "ja": "Discord のコミュニティがあったら参加してみたいですか？",
+        "ko": "Discord 커뮤니티가 생기면 참여해 보고 싶으신가요?",
+        "vi": "Nếu có cộng đồng trên Discord, bạn có muốn tham gia không?",
+        "zh": "如果有 Discord 社区，你想加入吗？",
+        "zh_Hant": "如果有 Discord 社群，你想加入嗎？"
+      },
+      "options": [
+        {
+          "en": "I'd like to join",
+          "ja": "参加してみたい",
+          "ko": "참여해 보고 싶다",
+          "vi": "Muốn tham gia",
+          "zh": "想加入",
+          "zh_Hant": "想加入"
+        },
+        {
+          "en": "Only to read along",
+          "ja": "見るだけなら",
+          "ko": "보기만 한다면",
+          "vi": "Chỉ xem thôi",
+          "zh": "只看看的话可以",
+          "zh_Hant": "只看看的話可以"
+        },
+        {
+          "en": "I wouldn't join",
+          "ja": "参加しない",
+          "ko": "참여하지 않겠다",
+          "vi": "Không tham gia",
+          "zh": "不会加入",
+          "zh_Hant": "不會加入"
+        }
+      ],
+      "freeText": {
+        "label": {
+          "en": "Anything you'd like the Discord to have?",
+          "ja": "Discord でやってほしいことがあれば",
+          "ko": "Discord에서 해 줬으면 하는 것이 있다면",
+          "vi": "Bạn muốn có gì trên Discord?",
+          "zh": "希望在 Discord 上有什么？",
+          "zh_Hant": "希望在 Discord 上有什麼？"
+        },
+        "maxLength": 500
+      },
+      "opensAt": "2026-11-15T12:00:00Z",
+      "closesAt": "2026-12-13T12:00:00Z"
+    }
+  ]
+}

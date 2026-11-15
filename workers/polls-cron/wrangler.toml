@@ -1,0 +1,30 @@
+# sshterm-polls-cron: the polls' clock (ADR 0024, README "The polls").
+# Every hour, on the same D1 database as the site's Pages Functions: the
+# deadline processing, free text deleted 90 days after the deadline, and the
+# Pages deploy hook when /polls/current.json is due to change. No route: it
+# serves nothing. workers.dev and preview URLs are off.
+name = "sshterm-polls-cron"
+main = "index.js"
+compatibility_date = "2026-11-01"
+workers_dev = false
+preview_urls = false
+
+[triggers]
+crons = ["0 * * * *"]
+
+# No Workers Logs: nothing of the polls is written anywhere else.
+[observability]
+enabled = false
+
+# The polls' database, also bound to the Pages project as POLLS_DB.
+[[d1_databases]]
+binding = "POLLS_DB"
+database_name = "sshterm-polls"
+database_id = "dc44b97e-4187-44d2-aa34-2809dc73c4cc"
+migrations_dir = "../../polls/migrations"
+
+[vars]
+SITE = "https://sshterm.iru-yo.com"
+
+# Secret (npx wrangler secret put PAGES_DEPLOY_HOOK): the deploy hook URL of
+# the Pages project's production branch (main).

@@ -6,6 +6,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { nameKey } from '../public/theme-format.js';
 import { STRINGS, shows } from '../public/themes/gallery.js';
+import { headersFor } from './headers.js';
 
 const read = (path) => readFileSync(new URL(`../${path}`, import.meta.url), 'utf8');
 
@@ -38,30 +39,6 @@ test('the background filter shows only its tone; no tone shows both', () => {
   assert.deepEqual([dark, light].map((t) => shows(t, { query: 'tide', tone: 'light' })), [false, true]);
   assert.deepEqual([dark, light].map((t) => shows(t, { query: 'reef', tone: 'light' })), [false, false]);
 });
-
-/**
- * The headers Cloudflare Pages sends for [path] by public/_headers: the
- * blocks whose URL pattern matches, in the file's order; `! Name` removes
- * what earlier blocks set, a name set again is joined with a comma.
- */
-function headersFor(path) {
-  const headers = new Map();
-  const blocks = read('public/_headers').split(/\n(?=\S)/).map((b) => b.split('\n'));
-  for (const [pattern, ...lines] of blocks) {
-    if (pattern.startsWith('#')) continue;
-    const source = pattern.split('*').map((s) => s.replace(/[.+?^${}()|[\]\\]/g, '\\$&')).join('.*');
-    if (!new RegExp(`^${source}$`).test(path)) continue;
-    for (const line of lines.map((l) => l.trim()).filter((l) => l && !l.startsWith('#'))) {
-      if (line.startsWith('! ')) {
-        headers.delete(line.slice(2).toLowerCase());
-        continue;
-      }
-      const [name, value] = [line.slice(0, line.indexOf(':')).toLowerCase(), line.slice(line.indexOf(':') + 1).trim()];
-      headers.set(name, headers.has(name) ? `${headers.get(name)}, ${value}` : value);
-    }
-  }
-  return headers;
-}
 
 const CSP = "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'";
 const ID = '6f1c2b9e-3d4a-4b8c-9e7f-0a1b2c3d4e5f';

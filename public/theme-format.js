@@ -60,26 +60,32 @@ export function themeText(text) {
   return cps.slice(start, end).join('');
 }
 
-function forbidden(cp) {
+/**
+ * True for a control character (C0, DEL, C1) or one that turns the text's
+ * direction (ALM, LRM, RLM, LRE–RLO, LRI–PDI): ADR 0015's rule, which the
+ * polls (polls/rules.js) share.
+ */
+export function isForbiddenCodePoint(cp) {
   return cp <= 0x1f || (cp >= 0x7f && cp <= 0x9f) || cp === 0x061c ||
     cp === 0x200e || cp === 0x200f || (cp >= 0x202a && cp <= 0x202e) ||
     (cp >= 0x2066 && cp <= 0x2069);
 }
 
 /**
- * Null when [text], as themeText keeps it, is 1–40 code points with no
- * control characters and none that turn the direction; else 'empty',
- * 'tooLong' or 'forbiddenCharacter'.
+ * Null when [text], as themeText keeps it, is 1–[max] code points (40, a
+ * theme's names, unless given) with no control characters and none that turn
+ * the direction; else 'empty', 'tooLong' or 'forbiddenCharacter'. The polls'
+ * texts (polls/rules.js) are checked with their own limits.
  */
-export function checkThemeText(text) {
+export function checkThemeText(text, max = TEXT_MAX_CODE_POINTS) {
   const kept = themeText(text);
   if (kept.length === 0) return 'empty';
   let count = 0;
   for (const ch of kept) {
-    if (forbidden(ch.codePointAt(0))) return 'forbiddenCharacter';
+    if (isForbiddenCodePoint(ch.codePointAt(0))) return 'forbiddenCharacter';
     count++;
   }
-  return count > TEXT_MAX_CODE_POINTS ? 'tooLong' : null;
+  return count > max ? 'tooLong' : null;
 }
 
 class Problem {

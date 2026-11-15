@@ -1,0 +1,165 @@
+/* The polls (/polls/ and /polls/<id>), on top of /sheet.css and /legal.css:
+   the options as one column of radio rows, the free text field, the counts
+   as meters. No inline styles: the CSP allows only the site's own files. */
+
+/* The head of a poll: the kicker, the title and the deadline, one under the
+   other across the whole width (the sheet's second column is for a lede,
+   which a poll has none of), inset like the rest of the sheet. A title on
+   either page breaks between words; only a word too long for the line breaks
+   inside. */
+
+[data-page="poll"] .hero > * {
+  grid-column: 1 / -1;
+}
+
+[data-page="poll"] .hero h1 {
+  padding-top: 24px;
+}
+
+.hero h1 {
+  overflow-wrap: break-word;
+}
+
+.hero > .label {
+  margin: 0;
+  padding: 26px var(--pad) 0;
+}
+
+.hero > .dates {
+  margin: 0;
+  padding: 0 var(--pad) 26px;
+}
+
+/* A note inside a section or the form takes the section's inset, not its
+   own on top of it. */
+
+main section .note {
+  padding: 0;
+}
+
+main > .status,
+main > .note,
+main > noscript p {
+  max-width: none;
+  margin: 0;
+  padding: 18px var(--pad);
+  border-bottom: 1px solid var(--rule);
+}
+
+main > .status:empty {
+  display: none;
+}
+
+.note {
+  color: var(--muted);
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 44em;
+}
+
+fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+legend {
+  margin-bottom: 10px;
+  font: 500 11px/1.4 var(--mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.choice {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  padding: 10px 0;
+  border-top: 1px solid var(--rule-soft);
+  cursor: pointer;
+}
+
+.choice:last-child {
+  border-bottom: 1px solid var(--rule-soft);
+}
+
+.choice input {
+  accent-color: var(--accent);
+}
+
+.free {
+  font-weight: 600;
+}
+
+form .note {
+  margin: -8px 0 0;
+}
+
+textarea {
+  width: 100%;
+  padding: 12px;
+  font: inherit;
+  color: inherit;
+  background: var(--rule-soft);
+  border: 1px solid var(--rule);
+  resize: vertical;
+}
+
+form .button {
+  align-self: flex-start;
+  border: 0;
+  font: inherit;
+  cursor: pointer;
+}
+
+form .button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.counts {
+  list-style: none;
+  max-width: 44em;
+  padding: 0;
+}
+
+.counts li {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 4px 12px;
+  padding: 10px 0;
+  border-top: 1px solid var(--rule-soft);
+}
+
+.counts .count {
+  font-family: var(--mono);
+}
+
+.counts meter {
+  grid-column: 1 / -1;
+  width: 100%;
+  height: 10px;
+}
+
+.polls {
+  list-style: none;
+  padding: 0;
+}
+
+.polls li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.announcement h3 {
+  margin: 0 0 8px;
+  font-size: 18px;
+}
