@@ -17,11 +17,10 @@ crons = ["0 * * * *"]
 enabled = false
 
 # The polls' database, also bound to the Pages project as POLLS_DB.
-# database_id: the id `npx wrangler d1 create sshterm-polls` prints (README).
 [[d1_databases]]
 binding = "POLLS_DB"
 database_name = "sshterm-polls"
-database_id = "set-me-from-wrangler-d1-create"
+database_id = "dc44b97e-4187-44d2-aa34-2809dc73c4cc"
 migrations_dir = "../../polls/migrations"
 
 [vars]
