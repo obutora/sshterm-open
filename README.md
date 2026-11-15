@@ -275,9 +275,10 @@ hold a control character or one that turns the direction (ADR 0015's rule,
 two polls are open at once. `npm run build` checks the file against the
 schema and `polls/rules.js` before anything else and fails, writing nothing,
 with a JSON line per problem. That build is the CI gate for the definition:
-Cloudflare Pages runs it on every deploy (a branch's preview too), so a
-broken definition never goes out; the repository has no other CI (no GitHub
-Actions workflow).
+Cloudflare Pages runs it on every deploy of `main` (the project builds no
+previews of other branches), so a broken definition never goes out; the
+repository has no other CI (no GitHub Actions workflow). Run `npm run build`
+before merging a change to the definition.
 `npm test` checks the shipped file the same way, but runs only by hand.
 
 To add a poll, add an entry to `polls` with an `opensAt` in the future and
