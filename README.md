@@ -355,23 +355,29 @@ node ../../polls/export.js llm < free-texts.json > free-texts.txt
 - Delete the exported files when done; D1 deletes the free text 90 days
   after the deadline, and the copies should not outlive it.
 
-### Setting it up on Cloudflare (by hand)
+### Setting it up on Cloudflare
+
+Done on November 15, 2026 (account `df496aa8…`); to set it up again:
 
 1. `cd workers/polls-cron && npx wrangler d1 create sshterm-polls`, and put
    the `database_id` it prints into `workers/polls-cron/wrangler.toml`.
 2. `npx wrangler d1 migrations apply sshterm-polls --remote` (there).
-3. The Pages project › Settings › Bindings › Add › D1 database: variable
-   `POLLS_DB`, database `sshterm-polls`, for Production. Leave Preview
-   without it, or bind a separate database, so previews never write to the
-   real one.
+3. The Pages project `sshterm-open` › Settings › Bindings › Add › D1
+   database: variable `POLLS_DB`, database `sshterm-polls`, for Production.
+   Leave Preview without it, or bind a separate database, so previews never
+   write to the real one.
 4. The Pages project › Settings › Builds › Deploy hooks: add one for the
-   branch `main`, and `npx wrangler secret put PAGES_DEPLOY_HOOK` (in
-   `workers/polls-cron/`) with its URL.
+   branch `main` (named `sshterm-polls-cron`), and
+   `npx wrangler secret put PAGES_DEPLOY_HOOK` (in `workers/polls-cron/`)
+   with its URL.
 5. `npx wrangler deploy` (in `workers/polls-cron/`).
-6. The zone `iru-yo.com` › Security › WAF › Rate limiting rules: when
-   `http.host eq "sshterm.iru-yo.com" and starts_with(http.request.uri.path, "/api/polls/") and http.request.method eq "POST"`,
-   counting by IP, 10 requests per 10 seconds, block for 10 seconds
-   (response 429, which the page reads as too many tries).
+6. The zone `iru-yo.com` › Security › Security rules › Rate limiting rules.
+   The Free plan has one rule, which Meishi Next's `/v1/usage` already
+   uses, so the polls share it: its expression is
+   `(http.request.uri.path eq "/v1/usage") or (http.host eq "sshterm.iru-yo.com" and starts_with(http.request.uri.path, "/api/polls/") and http.request.method eq "POST")`,
+   counting by IP, 20 requests per 10 seconds, block for 10 seconds
+   (response 429, which the page reads as too many tries). Both count
+   against the same per-IP counter.
 
 ## Layout
 
