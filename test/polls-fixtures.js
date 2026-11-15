@@ -1,5 +1,5 @@
-// Poll definitions for the tests. The shipped polls/polls.json holds no poll,
-// so every test builds its own.
+// Poll definitions for the tests. No test depends on the polls the shipped
+// polls/polls.json holds: every test builds its own.
 
 export const DAY = 24 * 60 * 60 * 1000;
 export const OPENS = '2026-12-01T00:00:00Z';

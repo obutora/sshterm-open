@@ -5,7 +5,16 @@
 
 import { DAY, FREE_TEXT_DAYS } from './rules.js';
 
-const OPEN = 'EXISTS (SELECT 1 FROM polls WHERE id = ?1 AND closed_at IS NULL)';
+/** SQL true while the poll ?1 has not been through its deadline processing. */
+const POLL_NOT_CLOSED = 'EXISTS (SELECT 1 FROM polls WHERE id = ?1 AND closed_at IS NULL)';
+
+/** The statement that records [poll] with its deadline from the definition, until it is closed. */
+function recordPoll(db, poll) {
+  return db.prepare(
+    `INSERT INTO polls (id, closes_at) VALUES (?1, ?2)
+     ON CONFLICT (id) DO UPDATE SET closes_at = excluded.closes_at WHERE polls.closed_at IS NULL`,
+  ).bind(poll.id, poll.closesAt);
+}
 
 /**
  * Stores an answer to [poll] for the token whose hash is [hash], replacing
@@ -14,13 +23,10 @@ const OPEN = 'EXISTS (SELECT 1 FROM polls WHERE id = ?1 AND closed_at IS NULL)';
  */
 export async function vote(db, { poll, hash, choice, freeText }) {
   const [, stored] = await db.batch([
-    db.prepare(
-      `INSERT INTO polls (id, closes_at) VALUES (?1, ?2)
-       ON CONFLICT (id) DO UPDATE SET closes_at = excluded.closes_at WHERE polls.closed_at IS NULL`,
-    ).bind(poll.id, poll.closesAt),
+    recordPoll(db, poll),
     db.prepare(
       `INSERT INTO votes (poll_id, token_hash, choice, free_text)
-       SELECT ?1, ?2, ?3, ?4 WHERE ${OPEN}
+       SELECT ?1, ?2, ?3, ?4 WHERE ${POLL_NOT_CLOSED}
        ON CONFLICT (poll_id, token_hash) DO UPDATE SET choice = excluded.choice, free_text = excluded.free_text`,
     ).bind(poll.id, hash, choice, freeText),
   ]);
@@ -28,16 +34,16 @@ export async function vote(db, { poll, hash, choice, freeText }) {
 }
 
 /** The statements that close one poll ([id]) at [now]: they do nothing once it is closed. */
-function closing(db, id, now) {
+function closeStatements(db, id, now) {
   return [
     db.prepare(
       `INSERT INTO tallies (poll_id, choice, count)
-       SELECT poll_id, choice, COUNT(*) FROM votes WHERE poll_id = ?1 AND ${OPEN} GROUP BY choice`,
+       SELECT poll_id, choice, COUNT(*) FROM votes WHERE poll_id = ?1 AND ${POLL_NOT_CLOSED} GROUP BY choice`,
     ).bind(id),
     // Ordered by the hash, which is random: the order says nothing of who or when.
     db.prepare(
       `INSERT INTO free_texts (poll_id, text)
-       SELECT poll_id, free_text FROM votes WHERE poll_id = ?1 AND free_text IS NOT NULL AND ${OPEN}
+       SELECT poll_id, free_text FROM votes WHERE poll_id = ?1 AND free_text IS NOT NULL AND ${POLL_NOT_CLOSED}
        ORDER BY token_hash`,
     ).bind(id),
     db.prepare('DELETE FROM votes WHERE poll_id = ?1').bind(id),
@@ -45,23 +51,26 @@ function closing(db, id, now) {
   ];
 }
 
+/** True once [pollId] has been through its deadline processing. */
+export async function isClosed(db, pollId) {
+  return (await db.prepare('SELECT closed_at FROM polls WHERE id = ?1').bind(pollId).first('closed_at')) != null;
+}
+
 /**
  * The deadline processing of [poll] (its deadline from the definition) at
  * [now]: its counts go to tallies, its free text to free_texts with only the
  * poll's id, and every answer's row (the token's hash, the choice) is deleted.
+ * A poll nobody answered is recorded as closed too.
  */
 export async function closePoll(db, poll, now) {
-  await db.batch([
-    db.prepare('UPDATE polls SET closes_at = ?2 WHERE id = ?1 AND closed_at IS NULL').bind(poll.id, poll.closesAt),
-    ...closing(db, poll.id, now),
-  ]);
+  await db.batch([recordPoll(db, poll), ...closeStatements(db, poll.id, now)]);
 }
 
 /** The deadline processing of every poll whose deadline is past at [now]. Resolves to their ids. */
 export async function closeDue(db, now) {
   const { results } = await db.prepare('SELECT id FROM polls WHERE closed_at IS NULL AND closes_at <= ?1').bind(now).all();
   const ids = results.map((r) => r.id);
-  if (ids.length) await db.batch(ids.flatMap((id) => closing(db, id, now)));
+  if (ids.length) await db.batch(ids.flatMap((id) => closeStatements(db, id, now)));
   return ids;
 }
 

@@ -72,11 +72,12 @@ export function isForbiddenCodePoint(cp) {
 }
 
 /**
- * Null when [text], as themeText keeps it, is 1–40 code points with no
- * control characters and none that turn the direction; else 'empty',
- * 'tooLong' or 'forbiddenCharacter'.
+ * Null when [text], as themeText keeps it, is 1–[max] code points (40, a
+ * theme's names, unless given) with no control characters and none that turn
+ * the direction; else 'empty', 'tooLong' or 'forbiddenCharacter'. The polls'
+ * texts (polls/rules.js) are checked with their own limits.
  */
-export function checkThemeText(text) {
+export function checkThemeText(text, max = TEXT_MAX_CODE_POINTS) {
   const kept = themeText(text);
   if (kept.length === 0) return 'empty';
   let count = 0;
@@ -84,7 +85,7 @@ export function checkThemeText(text) {
     if (isForbiddenCodePoint(ch.codePointAt(0))) return 'forbiddenCharacter';
     count++;
   }
-  return count > TEXT_MAX_CODE_POINTS ? 'tooLong' : null;
+  return count > max ? 'tooLong' : null;
 }
 
 class Problem {

@@ -3,19 +3,22 @@
 //
 //   GET   {id, state: "open", closesAt} until the deadline: no count, ever;
 //         {id, state: "closed", closesAt, total, counts} after it (closing
-//         the poll first if the cron Worker has not yet).
+//         the poll first if the cron Worker has not yet; once it is closed,
+//         reading writes nothing).
 //   POST  {token, choice, freeText?}: stores the token's answer, replacing
 //         its earlier one, until the deadline (409 after it).
 //
 // A poll is known only from its start. Nothing about the request but its
-// body is read: no IP address, no user agent, no cookie.
+// body and the headers that frame it (content type, length) is read: no IP
+// address, no user agent, no cookie. A body announced as too large is
+// refused before it is read.
 
-import { TOKEN, checkFreeText, tokenHash } from './rules.js';
-import { closePoll, countsOf, vote } from './store.js';
+import { TOKEN } from '../public/polls/token.js';
+import { checkFreeText, isoTime, tokenHash } from './rules.js';
+import { closePoll, countsOf, isClosed, vote } from './store.js';
 
 /** The largest body taken, in bytes: 1000 code points of 4 bytes, escaped, and the rest. */
 const MAX_BODY = 16 * 1024;
-const iso = (ms) => new Date(ms).toISOString().slice(0, 19) + 'Z';
 
 function json(status, body, headers = {}) {
   return new Response(JSON.stringify(body), {
@@ -28,8 +31,10 @@ const refuse = (error, extra = {}) => json(400, { error, ...extra });
 
 async function readAnswer(request) {
   if (!/^application\/json\b/i.test(request.headers.get('content-type') ?? '')) return { response: json(415, { error: 'contentType' }) };
+  const tooLarge = () => ({ response: json(413, { error: 'tooLarge' }) });
+  if (Number(request.headers.get('content-length')) > MAX_BODY) return tooLarge();
   const bytes = new Uint8Array(await request.arrayBuffer());
-  if (bytes.length > MAX_BODY) return { response: json(413, { error: 'tooLarge' }) };
+  if (bytes.length > MAX_BODY) return tooLarge();
   let text;
   try {
     text = new TextDecoder('utf-8', { fatal: true }).decode(bytes);
@@ -64,7 +69,7 @@ async function answer(request, db, poll) {
   }
   const stored = await vote(db, { poll, hash: await tokenHash(poll.id, body.token), choice, freeText });
   if (!stored) return json(409, { error: 'closed' });
-  return json(200, { ok: true, closesAt: iso(poll.closesAt) });
+  return json(200, { ok: true, closesAt: isoTime(poll.closesAt) });
 }
 
 /** The response to [request] for the poll [id] of [polls] at [now], on the D1 binding [db]. */
@@ -73,11 +78,11 @@ export async function handlePoll({ request, db, polls, id, now }) {
   if (!poll) return json(404, { error: 'notFound' });
   const open = now < poll.closesAt;
   if (request.method === 'GET' || request.method === 'HEAD') {
-    if (open) return json(200, { id: poll.id, state: 'open', closesAt: iso(poll.closesAt) });
-    await closePoll(db, poll, now);
+    if (open) return json(200, { id: poll.id, state: 'open', closesAt: isoTime(poll.closesAt) });
+    if (!await isClosed(db, poll.id)) await closePoll(db, poll, now);
     const counts = await countsOf(db, poll.id, poll.options.length);
     return json(200, {
-      id: poll.id, state: 'closed', closesAt: iso(poll.closesAt), total: counts.reduce((a, b) => a + b, 0), counts,
+      id: poll.id, state: 'closed', closesAt: isoTime(poll.closesAt), total: counts.reduce((a, b) => a + b, 0), counts,
     });
   }
   if (request.method === 'POST') {
@@ -85,4 +90,9 @@ export async function handlePoll({ request, db, polls, id, now }) {
     return answer(request, db, poll);
   }
   return json(405, { error: 'method' }, { allow: 'GET, HEAD, POST' });
+}
+
+/** The Pages Function's onRequest for [polls], on the D1 binding POLLS_DB. */
+export function pagesFunction(polls) {
+  return ({ request, env, params }) => handlePoll({ request, db: env.POLLS_DB, polls, id: params.id, now: Date.now() });
 }

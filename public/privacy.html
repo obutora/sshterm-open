@@ -107,8 +107,8 @@
       <table>
         <thead><tr><th>What the operator receives</th><th>How long it is kept</th></tr></thead>
         <tbody>
-        <tr><td>The poll’s id, the answer you chose, and a hash of the poll’s token (to count one answer per app and let you change it until the deadline)</td><td>Each vote’s record is deleted at the poll’s deadline, once the number for each choice is moved to the totals.</td></tr>
-        <tr><td>Free text, only if you write some</td><td>Kept tied only to the poll’s id, and deleted 90 days after the deadline. Only the developer reads it; it is never published.</td></tr>
+        <tr><td>The poll’s id, the answer you chose, and a hash of the poll’s token (to count one answer per app and let you change it until the deadline)</td><td>Each vote’s record is deleted within about an hour after the poll’s deadline (by the hourly job, or when someone first opens the results, whichever comes first), once the number for each choice is moved to the totals.</td></tr>
+        <tr><td>Free text, only if you write some</td><td>Kept tied only to the poll’s id, and deleted within about an hour once 90 days have passed since the deadline (by the hourly job). Only the developer reads it; it is never published.</td></tr>
         <tr><td>The totals for each choice</td><td>Published on the poll’s page and in the app after the deadline, and kept published.</td></tr>
         </tbody>
       </table>
@@ -117,7 +117,7 @@
       <li>Not received: IP addresses are not stored (Cloudflare’s rate limiting uses them only to limit how often one address can send), and there is no device or installation ID. A new token is made for each poll, so answers to different polls are not linked.</li>
       <li>What for: to hear what users want, decide what to build, and share the results and the announcements that follow.</li>
       <li>Please do not write names, host names, IP addresses or other personal details in free text.</li>
-      <li>Answers are kept in Cloudflare D1, handled under <a href="https://www.cloudflare.com/privacypolicy/">Cloudflare’s Privacy Policy</a>.</li>
+      <li>Answers are kept in Cloudflare D1, handled under <a href="https://www.cloudflare.com/privacypolicy/">Cloudflare’s Privacy Policy</a>. D1 always keeps the database’s recent history for point-in-time recovery (<a href="https://developers.cloudflare.com/d1/reference/time-travel/">Time Travel</a>), which cannot be turned off: a vote’s record or free text that has been deleted can still be restored from that history for up to 30 days after its deletion, and is then gone.</li>
       <li>To stop: turn off “Show polls” in the app’s Settings › About. Polls are no longer shown and the app no longer reads <code>/polls/current.json</code>. If you never answer, nothing is sent.</li>
     </ul>
   </section>
@@ -171,7 +171,7 @@
       <li>stagent and its settings are on your host; you can remove them there.</li>
       <li>Delete notifications that reached ntfy, Slack, Discord or Telegram in those services.</li>
       <li>The operator’s Worker stores nothing. SSH Term Desktop purchase records stay with Stripe under Link’s and Stripe’s policies. Delete the key email from your mailbox yourself.</li>
-      <li>Poll answers: each vote’s record is deleted at the poll’s deadline, and free text 90 days after it. The totals stay published.</li>
+      <li>Poll answers: each vote’s record is deleted within about an hour after the poll’s deadline, and free text within about an hour once 90 days have passed since it. Deleted data stays restorable in Cloudflare D1’s history for up to 30 days. The totals stay published.</li>
       <li>What you write in the contact form (Google Forms) is used only to reply and to deal with your request.</li>
     </ul>
   </section>

@@ -5,7 +5,7 @@
 // polls/schema/ say the same rules for editors and the build; this module is
 // what the Functions trust.
 
-import { isForbiddenCodePoint, themeText } from '../public/theme-format.js';
+import { checkThemeText, isForbiddenCodePoint, themeText } from '../public/theme-format.js';
 
 export const SITE = 'https://sshterm.iru-yo.com';
 /** The app's languages; every text must have `en`, which stands in for a missing one. */
@@ -27,11 +27,14 @@ export const DAY = 24 * 60 * 60 * 1000;
 export const OPEN_DAYS = 14;
 /** current.json shows a poll's results this long after its deadline. */
 export const RESULTS_DAYS = 14;
-/** An announcement is shown this long when the definition gives no end. */
+/** An announcement is shown this long from its poll's deadline (the results) when the definition gives no end. */
 export const ANNOUNCEMENT_DAYS = 30;
 /** Free text is deleted this long after the poll's deadline. */
 export const FREE_TEXT_DAYS = 90;
-/** The only hosts an announcement may link to (https only), as the app has them. */
+/**
+ * The only hosts an announcement may link to (https only), as the app has
+ * them. The one list: the JSON Schemas leave the hosts to these rules.
+ */
 export const LINK_HOSTS = ['discord.gg', 'discord.com', 'sshterm.iru-yo.com', 'github.com'];
 export const LINK_MAX = 500;
 
@@ -41,30 +44,16 @@ const POLL_ID_MAX = 40;
 const RESERVED_IDS = ['index'];
 /** ISO 8601 with seconds or not, no fractions, and a zone. */
 const TIME = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2})?(?:Z|[+-]\d{2}:\d{2})$/;
-const LINK = /^https:\/\/(?:discord\.gg|discord\.com|sshterm\.iru-yo\.com|github\.com)(?:[/?#][^\s]*)?$/;
-/** A token: 32 random bytes as base64url without padding, made by the app for one poll. */
-export const TOKEN = /^[A-Za-z0-9_-]{43}$/;
+/** https, one of LINK_HOSTS exactly (no userinfo, port or trailing dot), then a path, query or fragment. */
+const LINK = new RegExp(`^https://(?:${LINK_HOSTS.map((h) => h.replaceAll('.', '\\.')).join('|')})(?:[/?#]\\S*)?$`);
 
 const isObject = (v) => v !== null && typeof v === 'object' && !Array.isArray(v);
 
 /** The URL of a poll's page (answers with #k=<token>, results after the deadline). */
 export const pollUrl = (id) => `${SITE}/polls/${id}`;
 
-/**
- * Null when [text], as it is kept (trimmed like the theme format's names),
- * is 1–[max] code points with no control characters and none that turn the
- * direction; else 'empty', 'tooLong' or 'forbiddenCharacter'.
- */
-export function textProblem(text, max) {
-  const kept = themeText(text);
-  if (kept.length === 0) return 'empty';
-  let count = 0;
-  for (const ch of kept) {
-    if (isForbiddenCodePoint(ch.codePointAt(0))) return 'forbiddenCharacter';
-    count++;
-  }
-  return count > max ? 'tooLong' : null;
-}
+/** [ms] as the polls write times (current.json, the API, the pages): UTC, to the second. */
+export const isoTime = (ms) => new Date(ms).toISOString().slice(0, 19) + 'Z';
 
 /** [time] (ISO 8601 with a zone) in ms since the epoch, or null. */
 function parseTime(time) {
@@ -123,7 +112,7 @@ export function checkDefinition(doc) {
         fail(`${path}.${lang}`, 'wrongType');
         continue;
       }
-      const problem = textProblem(value[lang], max);
+      const problem = checkThemeText(value[lang], max);
       if (problem) fail(`${path}.${lang}`, problem);
       else kept[lang] = themeText(value[lang]);
     }
@@ -190,7 +179,7 @@ export function checkDefinition(doc) {
       const map = need(value, 'announcement', `${at}.announcement`, isObject);
       if (map) {
         const path = `${at}.announcement`;
-        onlyKeys(map, ['title', 'body', 'link', 'from', 'until'], path);
+        onlyKeys(map, ['title', 'body', 'link', 'until'], path);
         const aTitle = langText(map, 'title', `${path}.title`, LIMITS.announcementTitle);
         const body = langText(map, 'body', `${path}.body`, LIMITS.announcementBody);
         let link = null;
@@ -198,17 +187,12 @@ export function checkDefinition(doc) {
           link = map.link;
           if (!isAllowedLink(link)) fail(`${path}.link`, 'badLink');
         }
-        let from = closesAt;
-        if (Object.hasOwn(map, 'from')) {
-          from = time(map, 'from', `${path}.from`);
-          if (from !== undefined && closesAt !== undefined && from < closesAt) fail(`${path}.from`, 'beforeDeadline');
-        }
-        let until = from === undefined ? undefined : from + ANNOUNCEMENT_DAYS * DAY;
+        let until = closesAt === undefined ? undefined : closesAt + ANNOUNCEMENT_DAYS * DAY;
         if (Object.hasOwn(map, 'until')) {
           until = time(map, 'until', `${path}.until`);
-          if (until !== undefined && from !== undefined && until <= from) fail(`${path}.until`, 'notAfterFrom');
+          if (until !== undefined && closesAt !== undefined && until <= closesAt) fail(`${path}.until`, 'notAfterDeadline');
         }
-        announcement = { title: aTitle, body, link, from, until };
+        announcement = { title: aTitle, body, link, until };
       }
     }
     if (problems.length > before) continue;

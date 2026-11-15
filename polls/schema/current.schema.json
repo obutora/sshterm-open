@@ -62,7 +62,7 @@
       }
     },
     "announcements": {
-      "description": "Announcements between their from and until, newest first. url is the poll's results page.",
+      "description": "Announcements between their from (the poll's deadline, when its results came) and until, newest first. url is the poll's results page.",
       "type": "array",
       "items": {
         "type": "object",
@@ -73,12 +73,12 @@
           "title": { "$ref": "#/$defs/announcementTitle" },
           "body": { "$ref": "#/$defs/announcementBody" },
           "link": {
-            "description": "https on discord.gg, discord.com, sshterm.iru-yo.com or github.com only; null for none.",
+            "description": "https to one of the hosts polls/rules.js allows (LINK_HOSTS); null for none. The app checks the host itself.",
             "oneOf": [
               {
                 "type": "string",
                 "maxLength": 500,
-                "pattern": "^https://(?:discord\\.gg|discord\\.com|sshterm\\.iru-yo\\.com|github\\.com)(?:[/?#][^\\s\\u0000-\\u001f\\u007f-\\u009f\\u061c\\u200e\\u200f\\u202a-\\u202e\\u2066-\\u2069]*)?$"
+                "pattern": "^https://[^\\s\\u0000-\\u001f\\u007f-\\u009f\\u061c\\u200e\\u200f\\u202a-\\u202e\\u2066-\\u2069]+$"
               },
               { "type": "null" }
             ]

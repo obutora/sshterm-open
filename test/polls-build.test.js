@@ -25,19 +25,15 @@ function tempDir(prefix) {
   return dir;
 }
 
-/** A definition file holding [doc]; returns its path. */
-function definitionFile(doc) {
-  const file = join(tempDir('sshterm-polls-def-'), 'polls.json');
-  writeFileSync(file, JSON.stringify(doc));
-  return file;
-}
+/** The polls of the definition [doc], as the build reads them. */
+const pollsIn = (doc) => readDefinition(new TextEncoder().encode(JSON.stringify(doc)));
 
 /** Builds [doc] at [now] into a fresh public/ with polls/polls.js in it; returns its reader. */
 async function build(doc, now, { getCounts = async () => { throw new Error('no API in the tests'); }, logs = [] } = {}) {
   const dir = tempDir('sshterm-polls-public-');
   mkdirSync(join(dir, 'polls'));
   writeFileSync(join(dir, 'polls/polls.js'), '// the committed script stays\n');
-  await buildPolls({ definition: definitionFile(doc), publicDir: dir, now, getCounts, log: (l) => logs.push(l) });
+  await buildPolls({ polls: pollsIn(doc), publicDir: dir, now, getCounts, log: (l) => logs.push(l) });
   return {
     dir,
     list: () => readdirSync(join(dir, 'polls')).sort(),
@@ -56,9 +52,8 @@ const problemsOf = (bytes) => {
   }
 };
 
-test('a definition with a link off the allowed hosts fails the schema and the rules', () => {
+test('a definition with a link off the allowed hosts fails the rules', () => {
   const problems = problemsOf(readFileSync(join(FIXTURES, 'link-host.json')));
-  assert.ok(problems.some((p) => p.rule === 'schema' && p.path === '/polls/0/announcement/link'), JSON.stringify(problems));
   assert.ok(problems.some((p) => p.rule === 'badLink' && p.path === 'polls[0].announcement.link'), JSON.stringify(problems));
 });
 
@@ -85,7 +80,6 @@ test('the schema refuses what the rules refuse, where a schema can say it', () =
     poll({ announcement: { title: { en: 'a'.repeat(41) }, body: { en: 'b' } } }),
     poll({ announcement: { title: { en: 'a' }, body: { en: 'b'.repeat(301) } } }),
     poll({ announcement: { title: { en: 'a' }, body: { en: 'b' }, link: 'http://github.com/' } }),
-    poll({ announcement: { title: { en: 'a' }, body: { en: 'b' }, link: 'https://github.com@evil.example/' } }),
   ];
   for (const p of bad) {
     const problems = problemsOf(new TextEncoder().encode(JSON.stringify(definition(p))));
@@ -162,20 +156,14 @@ test('when the API gives no counts the build goes on without the results, and sa
   assert.ok(logs.some((l) => /no counts for next-feature/.test(l)), logs.join('\n'));
 });
 
-test('a broken definition writes nothing, and a rebuild removes pages of polls no longer defined', async () => {
+test('a rebuild removes pages of polls no longer defined', async () => {
   const site = await build(definition(poll()), OPENS_MS + DAY);
-  const before = site.list();
-  await assert.rejects(
-    buildPolls({ definition: join(FIXTURES, 'title-too-long.json'), publicDir: site.dir, now: OPENS_MS + DAY, log: () => {} }),
-    PollsError,
-  );
-  assert.deepEqual(site.list(), before);
-  await buildPolls({ definition: definitionFile(definition()), publicDir: site.dir, now: OPENS_MS + DAY, log: () => {} });
+  await buildPolls({ polls: pollsIn(definition()), publicDir: site.dir, now: OPENS_MS + DAY, log: () => {} });
   assert.deepEqual(site.list(), ['current.json', 'index.html', 'polls.js']);
 });
 
 test('the counts are read from GET /api/polls/<id> only when closed and as long as the options', async () => {
-  const [p] = readDefinition(new TextEncoder().encode(JSON.stringify(definition(poll()))));
+  const [p] = pollsIn(definition(poll()));
   const answer = (body, status = 200) => async (url) => {
     assert.equal(url, 'https://sshterm.iru-yo.com/api/polls/next-feature');
     return new Response(JSON.stringify(body), { status });
@@ -219,7 +207,7 @@ test('a text that looks like markup goes in escaped, and cannot end the data blo
 test('on Pages the poll pages’ links get their versions', async () => {
   const site = tempDir('sshterm-polls-stamp-');
   cpSync(join(ROOT, 'public'), site, { recursive: true });
-  await buildPolls({ definition: definitionFile(definition(poll())), publicDir: site, now: OPENS_MS, getCounts: async () => [], log: () => {} });
+  await buildPolls({ polls: pollsIn(definition(poll())), publicDir: site, now: OPENS_MS, getCounts: async () => [], log: () => {} });
   stampSite(site);
   const page = readFileSync(join(site, 'polls/next-feature.html'), 'utf8');
   assert.match(page, /src="\/polls\/polls\.js\?v=[0-9a-f]{12}"/);

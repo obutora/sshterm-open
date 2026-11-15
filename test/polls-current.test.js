@@ -21,7 +21,6 @@ const ANNOUNCED = poll({
     title: { en: 'SFTP is coming', ja: 'SFTP を作ります' },
     body: { en: 'Thanks for answering.' },
     link: 'https://github.com/obutora/sshterm-open',
-    from: '2026-12-20T00:00:00Z',
   },
 });
 const polls = (...p) => checkDefinition(definition(...p)).polls;
@@ -76,7 +75,7 @@ test('after the deadline it holds the results for 14 days', () => {
       { title: { en: 'Themes', ja: 'テーマ' }, count: 0 },
     ],
   }]);
-  assert.equal(doc.nextChangeAt, '2026-12-20T00:00:00Z');
+  assert.equal(doc.nextChangeAt, '2026-12-29T00:00:00Z');
   assert.deepEqual(current(polls(ANNOUNCED), CLOSES_MS + 14 * DAY, { 'next-feature': [5, 3, 0] }).results, []);
 });
 
@@ -87,20 +86,23 @@ test('without the counts (the API did not answer) the results wait, and it asks 
   assert.equal(doc.nextChangeAt, iso(now + HOUR));
 });
 
-test('the announcement shows from its start to its end, with its link', () => {
-  assert.deepEqual(current(polls(ANNOUNCED), Date.parse('2026-12-19T23:59:59Z'), { 'next-feature': [1, 0, 0] }).announcements, []);
-  const doc = current(polls(ANNOUNCED), Date.parse('2026-12-20T00:00:00Z'), { 'next-feature': [1, 0, 0] });
+test('the announcement shows from the results (the deadline) for 30 days, with its link', () => {
+  assert.deepEqual(current(polls(ANNOUNCED), CLOSES_MS - 1).announcements, []);
+  const doc = current(polls(ANNOUNCED), CLOSES_MS, { 'next-feature': [1, 0, 0] });
   assert.deepEqual(doc.announcements, [{
     pollId: 'next-feature',
     title: { en: 'SFTP is coming', ja: 'SFTP を作ります' },
     body: { en: 'Thanks for answering.' },
     link: 'https://github.com/obutora/sshterm-open',
     url: 'https://sshterm.iru-yo.com/polls/next-feature',
-    from: '2026-12-20T00:00:00Z',
-    until: '2027-01-19T00:00:00Z',
+    from: '2026-12-15T00:00:00Z',
+    until: '2027-01-14T00:00:00Z',
   }]);
   assert.equal(doc.nextChangeAt, '2026-12-29T00:00:00Z');
-  const late = current(polls(ANNOUNCED), Date.parse('2027-01-19T00:00:00Z'));
+  const lastResults = current(polls(ANNOUNCED), Date.parse('2026-12-29T00:00:00Z'));
+  assert.deepEqual(lastResults.announcements.map((a) => a.pollId), ['next-feature']);
+  assert.equal(lastResults.nextChangeAt, '2027-01-14T00:00:00Z');
+  const late = current(polls(ANNOUNCED), Date.parse('2027-01-14T00:00:00Z'));
   assert.deepEqual(late.announcements, []);
   assert.equal(late.nextChangeAt, null);
   const unlinked = poll({ announcement: { title: { en: 't' }, body: { en: 'b' } } });
@@ -116,14 +118,13 @@ test('a poll after another: the open one, the last one’s results, newest first
   assert.deepEqual(later.results.map((p) => p.id), ['second', 'next-feature']);
 });
 
-test('the schema refuses an announcement link off the allowed hosts, an overlong title and counts on an open poll', () => {
-  const doc = current(polls(ANNOUNCED), Date.parse('2026-12-20T00:00:00Z'), { 'next-feature': [1, 0, 0] });
+test('the schema refuses a link that is not https, an overlong title and counts on an open poll', () => {
+  const doc = current(polls(ANNOUNCED), CLOSES_MS, { 'next-feature': [1, 0, 0] });
   const broken = (change) => {
     const copy = structuredClone(doc);
     change(copy);
     return validate(copy);
   };
-  assert.equal(broken((d) => { d.announcements[0].link = 'https://evil.example/'; }), false);
   assert.equal(broken((d) => { d.announcements[0].link = 'http://github.com/'; }), false);
   assert.equal(broken((d) => { d.results[0].title.en = 'a'.repeat(61); }), false);
   assert.equal(broken((d) => { d.results[0].title.en = 'a\u202eb'; }), false);

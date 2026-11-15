@@ -29,7 +29,6 @@ test('a poll takes the defaults: 14 days open, 500 for free text, the announceme
     title: { en: 'We started on SFTP' },
     body: { en: 'Thanks for answering.' },
     link: null,
-    from: CLOSES_MS,
     until: CLOSES_MS + 30 * DAY,
   });
 });
@@ -41,7 +40,7 @@ test('given times, the free text length and the link are kept; text is kept trim
     freeText: { label: { en: 'Why?' }, maxLength: 1000 },
     announcement: {
       title: { en: 'Done' }, body: { en: 'Read more.' }, link: 'https://discord.gg/abc',
-      from: '2026-12-10T00:00:00Z', until: '2026-12-20T00:00:00Z',
+      until: '2026-12-20T00:00:00Z',
     },
   })));
   assert.equal(result.ok, true, JSON.stringify(result.problems));
@@ -50,15 +49,13 @@ test('given times, the free text length and the link are kept; text is kept trim
   assert.equal(p.closesAt, Date.parse('2026-12-08T00:00:00Z'));
   assert.equal(p.freeText.maxLength, 1000);
   assert.equal(p.announcement.link, 'https://discord.gg/abc');
-  assert.equal(p.announcement.from, Date.parse('2026-12-10T00:00:00Z'));
   assert.equal(p.announcement.until, Date.parse('2026-12-20T00:00:00Z'));
 });
 
-test('the shipped definition holds no poll and passes', () => {
+test('the shipped definition passes', () => {
   const doc = JSON.parse(readFileSync(new URL('../polls/polls.json', import.meta.url), 'utf8'));
   const result = checkDefinition(doc);
   assert.equal(result.ok, true, JSON.stringify(result.problems));
-  assert.deepEqual(result.polls, []);
 });
 
 test('the title, options, label and announcement title have their lengths, in code points once trimmed', () => {
@@ -117,15 +114,16 @@ test('the announcement link is https on discord.gg, discord.com, sshterm.iru-yo.
   ]) assert.deepEqual(problems(linked(link)), ['polls[0].announcement.link badLink'], link);
 });
 
-test('times: ISO 8601 with a zone; the deadline after the start; the announcement not before the deadline', () => {
+test('times: ISO 8601 with a zone; the deadline after the start; the announcement ends after the deadline and has no start of its own', () => {
   assert.deepEqual(problems(poll({ opensAt: '2026-12-01' })), ['polls[0].opensAt badTime']);
   assert.deepEqual(problems(poll({ opensAt: '2026-12-01T00:00:00' })), ['polls[0].opensAt badTime']);
   assert.deepEqual(problems(poll({ opensAt: '2026-13-01T00:00:00Z' })), ['polls[0].opensAt badTime']);
   assert.deepEqual(problems(poll({ closesAt: OPENS_MS })), ['polls[0].closesAt wrongType']);
   assert.deepEqual(problems(poll({ closesAt: '2026-12-01T00:00:00Z' })), ['polls[0].closesAt notAfterOpening']);
   const announced = (extra) => poll({ announcement: { title: { en: 't' }, body: { en: 'b' }, ...extra } });
-  assert.deepEqual(problems(announced({ from: '2026-12-14T23:59:59Z' })), ['polls[0].announcement.from beforeDeadline']);
-  assert.deepEqual(problems(announced({ from: '2026-12-20T00:00:00Z', until: '2026-12-20T00:00:00Z' })), ['polls[0].announcement.until notAfterFrom']);
+  assert.deepEqual(problems(announced({ from: '2026-12-20T00:00:00Z' })), ['polls[0].announcement.from unknownField']);
+  assert.deepEqual(problems(announced({ until: '2026-12-15T00:00:00Z' })), ['polls[0].announcement.until notAfterDeadline']);
+  ok(announced({ until: '2026-12-15T00:00:01Z' }));
 });
 
 test('ids are unique slugs, and no two polls are open at once', () => {

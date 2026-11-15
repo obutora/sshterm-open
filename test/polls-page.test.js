@@ -4,10 +4,10 @@
 
 import { after, test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { buildPolls } from '../build/polls.js';
+import { buildPolls, readDefinition } from '../build/polls.js';
 import { STRINGS, runList, runPoll, tokenFrom } from '../public/polls/polls.js';
 import { CLOSES_MS, DAY, OPENS_MS, definition, poll, token } from './polls-fixtures.js';
 import { headersFor } from './headers.js';
@@ -26,9 +26,8 @@ async function built(file, now) {
   const dir = mkdtempSync(join(tmpdir(), 'sshterm-polls-page-'));
   dirs.push(dir);
   mkdirSync(join(dir, 'polls'));
-  const def = join(dir, 'polls.json');
-  writeFileSync(def, JSON.stringify(definition(POLL)));
-  await buildPolls({ definition: def, publicDir: dir, now, getCounts: async () => [1, 2, 3], log: () => {} });
+  const polls = readDefinition(new TextEncoder().encode(JSON.stringify(definition(POLL))));
+  await buildPolls({ polls, publicDir: dir, now, getCounts: async () => [1, 2, 3], log: () => {} });
   return readFileSync(join(dir, 'polls', file), 'utf8');
 }
 
@@ -219,6 +218,17 @@ test('after the deadline: the counts from the API, the total, the announcement; 
   assert.equal(page.$('total').textContent, 'Answers: 6');
   assert.equal(page.$('announcement').hidden, false);
   assert.equal(page.$('announcement-title').textContent, 'SFTP is coming');
+});
+
+test('the results page stops showing the announcement at its end, 30 days after the deadline', async () => {
+  const answer = () => ({ body: { id: 'next-feature', state: 'closed', total: 6, counts: [1, 2, 3] } });
+  const lastDay = browser(await built('next-feature.html', CLOSES_MS + 30 * DAY - 1), { answer });
+  await runPoll({ ...lastDay.env, now: () => CLOSES_MS + 30 * DAY - 1 });
+  assert.equal(lastDay.$('announcement').hidden, false);
+  const ended = browser(await built('next-feature.html', CLOSES_MS + 30 * DAY), { answer });
+  await runPoll({ ...ended.env, now: () => CLOSES_MS + 30 * DAY });
+  assert.equal(ended.$('results').hidden, false);
+  assert.equal(ended.$('announcement'), undefined);
 });
 
 test('after the deadline, results that do not come say so', async () => {
