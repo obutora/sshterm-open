@@ -200,7 +200,7 @@ export function readGallery({ repo, ref }) {
 // ── HTML ────────────────────────────────────────────────────────────────────
 
 /** Markup that goes in as it is. Everything else is escaped. */
-class Html {
+export class Html {
   constructor(text) {
     this.text = text;
   }
@@ -227,7 +227,7 @@ function piece(value) {
 }
 
 /** A template whose ${values} are escaped unless they are Html (or arrays of it). */
-function html(strings, ...values) {
+export function html(strings, ...values) {
   return new Html(strings.reduce((out, s, i) => out + piece(values[i - 1]) + s));
 }
 

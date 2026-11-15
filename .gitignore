@@ -6,3 +6,6 @@ node_modules/
 /public/themes/colors.css
 /public/themes/sitemap.xml
 /public/themes/*-*-*-*-*/
+# Written by npm run build (the polls, build/polls.js): the list, a page per poll and current.json.
+/public/polls/*.html
+/public/polls/current.json
