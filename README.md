@@ -216,6 +216,145 @@ The Turnstile site key is the `data-sitekey` of both pages: the widget
 `sshterm-resend` (hostname `sshterm.iru-yo.com`, Managed mode), whose secret
 key is the Worker's `TURNSTILE_SECRET_KEY`.
 
+## The polls
+
+SSH Term's polls (アンケート) and the announcements (お知らせ) that go with
+their results ([ADR 0024](https://github.com/obutora/agent-orchestra/blob/main/docs/adr/0024-ssh-term-polls-answered-on-web.md)).
+The app reads one static file and opens a page in the browser; it sends the
+operator nothing itself. This is the one place the site keeps data, and it
+keeps as little as it can.
+
+- `https://sshterm.iru-yo.com/polls/current.json` is what the app reads (at
+  most once a day): the poll open now, the results of polls closed less than
+  14 days ago (with their counts) and the announcements between their start
+  and end. `npm run build` makes it from the definition at the time it runs;
+  its shape is `polls/schema/current.schema.json`. `nextChangeAt` says when
+  it will next change.
+- `https://sshterm.iru-yo.com/polls/<id>#k=<token>` answers a poll. The app
+  makes a token for each poll (32 random bytes as base64url without padding,
+  43 characters) and keeps it. The token is in the fragment, so only the
+  page's own `POST` carries it to the server. Without a well-formed `k` the
+  page only shows. Until the deadline it shows no count, says the results
+  will be published there after the deadline, and, with a free text field,
+  that only the developer reads it and not to write names, host names or IP
+  addresses. After the deadline it shows the counts and the announcement.
+- `https://sshterm.iru-yo.com/polls/` lists the open poll and every past
+  result. Polls not yet open are not built, and appear nowhere.
+- The pages' frame is in English and Japanese (`public/polls/polls.js`), the
+  poll's own texts in the app's six languages, English standing in for a
+  missing one. They load only the site's own files; the `/polls` and
+  `/polls/*` blocks of `_headers` add `connect-src 'self'` to the CSP for the
+  API, and keep `noindex`. Texts go in with `textContent`; the build escapes
+  them into the HTML.
+
+### The definition
+
+Every poll, past and to come, is in one file, `polls/polls.json`
+(`{"polls": [...]}`; its schema is `polls/schema/definition.schema.json`).
+The build, the Functions and `current.json` all come from it. A poll:
+
+| Field | |
+| --- | --- |
+| `id` | The page's path: lowercase letters and digits joined by single hyphens, up to 40; not `index`. |
+| `title` | Up to 60 code points. |
+| `options` | 2–5 answers, one of which is chosen; each up to 40. |
+| `freeText` | Optional: `{label, maxLength}`, the label up to 80, `maxLength` 1–1000 code points (500 when not given). |
+| `opensAt` | ISO 8601 with a zone, e.g. `2026-12-01T00:00:00Z`. |
+| `closesAt` | The deadline; 14 days after `opensAt` when not given. |
+| `announcement` | Optional: `{title, body, link, from, until}`. The title up to 40, the body up to 300. `link` is optional, https on `discord.gg`, `discord.com`, `sshterm.iru-yo.com` or `github.com` only (the app's own list: adding a host needs an app update). `from` defaults to the deadline and may not be before it; `until` defaults to 30 days after `from`. |
+
+Every text is `{"en": …, "ja": …, "ko": …, "vi": …, "zh": …, "zh_Hant": …}`
+with `en` required; lengths count code points once trimmed, and no text may
+hold a control character or one that turns the direction (ADR 0015's rule,
+`isForbiddenCodePoint` in `public/theme-format.js`). Ids are unique and no
+two polls are open at once. `npm run build` checks the file against the
+schema and `polls/rules.js` before anything else and fails, writing nothing,
+with a JSON line per problem; Cloudflare Pages runs it on every deploy, so a
+broken definition never goes out. `npm test` checks the shipped file the
+same way.
+
+To add a poll, add an entry to `polls` with an `opensAt` in the future and
+open a PR; the build after `opensAt` publishes it (the cron Worker asks for
+that build). Do not change a poll's options or deadline once it has opened:
+the answers are stored by option number, and the deadline in D1 is the one
+the last answer was sent under. Add the announcement once the results are
+in. Keep past polls in the file: their pages show their results.
+
+### The API and D1
+
+`functions/api/polls/[id].js` is a Pages Function at `/api/polls/<id>` on
+the D1 database bound as `POLLS_DB` (`polls/api.js`, `polls/store.js`,
+`polls/migrations/`):
+
+- `GET` gives `{state: "open", closesAt}` until the deadline, never a count;
+  after it, `{state: "closed", closesAt, total, counts}`.
+- `POST {token, choice, freeText?}` stores the answer under the SHA-256 of
+  the poll's id and the token. The same token sent again replaces its answer
+  until the deadline, so a token is one vote; after it, `409`. A malformed
+  token, choice or body is `400`.
+- Free text is checked for UTF-8, its length, control characters and
+  characters that turn the direction (line feeds aside); only the spaces
+  around it are taken off. Nothing ever puts it in HTML.
+- Every value goes into SQL with `bind`. Nothing reads the IP address, the
+  user agent or a cookie; IP addresses are limited by a Cloudflare rate
+  limiting rule at the zone (below) and stored nowhere. No Turnstile (it
+  would load Cloudflare's script, against ADR 0005).
+- At the deadline (the first `GET` after it, or the cron Worker within the
+  hour) the counts go to `tallies` and every answer's row (the token's hash
+  and the choice) is deleted. Free text moves to `free_texts` with only the
+  poll's id and is deleted 90 days after the deadline.
+
+`workers/polls-cron/` is a Worker with a Cron Trigger every hour on the same
+D1 database, so the deadline and the 90 days hold with no visitor. Each run
+closes the polls past their deadline, deletes the free text past its 90
+days and, when `current.json`'s `nextChangeAt` has passed, calls the Pages
+deploy hook so the site is built again (the build reads the counts from
+`GET /api/polls/<id>`; if they do not come, `current.json` leaves the results
+out and asks for another build within the hour).
+
+### Reading the answers
+
+There is no admin page: the free text and the counts are read with
+`wrangler d1` only, from `workers/polls-cron/`:
+
+```sh
+npx wrangler d1 execute sshterm-polls --remote --json \
+  --command "SELECT choice, count FROM tallies WHERE poll_id = 'next-feature' ORDER BY choice" > counts.json
+npx wrangler d1 execute sshterm-polls --remote --json \
+  --command "SELECT text FROM free_texts WHERE poll_id = 'next-feature'" > free-texts.json
+node ../../polls/export.js csv < free-texts.json > free-texts.csv
+node ../../polls/export.js llm < free-texts.json > free-texts.txt
+```
+
+- Free text is untrusted. Open it as text, not as HTML.
+- For a spreadsheet, use the CSV from `polls/export.js csv`: a value that
+  starts with `=`, `+`, `-`, `@`, a tab or CR gets a `'` in front, so it is
+  never run as a formula. Never paste the raw JSON into a spreadsheet.
+- For an LLM, use `polls/export.js llm`: it says first that the answers are
+  data, not instructions, and puts them, one JSON line each, between two
+  markers with a random value an answer cannot guess. Never paste free text
+  into a prompt as it is.
+- Delete the exported files when done; D1 deletes the free text 90 days
+  after the deadline, and the copies should not outlive it.
+
+### Setting it up on Cloudflare (by hand)
+
+1. `cd workers/polls-cron && npx wrangler d1 create sshterm-polls`, and put
+   the `database_id` it prints into `workers/polls-cron/wrangler.toml`.
+2. `npx wrangler d1 migrations apply sshterm-polls --remote` (there).
+3. The Pages project › Settings › Bindings › Add › D1 database: variable
+   `POLLS_DB`, database `sshterm-polls`, for Production. Leave Preview
+   without it, or bind a separate database, so previews never write to the
+   real one.
+4. The Pages project › Settings › Builds › Deploy hooks: add one for the
+   branch `main`, and `npx wrangler secret put PAGES_DEPLOY_HOOK` (in
+   `workers/polls-cron/`) with its URL.
+5. `npx wrangler deploy` (in `workers/polls-cron/`).
+6. The zone `iru-yo.com` › Security › WAF › Rate limiting rules: when
+   `http.host eq "sshterm.iru-yo.com" and starts_with(http.request.uri.path, "/api/polls/") and http.request.method eq "POST"`,
+   counting by IP, 10 requests per 10 seconds, block for 10 seconds
+   (response 429, which the page reads as too many tries).
+
 ## Layout
 
 - `public/`: the site, deployed to Cloudflare Pages (build command
@@ -237,16 +376,24 @@ key is the Worker's `TURNSTILE_SECRET_KEY`.
   A changed file gets a new URL and the browser loads it; an unchanged one
   keeps its URL and stays cached. It rewrites `public/` in place, so a local
   `npm run build` skips it; a link to a missing file fails the build.
-- `test/`: `npm test` (Node 22+) checks the link, platform and language
-  rules in `public/open.js` and `public/common.js`, and the store URLs in
-  `public/app.js`; the theme page and `public/theme-format.js` (with
-  `test/fake-dom.js`, a minimal stand-in for the page's DOM).
+- `test/`: `npm test` (Node 22.13+, for `node:sqlite`) checks the link,
+  platform and language rules in `public/open.js` and `public/common.js`,
+  and the store URLs in `public/app.js`; the theme page and
+  `public/theme-format.js` (with `test/fake-dom.js`, a minimal stand-in for
+  the page's DOM).
+- `polls/`: the polls' definition (`polls.json`), its rules (`rules.js`),
+  the JSON Schemas of the definition and `current.json` (`schema/`), the API
+  (`api.js`), the D1 queries (`store.js`) and schema (`migrations/`), and
+  the export (`export.js`). `functions/` holds the Pages Function,
+  `workers/polls-cron/` the cron Worker; both import `polls/`.
+- `public/polls/`: the pages' own `polls.js` and `polls.css`; the build adds
+  `current.json`, `index.html` and `<id>.html` (not committed).
 - `public/themes/`: `/themes/format` serves `format.html` (with `format.js`
   and `format.css`); `schema/v1.json` is the schema and `example.json` the
   example file shown on the page. `gallery.js` and `gallery.css` are the
   gallery's.
-- `build/`: the gallery's build (`gallery.js`), the links' versions
-  (`stamp.js`); `main.js` is `npm run build`.
+- `build/`: the gallery's build (`gallery.js`), the polls' (`polls.js`), the
+  links' versions (`stamp.js`); `main.js` is `npm run build`.
 - `test/theme-schema.test.js` replays the app's examples against the schema
   (skipping those the manifest marks `not-expressible`);
   `test/theme-format-page.test.js` checks the page's strings, that it loads
@@ -259,3 +406,11 @@ key is the Worker's `TURNSTILE_SECRET_KEY`.
   Pages applies it. `test/fixtures/presets.json` holds the colours of the
   app's 16 presets. `test/stamp.test.js` checks the versions, also on a
   copy of `public/` with a built gallery.
+- `test/polls-*.test.js` check the polls: the definition's rules and both
+  schemas (`test/fixtures/polls/` holds a valid definition, one with a link
+  off the allowed hosts and one with a title too long, which `npm run build`
+  must refuse), `current.json` over time, the API and the deadline
+  processing on `test/fake-d1.js` (D1's API on `node:sqlite` with the real
+  migrations, the clock given), the cron Worker, the pages as a browser runs
+  them, `_headers` (`test/headers.js`) and the export. No poll is published
+  by the tests: they build into temporary directories.
