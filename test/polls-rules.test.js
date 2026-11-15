@@ -126,6 +126,22 @@ test('times: ISO 8601 with a zone; the deadline after the start; the announcemen
   ok(announced({ until: '2026-12-15T00:00:01Z' }));
 });
 
+test('resultsAt: none by default; given, at or after the deadline, and the announcement then counts from it', () => {
+  assert.equal(checkDefinition(definition(poll())).polls[0].resultsAt, null);
+  const at = (resultsAt, extra = {}) => checkDefinition(definition(poll({ resultsAt, ...extra })));
+  assert.equal(at('2026-12-15T00:00:00Z').polls[0].resultsAt, CLOSES_MS);
+  assert.equal(at('2026-12-16T09:00:00+09:00').polls[0].resultsAt, CLOSES_MS + DAY);
+  assert.deepEqual(problems(poll({ resultsAt: '2026-12-14T23:59:59Z' })), ['polls[0].resultsAt beforeDeadline']);
+  assert.deepEqual(problems(poll({ closesAt: '2026-12-20T00:00:00Z', resultsAt: '2026-12-19T00:00:00Z' })), ['polls[0].resultsAt beforeDeadline']);
+  assert.deepEqual(problems(poll({ resultsAt: '2026-12-16' })), ['polls[0].resultsAt badTime']);
+  assert.deepEqual(problems(poll({ resultsAt: CLOSES_MS })), ['polls[0].resultsAt wrongType']);
+  const announcement = { title: { en: 't' }, body: { en: 'b' } };
+  assert.equal(at('2026-12-18T00:00:00Z', { announcement }).polls[0].announcement.until, Date.parse('2026-12-18T00:00:00Z') + 30 * DAY);
+  assert.deepEqual(problems(poll({ resultsAt: '2026-12-18T00:00:00Z', announcement: { ...announcement, until: '2026-12-18T00:00:00Z' } })),
+    ['polls[0].announcement.until notAfterResults']);
+  ok(poll({ resultsAt: '2026-12-18T00:00:00Z', announcement: { ...announcement, until: '2026-12-18T00:00:01Z' } }));
+});
+
 test('ids are unique slugs, and no two polls are open at once', () => {
   assert.deepEqual(problems(poll({ id: 'Next' })), ['polls[0].id badId']);
   assert.deepEqual(problems(poll({ id: 'a'.repeat(41) })), ['polls[0].id badId']);

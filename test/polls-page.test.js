@@ -15,18 +15,23 @@ import { headersFor } from './headers.js';
 const dirs = [];
 after(() => dirs.forEach((d) => rmSync(d, { recursive: true, force: true })));
 
+/** Results published at the deadline (resultsAt): the developer checked the counts beforehand. */
 const POLL = poll({
+  resultsAt: '2026-12-15T00:00:00Z',
   title: { en: 'What should SSH Term do next?', ja: 'SSH Term に次に足すものは？', ko: '다음은?' },
   freeText: { label: { en: 'Anything else?', ja: 'ほかにあれば' } },
   announcement: { title: { en: 'SFTP is coming', ja: 'SFTP を作ります' }, body: { en: 'Thanks.' } },
 });
 
-/** The page [file] that the build writes at [now]. */
-async function built(file, now) {
+/** The same poll before the developer has checked its counts: no resultsAt. */
+const { resultsAt: _, ...UNCHECKED } = POLL;
+
+/** The page [file] that the build writes at [now] for the poll [p]. */
+async function built(file, now, p = POLL) {
   const dir = mkdtempSync(join(tmpdir(), 'sshterm-polls-page-'));
   dirs.push(dir);
   mkdirSync(join(dir, 'polls'));
-  const polls = readDefinition(new TextEncoder().encode(JSON.stringify(definition(POLL))));
+  const polls = readDefinition(new TextEncoder().encode(JSON.stringify(definition(p))));
   await buildPolls({ polls, publicDir: dir, now, getCounts: async () => [1, 2, 3], log: () => {} });
   return readFileSync(join(dir, 'polls', file), 'utf8');
 }
@@ -231,6 +236,64 @@ test('the results page stops showing the announcement at its end, 30 days after 
   assert.equal(ended.$('announcement'), undefined);
 });
 
+test('without resultsAt, after the deadline: closed, the results come after the developer checks them; nothing is fetched', async () => {
+  for (const [language, closed, checking] of [
+    ['en', 'This poll has closed.', 'The results will be published here after the developer checks them.'],
+    ['ja', 'このアンケートは締め切りました。', '結果は開発者が確認したあと、ここで公開します。'],
+  ]) {
+    const page = browser(await built('next-feature.html', CLOSES_MS, UNCHECKED), { hash: `#k=${TOKEN}`, language });
+    await runPoll({ ...page.env, now: () => CLOSES_MS + 30 * DAY });
+    assert.deepEqual(page.calls, [], language);
+    assert.equal(page.$('answer').hidden, true, language);
+    assert.equal(page.$('pending').hidden, true, language);
+    assert.equal(page.$('results').hidden, true, language);
+    assert.equal(page.$('checking').hidden, false, language);
+    assert.equal(page.$('checking').textContent, checking, language);
+    assert.equal(page.$('status').textContent, closed, language);
+    assert.equal(page.$('announcement'), undefined, `${language}: the announcement waits for the results`);
+  }
+});
+
+test('a send the deadline overtook, results not published: closed and waiting for the check, nothing fetched', async () => {
+  const page = browser(await built('next-feature.html', OPEN, UNCHECKED), {
+    hash: `#k=${TOKEN}`,
+    answer: (url, init) => (init.method === 'POST' ? { status: 409, body: { error: 'closed' } } : { body: { state: 'closed', counts: [1, 0, 0] } }),
+  });
+  await runPoll({ ...page.env, now: () => OPEN });
+  page.radios[0].checked = true;
+  await page.submit();
+  assert.deepEqual(page.calls.map((c) => c.method), ['POST']);
+  assert.equal(page.$('answer').hidden, true);
+  assert.equal(page.$('results').hidden, true);
+  assert.equal(page.$('checking').hidden, false);
+  assert.equal(page.$('status').textContent, STRINGS.en.closed);
+});
+
+test('with resultsAt after the deadline: the page waits until it, then shows the counts', async () => {
+  const later = { ...UNCHECKED, resultsAt: '2026-12-17T00:00:00Z' };
+  const html = await built('next-feature.html', CLOSES_MS, later);
+  const answer = () => ({ body: { id: 'next-feature', state: 'closed', closesAt: '2026-12-15T00:00:00Z', total: 6, counts: [1, 2, 3] } });
+  const before = browser(html, { answer });
+  await runPoll({ ...before.env, now: () => CLOSES_MS + 2 * DAY - 1 });
+  assert.deepEqual(before.calls, []);
+  assert.equal(before.$('checking').hidden, false);
+  const from = browser(html, { answer });
+  await runPoll({ ...from.env, now: () => CLOSES_MS + 2 * DAY });
+  assert.equal(from.$('results').hidden, false);
+  assert.equal(from.$('checking').hidden, true);
+  assert.equal(from.$('total').textContent, 'Answers: 6');
+});
+
+test('when the API says closed without counts (the reader’s clock ahead of resultsAt), the page says the results are being checked', async () => {
+  const page = browser(await built('next-feature.html', CLOSES_MS), {
+    answer: () => ({ body: { id: 'next-feature', state: 'closed', closesAt: '2026-12-15T00:00:00Z' } }),
+  });
+  await runPoll({ ...page.env, now: () => CLOSES_MS });
+  assert.equal(page.$('results').hidden, true);
+  assert.equal(page.$('checking').hidden, false);
+  assert.equal(page.$('status').textContent, STRINGS.en.closed);
+});
+
 test('after the deadline, results that do not come say so', async () => {
   for (const answer of [new Error('offline'), { status: 500 }, { body: { state: 'open' } }, { body: { state: 'closed', counts: [1] } }]) {
     const page = browser(await built('next-feature.html', CLOSES_MS), { answer: () => answer });
@@ -251,7 +314,7 @@ test('the frame is Japanese for Japanese and English otherwise; the poll’s tex
   const ja = browser(await built('next-feature.html', OPEN), { hash: `#k=${TOKEN}`, language: 'ja-JP' });
   await runPoll({ ...ja.env, now: () => OPEN });
   assert.equal(ja.document.documentElement.lang, 'ja');
-  assert.equal(ja.$('pending').textContent, '締め切りのあと、ここで公開します。');
+  assert.equal(ja.$('pending').textContent, '締め切りのあと、開発者が確認してから、ここで公開します。');
   assert.equal(ja.document.querySelectorAll('[data-t]').find((e) => e.dataset.t === 'freeNote').textContent,
     '開発者だけが読みます。名前・ホスト名・IP アドレスなどは書かないでください。');
   assert.equal(ja.$('title').textContent, 'SSH Term に次に足すものは？');
@@ -273,7 +336,14 @@ test('the list puts the titles in the reader’s language', async () => {
   runList(page.env);
   const title = page.document.querySelectorAll('[data-poll]')[0];
   assert.equal(title.textContent, 'SSH Term に次に足すものは？');
-  assert.equal(page.document.querySelectorAll('[data-t]').find((e) => e.dataset.t === 'pastResults').textContent, '結果');
+  assert.equal(page.document.querySelectorAll('[data-t]').find((e) => e.dataset.t === 'closedPolls').textContent, '締め切ったアンケート');
+});
+
+test('the list shows a poll whose results are not published among the closed ones, without a count', async () => {
+  const list = await built('index.html', CLOSES_MS + DAY, UNCHECKED);
+  const closed = list.slice(list.indexOf('data-t="closedPolls"'));
+  assert.match(closed, /<a href="\/polls\/next-feature">/);
+  assert.doesNotMatch(list, /data-t="noneClosed"|"counts"|"total"/);
 });
 
 test('both languages have every string', () => {

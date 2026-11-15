@@ -16,13 +16,14 @@ const validate = new Ajv2020({ allErrors: true }).compile(schema);
 const HOUR = 60 * 60 * 1000;
 const iso = (ms) => new Date(ms).toISOString().replace('.000Z', 'Z');
 
-const ANNOUNCED = poll({
-  announcement: {
-    title: { en: 'SFTP is coming', ja: 'SFTP を作ります' },
-    body: { en: 'Thanks for answering.' },
-    link: 'https://github.com/obutora/sshterm-open',
-  },
-});
+/** Results published at the deadline: the developer checked the counts beforehand. */
+const CHECKED = { resultsAt: '2026-12-15T00:00:00Z' };
+const ANNOUNCEMENT = {
+  title: { en: 'SFTP is coming', ja: 'SFTP を作ります' },
+  body: { en: 'Thanks for answering.' },
+  link: 'https://github.com/obutora/sshterm-open',
+};
+const ANNOUNCED = poll({ ...CHECKED, announcement: ANNOUNCEMENT });
 const polls = (...p) => checkDefinition(definition(...p)).polls;
 
 /** current.json at [now] for [p], with [counts] by poll id; checked against its schema. */
@@ -105,16 +106,51 @@ test('the announcement shows from the results (the deadline) for 30 days, with i
   const late = current(polls(ANNOUNCED), Date.parse('2027-01-14T00:00:00Z'));
   assert.deepEqual(late.announcements, []);
   assert.equal(late.nextChangeAt, null);
-  const unlinked = poll({ announcement: { title: { en: 't' }, body: { en: 'b' } } });
+  const unlinked = poll({ ...CHECKED, announcement: { title: { en: 't' }, body: { en: 'b' } } });
   assert.equal(current(polls(unlinked), CLOSES_MS, { 'next-feature': [0, 0, 0] }).announcements[0].link, null);
 });
 
+test('without resultsAt, after the deadline: no results and no announcement, even with the counts at hand', () => {
+  const unchecked = poll({ announcement: ANNOUNCEMENT });
+  for (const now of [CLOSES_MS, CLOSES_MS + HOUR, CLOSES_MS + 20 * DAY]) {
+    const doc = current(polls(unchecked), now, { 'next-feature': [5, 3, 0] });
+    assert.deepEqual([doc.polls, doc.results, doc.announcements], [[], [], []], iso(now));
+    // Nothing is due to change until the definition says when the results are published.
+    assert.equal(doc.nextChangeAt, null, iso(now));
+    assert.doesNotMatch(JSON.stringify(doc), /count|total/);
+  }
+});
+
+test('with resultsAt after the deadline: results for 14 days and the announcement for 30, both from resultsAt', () => {
+  const RESULTS_MS = CLOSES_MS + 3 * DAY;
+  const later = polls(poll({ resultsAt: iso(RESULTS_MS), announcement: ANNOUNCEMENT }));
+  const counts = { 'next-feature': [5, 3, 0] };
+  const waiting = current(later, CLOSES_MS, counts);
+  assert.deepEqual([waiting.results, waiting.announcements], [[], []]);
+  assert.equal(waiting.nextChangeAt, '2026-12-18T00:00:00Z');
+  const doc = current(later, RESULTS_MS, counts);
+  assert.deepEqual(doc.results.map(({ closedAt, until, total }) => ({ closedAt, until, total })), [{
+    closedAt: '2026-12-15T00:00:00Z', until: '2027-01-01T00:00:00Z', total: 8,
+  }]);
+  assert.deepEqual(doc.announcements.map(({ from, until }) => ({ from, until })), [{
+    from: '2026-12-18T00:00:00Z', until: '2027-01-17T00:00:00Z',
+  }]);
+  assert.equal(doc.nextChangeAt, '2027-01-01T00:00:00Z');
+  assert.deepEqual(current(later, Date.parse('2027-01-01T00:00:00Z'), counts).results, []);
+  assert.deepEqual(current(later, Date.parse('2027-01-17T00:00:00Z'), counts).announcements, []);
+  // The first build after resultsAt is merged reads the counts from the Function deployed before it, which
+  // gives none: the results wait for the next build, within the hour.
+  const first = current(later, RESULTS_MS + 60_000);
+  assert.deepEqual(first.results, []);
+  assert.equal(first.nextChangeAt, iso(RESULTS_MS + 60_000 + HOUR));
+});
+
 test('a poll after another: the open one, the last one’s results, newest first', () => {
-  const second = poll({ id: 'second', opensAt: '2026-12-20T00:00:00Z', closesAt: '2026-12-22T00:00:00Z' });
-  const doc = current(polls(poll(), second), Date.parse('2026-12-21T00:00:00Z'), { 'next-feature': [1, 1, 1] });
+  const second = poll({ id: 'second', opensAt: '2026-12-20T00:00:00Z', closesAt: '2026-12-22T00:00:00Z', resultsAt: '2026-12-22T00:00:00Z' });
+  const doc = current(polls(poll(CHECKED), second), Date.parse('2026-12-21T00:00:00Z'), { 'next-feature': [1, 1, 1] });
   assert.deepEqual(doc.polls.map((p) => p.id), ['second']);
   assert.deepEqual(doc.results.map((p) => p.id), ['next-feature']);
-  const later = current(polls(poll(), second), Date.parse('2026-12-23T00:00:00Z'), { 'next-feature': [1, 1, 1], second: [0, 2, 0] });
+  const later = current(polls(poll(CHECKED), second), Date.parse('2026-12-23T00:00:00Z'), { 'next-feature': [1, 1, 1], second: [0, 2, 0] });
   assert.deepEqual(later.results.map((p) => p.id), ['second', 'next-feature']);
 });
 

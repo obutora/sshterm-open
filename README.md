@@ -227,24 +227,33 @@ operator nothing itself. This is the one place the site keeps data, and it
 keeps as little as it can.
 
 - `https://sshterm.iru-yo.com/polls/current.json` is what the app reads (at
-  most once a day): the poll open now, the results of polls closed less than
-  14 days ago (with their counts; results show for 14 days from the
-  deadline, not from when the counts came, so counts that come late shorten
-  that time) and the announcements, each from its poll's results (the
-  deadline) until its end. `npm run build` makes it from the definition at the time it runs;
+  most once a day): the poll open now, the results of polls published less
+  than 14 days ago (with their counts; results show for 14 days from their
+  `resultsAt`, not from when the counts came, so counts that come late
+  shorten that time) and the announcements, each from its poll's results
+  (`resultsAt`) until its end. A poll without `resultsAt` has neither.
+  `npm run build` makes it from the definition at the time it runs;
   its shape is `polls/schema/current.schema.json`. `nextChangeAt` says when
   it will next change.
+- Nothing about a poll's counts is public until the developer has checked
+  them and set the poll's `resultsAt` in the definition ("Publishing the
+  results", below). Until then, after the deadline, the API, the pages and
+  `current.json` say only that the poll is closed.
 - `https://sshterm.iru-yo.com/polls/<id>#k=<token>` answers a poll. The app
   makes a token for each poll (32 random bytes as base64url without padding,
   43 characters) and keeps it. The token is in the fragment, so only the
   page's own `POST` carries it to the server. Without a well-formed `k` the
   page only shows. Until the deadline it shows no count, says the results
-  will be published there after the deadline, and, with a free text field,
-  that only the developer reads it and not to write names, host names or IP
-  addresses. After the deadline it shows the counts, and the announcement
-  until the announcement's end (the build after that end drops it).
-- `https://sshterm.iru-yo.com/polls/` lists the open poll and every past
-  result. Polls not yet open are not built, and appear nowhere.
+  will be published there after the deadline once the developer has checked
+  them, and, with a free text field, that only the developer reads it and
+  not to write names, host names or IP addresses. After the deadline it says
+  the poll has closed and that the results will be published there after
+  the developer checks them, and asks the API nothing; from `resultsAt` it
+  shows the counts, and the announcement until the announcement's end (the
+  build after that end drops it).
+- `https://sshterm.iru-yo.com/polls/` lists the open poll and every closed
+  one (titles and deadlines, no count). Polls not yet open are not built,
+  and appear nowhere.
 - The pages' frame is in English and Japanese (`public/polls/polls.js`), the
   poll's own texts in the app's six languages, English standing in for a
   missing one. They load only the site's own files; the `/polls` and
@@ -266,7 +275,8 @@ The build, the Functions and `current.json` all come from it. A poll:
 | `freeText` | Optional: `{label, maxLength}`, the label up to 80, `maxLength` 1–1000 code points (500 when not given). |
 | `opensAt` | ISO 8601 with a zone, e.g. `2026-12-01T00:00:00Z`. |
 | `closesAt` | The deadline; 14 days after `opensAt` when not given. |
-| `announcement` | Optional: `{title, body, link, until}`. The title up to 40, the body up to 300. `link` is optional, https on `discord.gg`, `discord.com`, `sshterm.iru-yo.com` or `github.com` only (the app's own list: adding a host needs an app update; `LINK_HOSTS` in `polls/rules.js` is the site's one copy, which the schemas leave to the rules). It shows from the poll's results (the deadline) until `until`, which defaults to 30 days after the deadline and must be after it. |
+| `resultsAt` | Optional: when the results are published, at or after the deadline. Absent: they are not. Add it only once you have checked the counts ("Publishing the results"). |
+| `announcement` | Optional: `{title, body, link, until}`. The title up to 40, the body up to 300. `link` is optional, https on `discord.gg`, `discord.com`, `sshterm.iru-yo.com` or `github.com` only (the app's own list: adding a host needs an app update; `LINK_HOSTS` in `polls/rules.js` is the site's one copy, which the schemas leave to the rules). It shows from the poll's results (`resultsAt`; never without it) until `until`, which defaults to 30 days after `resultsAt` and must be after it (after the deadline while there is no `resultsAt`). |
 
 Every text is `{"en": …, "ja": …, "ko": …, "vi": …, "zh": …, "zh_Hant": …}`
 with `en` required; lengths count code points once trimmed, and no text may
@@ -288,6 +298,41 @@ the answers are stored by option number, and the deadline in D1 is the one
 the last answer was sent under. Add the announcement once the results are
 in. Keep past polls in the file: their pages show their results.
 
+### Publishing the results
+
+At the deadline the counts go to D1's `tallies` (the deadline processing,
+below), but nothing shows them until the poll has a `resultsAt`. To publish:
+
+1. After the deadline, check that the poll is closed and read its counts,
+   from `workers/polls-cron/` (`discord-community` here):
+
+   ```sh
+   npx wrangler d1 execute sshterm-polls --remote \
+     --command "SELECT closed_at FROM polls WHERE id = 'discord-community'"
+   npx wrangler d1 execute sshterm-polls --remote \
+     --command "SELECT choice, count FROM tallies WHERE poll_id = 'discord-community' ORDER BY choice"
+   ```
+
+   `closed_at` must not be null: the cron Worker closes a poll within the
+   hour after its deadline; until then `tallies` has nothing for it (no row
+   at all means nobody answered). `choice` is the option's index in the
+   definition (0 is the first); an option nobody chose has no row (0).
+2. Once the counts are fine, add `"resultsAt"` to the poll in
+   `polls/polls.json`, e.g. `"resultsAt": "2026-12-14T00:00:00Z"`: a time at
+   or after the deadline, usually the time you merge or a little later.
+   Run `npm run build`, open a PR and merge it.
+3. From `resultsAt` (and that deploy) the API and the poll's page give the
+   counts. `current.json` follows within about an hour: the build of that
+   deploy reads the counts from the Function deployed before it, which
+   knows no `resultsAt`, so it leaves the results out and asks for another
+   build within the hour, which the cron Worker's next run starts; a
+   `resultsAt` still to come gets its build from the cron Worker's first run
+   after it. `current.json` then holds the results for 14 days from
+   `resultsAt` and the announcement until its `until` (30 days by default).
+
+Do not set `resultsAt` before you have read the counts; once set and
+reached, the counts are public.
+
 ### The API and D1
 
 `functions/api/polls/[id].js` is a Pages Function at `/api/polls/<id>` on
@@ -295,7 +340,8 @@ the D1 database bound as `POLLS_DB` (`polls/api.js`, `polls/store.js`,
 `polls/migrations/`):
 
 - `GET` gives `{state: "open", closesAt}` until the deadline, never a count;
-  after it, `{state: "closed", closesAt, total, counts}`.
+  after it, `{state: "closed", closesAt}` until the poll's `resultsAt`, and
+  `{state: "closed", closesAt, total, counts}` from then.
 - `POST {token, choice, freeText?}` stores the answer under the SHA-256 of
   the poll's id and the token. The same token sent again replaces its answer
   until the deadline, so a token is one vote; after it, `409`. A malformed
@@ -314,7 +360,7 @@ the D1 database bound as `POLLS_DB` (`polls/api.js`, `polls/store.js`,
   limiting rule at the zone (below) and stored nowhere. No Turnstile (it
   would load Cloudflare's script, against ADR 0005).
 - At the deadline (the first `GET` after it, or the cron Worker within the
-  hour) the counts go to `tallies` and every answer's row (the token's hash
+  hour), with or without `resultsAt`, the counts go to `tallies` and every answer's row (the token's hash
   and the choice) is deleted. Free text moves to `free_texts` with only the
   poll's id and is deleted by the cron Worker within the hour once 90 days
   have passed since the deadline. A `GET` reads whether the poll is closed
@@ -327,9 +373,9 @@ the D1 database bound as `POLLS_DB` (`polls/api.js`, `polls/store.js`,
 D1 database, so the deadline and the 90 days hold with no visitor. Each run
 closes the polls past their deadline, deletes the free text past its 90
 days and, when `current.json`'s `nextChangeAt` has passed, calls the Pages
-deploy hook so the site is built again (the build reads the counts from
-`GET /api/polls/<id>`; if they do not come, `current.json` leaves the results
-out and asks for another build within the hour).
+deploy hook so the site is built again (from `resultsAt` the build reads the
+counts from `GET /api/polls/<id>`; if they do not come, `current.json` leaves
+the results out and asks for another build within the hour).
 
 ### Reading the answers
 
@@ -434,7 +480,7 @@ Done on November 15, 2026 (account `df496aa8…`); to set it up again:
   app's 16 presets. `test/stamp.test.js` checks the versions, also on a
   copy of `public/` with a built gallery.
 - `test/polls-*.test.js` check the polls: the definition's rules and both
-  schemas (`test/fixtures/polls/` holds a valid definition, one with a link
+  schemas (`test/fixtures/polls/` holds a valid definition with `resultsAt`, one with a link
   off the allowed hosts and one with a title too long, which `npm run build`
   must refuse), `current.json` over time, the API and the deadline
   processing on `test/fake-d1.js` (D1's API on `node:sqlite` with the real

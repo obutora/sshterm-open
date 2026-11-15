@@ -10,7 +10,7 @@
     "version": { "const": 1 },
     "generatedAt": { "$ref": "#/$defs/time" },
     "nextChangeAt": {
-      "description": "When this file next changes (a poll opens or closes, results or an announcement start or end); null when nothing is due. The cron Worker rebuilds the site once it has passed.",
+      "description": "When this file next changes (a poll opens or closes, its results are published or end, an announcement starts or ends); null when nothing is due. The cron Worker rebuilds the site once it has passed.",
       "oneOf": [{ "$ref": "#/$defs/time" }, { "type": "null" }]
     },
     "polls": {
@@ -31,7 +31,7 @@
       }
     },
     "results": {
-      "description": "Polls whose deadline passed less than 14 days ago, newest first, with their counts.",
+      "description": "Polls whose results were published (resultsAt in the definition, set once the developer has checked the counts) less than 14 days ago, newest first, with their counts. closedAt is the poll's deadline. A poll without resultsAt is never here.",
       "type": "array",
       "items": {
         "type": "object",
@@ -62,7 +62,7 @@
       }
     },
     "announcements": {
-      "description": "Announcements between their from (the poll's deadline, when its results came) and until, newest first. url is the poll's results page.",
+      "description": "Announcements between their from (when the poll's results were published: resultsAt) and until, newest first. url is the poll's results page.",
       "type": "array",
       "items": {
         "type": "object",
