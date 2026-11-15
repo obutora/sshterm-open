@@ -2,9 +2,45 @@
    the options as one column of radio rows, the free text field, the counts
    as meters. No inline styles: the CSP allows only the site's own files. */
 
+/* The head of a poll: the kicker, the title and the deadline, one under the
+   other across the whole width (the sheet's second column is for a lede,
+   which a poll has none of), inset like the rest of the sheet. A title on
+   either page breaks between words; only a word too long for the line breaks
+   inside. */
+
+[data-page="poll"] .hero > * {
+  grid-column: 1 / -1;
+}
+
+[data-page="poll"] .hero h1 {
+  padding-top: 24px;
+}
+
+.hero h1 {
+  overflow-wrap: break-word;
+}
+
+.hero > .label {
+  margin: 0;
+  padding: 26px var(--pad) 0;
+}
+
+.hero > .dates {
+  margin: 0;
+  padding: 0 var(--pad) 26px;
+}
+
+/* A note inside a section or the form takes the section's inset, not its
+   own on top of it. */
+
+main section .note {
+  padding: 0;
+}
+
 main > .status,
 main > .note,
 main > noscript p {
+  max-width: none;
   margin: 0;
   padding: 18px var(--pad);
   border-bottom: 1px solid var(--rule);
