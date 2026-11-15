@@ -194,7 +194,8 @@ and an "Open in SSH Term Desktop" button with the key's link
 The same session always gives the same key, so a reload shows it again.
 An unpaid session, a missing id and a failure each say so and show no key.
 The page stores nothing. `_headers` adds `connect-src 'self'` to the CSP of
-these two pages only.
+these two pages, as it does for the polls' pages (`/polls`, `/polls/*`) and
+the resend pages; other pages connect nowhere.
 
 ## The resend page
 
@@ -209,8 +210,9 @@ as the purchase to the entered address only. So the page always says "if
 this address bought, the key is on its way"; too many tries, a failed check
 and a failure each say so. A token works once, so the widget is reset after
 every send. The page stores nothing. `_headers` lets these two pages load
-Turnstile's script and frame from `challenges.cloudflare.com` and connect to
-their own origin; no other page may.
+Turnstile's script and frame from `challenges.cloudflare.com`; no other page
+may. Like the purchase-complete and the polls' pages, they may also connect
+to their own origin.
 
 The Turnstile site key is the `data-sitekey` of both pages: the widget
 `sshterm-resend` (hostname `sshterm.iru-yo.com`, Managed mode), whose secret
@@ -226,8 +228,10 @@ keeps as little as it can.
 
 - `https://sshterm.iru-yo.com/polls/current.json` is what the app reads (at
   most once a day): the poll open now, the results of polls closed less than
-  14 days ago (with their counts) and the announcements between their start
-  and end. `npm run build` makes it from the definition at the time it runs;
+  14 days ago (with their counts; results show for 14 days from the
+  deadline, not from when the counts came, so counts that come late shorten
+  that time) and the announcements, each from its poll's results (the
+  deadline) until its end. `npm run build` makes it from the definition at the time it runs;
   its shape is `polls/schema/current.schema.json`. `nextChangeAt` says when
   it will next change.
 - `https://sshterm.iru-yo.com/polls/<id>#k=<token>` answers a poll. The app
@@ -237,7 +241,8 @@ keeps as little as it can.
   page only shows. Until the deadline it shows no count, says the results
   will be published there after the deadline, and, with a free text field,
   that only the developer reads it and not to write names, host names or IP
-  addresses. After the deadline it shows the counts and the announcement.
+  addresses. After the deadline it shows the counts, and the announcement
+  until the announcement's end (the build after that end drops it).
 - `https://sshterm.iru-yo.com/polls/` lists the open poll and every past
   result. Polls not yet open are not built, and appear nowhere.
 - The pages' frame is in English and Japanese (`public/polls/polls.js`), the
@@ -261,7 +266,7 @@ The build, the Functions and `current.json` all come from it. A poll:
 | `freeText` | Optional: `{label, maxLength}`, the label up to 80, `maxLength` 1–1000 code points (500 when not given). |
 | `opensAt` | ISO 8601 with a zone, e.g. `2026-12-01T00:00:00Z`. |
 | `closesAt` | The deadline; 14 days after `opensAt` when not given. |
-| `announcement` | Optional: `{title, body, link, from, until}`. The title up to 40, the body up to 300. `link` is optional, https on `discord.gg`, `discord.com`, `sshterm.iru-yo.com` or `github.com` only (the app's own list: adding a host needs an app update). `from` defaults to the deadline and may not be before it; `until` defaults to 30 days after `from`. |
+| `announcement` | Optional: `{title, body, link, until}`. The title up to 40, the body up to 300. `link` is optional, https on `discord.gg`, `discord.com`, `sshterm.iru-yo.com` or `github.com` only (the app's own list: adding a host needs an app update; `LINK_HOSTS` in `polls/rules.js` is the site's one copy, which the schemas leave to the rules). It shows from the poll's results (the deadline) until `until`, which defaults to 30 days after the deadline and must be after it. |
 
 Every text is `{"en": …, "ja": …, "ko": …, "vi": …, "zh": …, "zh_Hant": …}`
 with `en` required; lengths count code points once trimmed, and no text may
@@ -269,9 +274,11 @@ hold a control character or one that turns the direction (ADR 0015's rule,
 `isForbiddenCodePoint` in `public/theme-format.js`). Ids are unique and no
 two polls are open at once. `npm run build` checks the file against the
 schema and `polls/rules.js` before anything else and fails, writing nothing,
-with a JSON line per problem; Cloudflare Pages runs it on every deploy, so a
-broken definition never goes out. `npm test` checks the shipped file the
-same way.
+with a JSON line per problem. That build is the CI gate for the definition:
+Cloudflare Pages runs it on every deploy (a branch's preview too), so a
+broken definition never goes out; the repository has no other CI (no GitHub
+Actions workflow).
+`npm test` checks the shipped file the same way, but runs only by hand.
 
 To add a poll, add an entry to `polls` with an `opensAt` in the future and
 open a PR; the build after `opensAt` publishes it (the cron Worker asks for
@@ -293,8 +300,14 @@ the D1 database bound as `POLLS_DB` (`polls/api.js`, `polls/store.js`,
   until the deadline, so a token is one vote; after it, `409`. A malformed
   token, choice or body is `400`.
 - Free text is checked for UTF-8, its length, control characters and
-  characters that turn the direction (line feeds aside); only the spaces
-  around it are taken off. Nothing ever puts it in HTML.
+  characters that turn the direction; only the spaces around it are taken
+  off. The one exception to the control characters is the line feed (LF):
+  the page's field is a `<textarea>`, so an answer may hold several lines (a
+  CR, a tab or any other control character is still refused). Nothing ever
+  puts it in HTML; the CSV quotes a value with a line feed, and the LLM
+  export writes each answer as one JSON line.
+- A body whose `content-length` is over 16 KiB is refused (`413`) before it
+  is read; one that turns out larger once read is refused too.
 - Every value goes into SQL with `bind`. Nothing reads the IP address, the
   user agent or a cookie; IP addresses are limited by a Cloudflare rate
   limiting rule at the zone (below) and stored nowhere. No Turnstile (it
@@ -302,7 +315,12 @@ the D1 database bound as `POLLS_DB` (`polls/api.js`, `polls/store.js`,
 - At the deadline (the first `GET` after it, or the cron Worker within the
   hour) the counts go to `tallies` and every answer's row (the token's hash
   and the choice) is deleted. Free text moves to `free_texts` with only the
-  poll's id and is deleted 90 days after the deadline.
+  poll's id and is deleted by the cron Worker within the hour once 90 days
+  have passed since the deadline. A `GET` reads whether the poll is closed
+  first, so it closes a poll once and writes nothing after that.
+- D1's Time Travel (always on) can restore the database to any minute of the
+  last 30 days (7 on the Workers Free plan), so deleted rows stay restorable
+  that long; the privacy policy says so.
 
 `workers/polls-cron/` is a Worker with a Cron Trigger every hour on the same
 D1 database, so the deadline and the 90 days hold with no visitor. Each run
@@ -386,14 +404,16 @@ node ../../polls/export.js llm < free-texts.json > free-texts.txt
   (`api.js`), the D1 queries (`store.js`) and schema (`migrations/`), and
   the export (`export.js`). `functions/` holds the Pages Function,
   `workers/polls-cron/` the cron Worker; both import `polls/`.
-- `public/polls/`: the pages' own `polls.js` and `polls.css`; the build adds
+- `public/polls/`: the pages' own `polls.js` and `polls.css`, and
+  `token.js`, the token's pattern, which the Functions import too; the build adds
   `current.json`, `index.html` and `<id>.html` (not committed).
 - `public/themes/`: `/themes/format` serves `format.html` (with `format.js`
   and `format.css`); `schema/v1.json` is the schema and `example.json` the
   example file shown on the page. `gallery.js` and `gallery.css` are the
   gallery's.
 - `build/`: the gallery's build (`gallery.js`), the polls' (`polls.js`), the
-  links' versions (`stamp.js`); `main.js` is `npm run build`.
+  HTML template both use (`html.js`), the links' versions (`stamp.js`);
+  `main.js` is `npm run build`.
 - `test/theme-schema.test.js` replays the app's examples against the schema
   (skipping those the manifest marks `not-expressible`);
   `test/theme-format-page.test.js` checks the page's strings, that it loads

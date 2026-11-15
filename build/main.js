@@ -20,13 +20,13 @@ const publicDir = fileURLToPath(new URL('../public', import.meta.url));
 const definition = process.env.POLLS_DEFINITION || DEFINITION;
 try {
   // The definition first: a broken one stops the build before anything is written.
-  readDefinition(readFileSync(definition));
+  const polls = readDefinition(readFileSync(definition));
   await buildGallery({
     repo: process.env.THEMES_REPO || DEFAULT_REPO,
     ref: process.env.THEMES_REF || 'main',
     publicDir,
   });
-  await buildPolls({ definition, publicDir });
+  await buildPolls({ polls, publicDir });
   if (process.env.CF_PAGES) stampSite(publicDir);
 } catch (e) {
   if (e instanceof PollsError) {

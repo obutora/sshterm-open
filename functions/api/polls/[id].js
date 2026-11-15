@@ -3,11 +3,7 @@
 // it was deployed with this build.
 
 import definition from '../../../polls/polls.json' with { type: 'json' };
-import { handlePoll } from '../../../polls/api.js';
+import { pagesFunction } from '../../../polls/api.js';
 import { pollsOf } from '../../../polls/rules.js';
 
-const polls = pollsOf(definition);
-
-export function onRequest({ request, env, params }) {
-  return handlePoll({ request, db: env.POLLS_DB, polls, id: params.id, now: Date.now() });
-}
+export const onRequest = pagesFunction(pollsOf(definition));

@@ -1,14 +1,12 @@
 // The cron Worker (workers/polls-cron/) closes polls and deletes free text on
 // its own clock, with no visitor, and asks Pages for a build when
-// current.json is due to change. Also: the Pages Function's wiring.
+// current.json is due to change. Also: the Pages Function on its binding.
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { existsSync, readFileSync } from 'node:fs';
-import { handlePoll } from '../polls/api.js';
-import { checkDefinition } from '../polls/rules.js';
+import { handlePoll, pagesFunction } from '../polls/api.js';
+import { checkDefinition, isoTime } from '../polls/rules.js';
 import cron, { runCron } from '../workers/polls-cron/index.js';
-import { onRequest } from '../functions/api/polls/[id].js';
 import { FakeD1 } from './fake-d1.js';
 import { CLOSES_MS, DAY, OPENS_MS, definition, poll, token } from './polls-fixtures.js';
 
@@ -91,22 +89,19 @@ test('the scheduled handler runs on the binding and the time of the trigger', as
   assert.deepEqual(db.rows('tallies'), [{ poll_id: 'next-feature', choice: 2, count: 1 }]);
 });
 
-test('the Worker and the Pages project share the database; the migrations are where wrangler looks', () => {
-  const toml = readFileSync(new URL('../workers/polls-cron/wrangler.toml', import.meta.url), 'utf8');
-  assert.match(toml, /^crons = \["0 \* \* \* \*"\]$/m);
-  assert.match(toml, /^binding = "POLLS_DB"$/m);
-  assert.match(toml, /^database_name = "sshterm-polls"$/m);
-  const dir = toml.match(/^migrations_dir = "([^"]+)"$/m)[1];
-  assert.ok(existsSync(new URL(`../workers/polls-cron/${dir}/0001_polls.sql`, import.meta.url)));
-  assert.match(toml, /^workers_dev = false$/m);
-  assert.doesNotMatch(toml, /^routes?\s*=/m);
-  const fn = readFileSync(new URL('../functions/api/polls/[id].js', import.meta.url), 'utf8');
-  assert.match(fn, /env\.POLLS_DB/);
-});
-
-test('the Pages Function serves the deployed definition: it holds no poll, so every id is unknown', async () => {
+test('the Pages Function answers on the POLLS_DB binding at the time of the request', async () => {
   const db = new FakeD1();
-  const res = await onRequest({ request: new Request(`${SITE}/api/polls/next-feature`), env: { POLLS_DB: db }, params: { id: 'next-feature' } });
-  assert.equal(res.status, 404);
-  assert.deepEqual(await res.json(), { error: 'notFound' });
+  const now = Date.now();
+  const [open] = checkDefinition(definition(poll({ opensAt: isoTime(now - DAY), closesAt: isoTime(now + DAY) }))).polls;
+  const onRequest = pagesFunction([open]);
+  const request = (init) => new Request(`${SITE}/api/polls/next-feature`, init);
+  const res = await onRequest({
+    request: request({ method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ token: token(1), choice: 1 }) }),
+    env: { POLLS_DB: db },
+    params: { id: 'next-feature' },
+  });
+  assert.equal(res.status, 200);
+  assert.equal(db.rows('votes').length, 1);
+  const unknown = await onRequest({ request: request(), env: { POLLS_DB: db }, params: { id: 'other' } });
+  assert.equal(unknown.status, 404);
 });

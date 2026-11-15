@@ -13,9 +13,7 @@
 // six languages, English standing in for a missing one.
 
 import { localize, pickLang } from '../common.js';
-
-/** The token the app makes: 32 random bytes as base64url without padding. */
-const TOKEN = /^[A-Za-z0-9_-]{43}$/;
+import { TOKEN } from './token.js';
 
 export const STRINGS = {
   en: {
@@ -97,6 +95,17 @@ export function tokenFrom(hash) {
   return tokens.length === 1 && TOKEN.test(tokens[0]) ? tokens[0] : null;
 }
 
+/**
+ * The counts in [body] (GET /api/polls/<id>'s) of a closed poll with
+ * [optionCount] options, or null: one whole number of 0 or more per option.
+ * The build (build/polls.js) reads them the same way.
+ */
+export function countsIn(body, optionCount) {
+  const counts = body?.state === 'closed' ? body.counts : null;
+  const ok = Array.isArray(counts) && counts.length === optionCount && counts.every((n) => Number.isInteger(n) && n >= 0);
+  return ok ? counts : null;
+}
+
 /** [texts]' text in the reader's language ([tag]), English when it has none: [lang, text]. */
 export function textIn(texts, tag) {
   const lang = pickLang(tag, texts);
@@ -121,21 +130,21 @@ function readData(document) {
 export async function runPoll({ document, location, navigator, fetch, now = Date.now }) {
   const $ = (id) => document.getElementById(id);
   const tag = navigator.language;
-  const t = frameOf(tag);
-  localize(t, document);
-  const data = readData(document);
-  put($('title'), data.title, tag);
-  document.title = `${textIn(data.title, tag)[1]} · SSH Term`;
-  for (const [i, option] of data.options.entries()) put(document.querySelector(`[data-option="${i}"]`), option, tag);
-  if (data.freeText) put($('free-label'), data.freeText.label, tag);
-  if (data.announcement) {
-    put($('announcement-title'), data.announcement.title, tag);
-    put($('announcement-body'), data.announcement.body, tag);
+  const frame = frameOf(tag);
+  localize(frame, document);
+  const poll = readData(document);
+  put($('title'), poll.title, tag);
+  document.title = `${textIn(poll.title, tag)[1]} · SSH Term`;
+  for (const [i, option] of poll.options.entries()) put(document.querySelector(`[data-option="${i}"]`), option, tag);
+  if (poll.freeText) put($('free-label'), poll.freeText.label, tag);
+  if (poll.announcement) {
+    put($('announcement-title'), poll.announcement.title, tag);
+    put($('announcement-body'), poll.announcement.body, tag);
   }
-  const closesAt = Date.parse(data.closesAt);
-  $('closes').textContent = new Date(closesAt).toLocaleString(t.htmlLang, { dateStyle: 'medium', timeStyle: 'short' });
+  const closesAt = Date.parse(poll.closesAt);
+  $('closes').textContent = new Date(closesAt).toLocaleString(frame.htmlLang, { dateStyle: 'medium', timeStyle: 'short' });
   const say = (text) => { $('status').textContent = text; };
-  const api = `/api/polls/${encodeURIComponent(data.id)}`;
+  const api = `/api/polls/${encodeURIComponent(poll.id)}`;
 
   const showResults = async () => {
     $('answer').hidden = true;
@@ -147,10 +156,8 @@ export async function runPoll({ document, location, navigator, fetch, now = Date
     } catch {
       body = null;
     }
-    const counts = body?.state === 'closed' ? body.counts : null;
-    if (!Array.isArray(counts) || counts.length !== data.options.length || !counts.every((n) => Number.isInteger(n) && n >= 0)) {
-      return say(t.resultsFailed);
-    }
+    const counts = countsIn(body, poll.options.length);
+    if (!counts) return say(frame.resultsFailed);
     const total = counts.reduce((a, b) => a + b, 0);
     const list = $('counts');
     list.textContent = '';
@@ -158,7 +165,7 @@ export async function runPoll({ document, location, navigator, fetch, now = Date
       const item = document.createElement('li');
       const name = document.createElement('span');
       name.className = 'option';
-      put(name, data.options[i], tag);
+      put(name, poll.options[i], tag);
       const figure = document.createElement('span');
       figure.className = 'count';
       figure.textContent = `${count} (${total ? Math.round((count / total) * 100) : 0}%)`;
@@ -169,18 +176,18 @@ export async function runPoll({ document, location, navigator, fetch, now = Date
       item.append(name, figure, meter);
       list.append(item);
     }
-    $('total').textContent = t.total.replace('{n}', String(total));
+    $('total').textContent = frame.total.replace('{n}', String(total));
     $('results').hidden = false;
     const announcement = $('announcement');
     if (announcement) announcement.hidden = false;
-    say(t.closed);
+    say(frame.closed);
   };
 
   if (now() >= closesAt) return showResults();
 
   $('pending').hidden = false;
   const token = tokenFrom(location.hash);
-  if (!token) return say(t.noToken);
+  if (!token) return say(frame.noToken);
 
   $('answer').hidden = false;
   const form = $('form');
@@ -188,11 +195,11 @@ export async function runPoll({ document, location, navigator, fetch, now = Date
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
     const picked = form.querySelector('input[name="choice"]:checked');
-    if (!picked) return say(t.chooseOne);
+    if (!picked) return say(frame.chooseOne);
     const answer = { token, choice: Number(picked.value) };
-    if (data.freeText) answer.freeText = $('free').value;
+    if (poll.freeText) answer.freeText = $('free').value;
     send.disabled = true;
-    say(t.sending);
+    say(frame.sending);
     let res;
     try {
       res = await fetch(api, {
@@ -205,16 +212,16 @@ export async function runPoll({ document, location, navigator, fetch, now = Date
     }
     send.disabled = false;
     if (res?.ok) {
-      send.textContent = t.sendAgain;
-      return say(t.sent);
+      send.textContent = frame.sendAgain;
+      return say(frame.sent);
     }
     if (res?.status === 409) return showResults();
-    if (res?.status === 429) return say(t.tooMany);
-    if (res?.status === 400 && data.freeText) {
+    if (res?.status === 429) return say(frame.tooMany);
+    if (res?.status === 400 && poll.freeText) {
       const body = await res.json().catch(() => null);
-      if (body?.error === 'freeText') return say(t.freeTextBad);
+      if (body?.error === 'freeText') return say(frame.freeTextBad);
     }
-    return say(t.failed);
+    return say(frame.failed);
   });
 }
 

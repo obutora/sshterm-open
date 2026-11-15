@@ -36,8 +36,7 @@
         "body": {
           "en": "Thank you for answering. We are starting on SFTP."
         },
-        "link": "https://evil.example/sshterm",
-        "from": "2026-12-20T00:00:00Z"
+        "link": "https://evil.example/sshterm"
       }
     }
   ]
