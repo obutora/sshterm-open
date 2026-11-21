@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { appLink, main, paramFromHash, STRINGS } from '../public/theme.js';
+import { appLink, desktopLink, main, paramFromHash, STRINGS } from '../public/theme.js';
 import { base64UrlEncode, encodeThemeLink } from '../public/theme-format.js';
 import { fakePage } from './fake-dom.js';
 
@@ -48,6 +48,7 @@ test('t is read alone; missing, empty or repeated is null', () => {
     assert.equal(paramFromHash(hash), null, hash);
   }
   assert.equal(appLink('abc'), 'sshtermx://theme?t=abc');
+  assert.equal(desktopLink('abc'), 'sshterm-desktop://theme?t=abc');
 });
 
 test("the app's link shows its name, author, licence, 元にしたテーマ and colours", async () => {
@@ -95,6 +96,8 @@ test('nothing but a broken-link line for a bad t', async () => {
     assert.equal($('theme').hidden, true, what);
     assert.equal($('open').hidden, true, what);
     assert.equal($('open').href, '', what);
+    assert.equal($('openDesktop').hidden, true, what);
+    assert.equal($('openDesktop').href, '', what);
     assert.equal(d.created.length, 0, what);
   }
 });
@@ -128,6 +131,28 @@ test('the store help shows at once only in an Android WebView', async () => {
   assert.equal(iphone.$('trouble').hidden, true);
   const desktop = await show(HASH, { ua: UAS.desktop[0] });
   assert.equal(desktop.$('desktop').hidden, false);
+});
+
+test('on a computer it also offers SSH Term Desktop with the same t, keeping the phone button and note', async () => {
+  const { $ } = await show(HASH, { ua: UAS.desktop[0] });
+  assert.equal($('openDesktop').hidden, false);
+  assert.equal($('openDesktop').href, `sshterm-desktop://theme?t=${T}`);
+  assert.equal($('open').hidden, false);
+  assert.equal($('open').href, `sshtermx://theme?t=${T}`);
+  assert.equal($('desktop').hidden, false);
+  const mac = await show(HASH, { ua: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15', language: 'ja' });
+  assert.equal(mac.$('openDesktop').hidden, false);
+  assert.equal(mac.$('openDesktop').textContent, 'SSH Term Desktop で開く');
+});
+
+test('phones and tablets get no SSH Term Desktop button', async () => {
+  for (const name of ['iphone', 'ipad', 'android', 'androidWebView']) {
+    const [ua, touch] = UAS[name];
+    const { $ } = await show(HASH, { ua, maxTouchPoints: touch });
+    assert.equal($('openDesktop').hidden, true, name);
+    assert.equal($('openDesktop').href, '', name);
+    assert.equal($('open').hidden, false, name);
+  }
 });
 
 test('every language has every string', () => {
