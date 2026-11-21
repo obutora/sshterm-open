@@ -30,6 +30,11 @@
       <div class="cf-turnstile" data-sitekey="0x4AAAAAAF_lx14ffX3d8qPO" data-action="resend" data-language="ja"></div>
       <button id="send" type="submit">キーを送る</button>
     </form>
+    <div id="done" class="sent" role="status" hidden>
+      <p class="sent-title">送信しました。メールを確認してください。</p>
+      <p id="done-text"></p>
+      <button id="again" type="button">別のアドレスで送る</button>
+    </div>
     <p id="status" aria-live="polite"></p>
     <p>キーは、入れたアドレスで SSH Term Desktop が買われているときだけ、そのアドレスにだけ送ります。買われているかどうかにかかわらず、このページの答えは同じです。ボットを防ぐために Cloudflare Turnstile を使い、1 つの IP アドレスから送れる回数を絞っています。何も保存しません。<a href="/ja/privacy">プライバシーポリシー</a>を見てください。</p>
   </section>

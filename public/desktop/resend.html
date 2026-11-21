@@ -30,6 +30,11 @@
       <div class="cf-turnstile" data-sitekey="0x4AAAAAAF_lx14ffX3d8qPO" data-action="resend"></div>
       <button id="send" type="submit">Send the key</button>
     </form>
+    <div id="done" class="sent" role="status" hidden>
+      <p class="sent-title">Sent. Check your email.</p>
+      <p id="done-text"></p>
+      <button id="again" type="button">Send to another address</button>
+    </div>
     <p id="status" aria-live="polite"></p>
     <p>The key is sent only to the address you enter, and only if SSH Term Desktop was bought with it. This page says the same thing either way. We use Cloudflare Turnstile to keep bots out, and limit how often one IP address can send. Nothing is stored. See the <a href="/privacy">Privacy Policy</a>.</p>
   </section>
