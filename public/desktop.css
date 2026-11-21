@@ -127,3 +127,34 @@
   opacity: 0.5;
   cursor: default;
 }
+
+/* The resend page after a send: the form gives way to this notice.
+   .license sets display, so hidden needs saying again here. */
+
+.license[hidden] {
+  display: none;
+}
+
+.sent {
+  padding: 14px 16px;
+  background: var(--rule-soft);
+  border: 1px solid var(--rule);
+  border-left: 4px solid var(--accent);
+}
+
+.sent p {
+  margin: 0 0 10px;
+}
+
+.sent .sent-title {
+  font-weight: 700;
+}
+
+.sent #again {
+  padding: 6px 14px;
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 1px solid var(--rule);
+  cursor: pointer;
+}

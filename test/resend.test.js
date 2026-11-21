@@ -14,7 +14,9 @@ function fakePage(lang, { email = 'buyer@example.com', token = 'tok', answer = {
     addEventListener(t, fn) { this.listeners[t] = fn; } });
   const form = el();
   form.elements = { email: { value: email }, 'cf-turnstile-response': token === null ? undefined : { value: token } };
-  const ids = { form, status: el(), send: el() };
+  const done = el();
+  done.hidden = true;
+  const ids = { form, status: el(), send: el(), done, 'done-text': el(), again: el() };
   const calls = [];
   const resets = [];
   const env = {
@@ -34,16 +36,28 @@ function fakePage(lang, { email = 'buyer@example.com', token = 'tok', answer = {
   return { env, ids, calls, resets, submit };
 }
 
-test('sends the address, the language and the Turnstile token, then says the same for any address', async () => {
+test('sends the address, the language and the Turnstile token, then swaps the form for a notice that says the same for any address', async () => {
   for (const lang of ['en', 'ja']) {
     const { env, ids, calls, resets, submit } = fakePage(lang, { email: '  buyer@example.com ' });
     run(env);
     assert.equal(await submit(), true);
     assert.deepEqual(calls, [['/api/license/resend', 'POST', { email: 'buyer@example.com', lang, turnstile: 'tok' }]]);
-    assert.equal(ids.status.textContent, STRINGS[lang].sent);
+    assert.equal(ids.form.hidden, true, 'the form goes away, so the same address is not sent twice');
+    assert.equal(ids.done.hidden, false);
+    assert.equal(ids['done-text'].textContent, STRINGS[lang].sent('buyer@example.com'));
+    assert.equal(ids.status.textContent, '');
     assert.equal(resets.length, 1, 'a Turnstile token works once, so the widget is reset');
     assert.equal(ids.send.disabled, false);
   }
+});
+
+test('"send to another address" brings the form back', async () => {
+  const { env, ids, submit } = fakePage('en');
+  run(env);
+  await submit();
+  ids.again.listeners.click();
+  assert.equal(ids.form.hidden, false);
+  assert.equal(ids.done.hidden, true);
 });
 
 test('asks to finish the check first when there is no Turnstile token yet', async () => {
@@ -69,6 +83,8 @@ test('too many tries, a failed check and a failure each say so', async () => {
       run(env);
       await submit();
       assert.equal(ids.status.textContent, STRINGS[lang][want], want);
+      assert.equal(ids.form.hidden, false, `${want}: the form stays so it can be sent again`);
+      assert.equal(ids.done.hidden, true, want);
       assert.equal(resets.length, 1, want);
     }
   }

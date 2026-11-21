@@ -9,7 +9,7 @@
 export const STRINGS = {
   en: {
     sending: 'Sending…',
-    sent: 'If SSH Term Desktop was bought with this address, we have sent the license key to it. It can take a few minutes; check your spam folder too.',
+    sent: (email) => `We sent it to ${email}. If SSH Term Desktop was bought with this address, the license key arrives there. It can take a few minutes; check your spam folder too.`,
     noToken: 'Finish the check above, then send again.',
     badEmail: 'Enter the email address you bought with.',
     tooMany: 'Too many tries. Wait a while and try again.',
@@ -17,7 +17,7 @@ export const STRINGS = {
   },
   ja: {
     sending: '送っています…',
-    sent: 'このアドレスで SSH Term Desktop を買っていれば、そのアドレスにライセンスキーを送りました。届くまで数分かかることがあります。迷惑メールのフォルダも見てください。',
+    sent: (email) => `${email} あてに送りました。このアドレスで SSH Term Desktop を買っていれば、ライセンスキーのメールが届きます。届くまで数分かかることがあります。迷惑メールのフォルダも見てください。`,
     noToken: '上の確認を済ませてから、もう一度送ってください。',
     badEmail: '買ったときのメールアドレスを入れてください。',
     tooMany: '試した回数が多すぎます。しばらく待ってから、もう一度試してください。',
@@ -33,6 +33,16 @@ export function run({ document, fetch, turnstile }) {
   const $ = (id) => document.getElementById(id);
   const say = (text) => { $('status').textContent = text; };
   const form = $('form');
+  const done = $('done');
+
+  // After a send, the form gives way to a notice so it is clear the send went
+  // through (and the same address is not sent twice). "Send to another
+  // address" brings the form back.
+  $('again').addEventListener('click', () => {
+    done.hidden = true;
+    form.hidden = false;
+    form.elements.email.focus?.();
+  });
 
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -58,6 +68,13 @@ export function run({ document, fetch, turnstile }) {
     // A token works only once, so the next send needs a new check
     turnstile()?.reset();
     send.disabled = false;
+    if (answer === 'sent') {
+      say('');
+      $('done-text').textContent = t.sent(email);
+      form.hidden = true;
+      done.hidden = false;
+      return;
+    }
     say(t[answer]);
   });
 }
