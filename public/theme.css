@@ -73,9 +73,33 @@
   border-top: 1px solid var(--rule);
 }
 
+/* The button cell: on a computer SSH Term Desktop's button sits above the
+   phone app's, a rule between them. */
+.board > .buttons {
+  grid-area: button;
+  display: flex;
+  flex-direction: column;
+}
+
+.buttons > .button {
+  flex: 1;
+}
+
+.buttons > .button + .button {
+  border-top: 1px solid var(--rule);
+}
+
 @media (min-width: 960px) {
   .board {
     grid-template-rows: 1fr auto auto;
+  }
+
+  .board > .buttons {
+    border-left: 1px solid var(--rule);
+  }
+
+  .buttons > .button {
+    min-height: 84px;
   }
 
   .legend {
