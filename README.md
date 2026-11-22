@@ -202,8 +202,11 @@ The Mac download points at
 the release workflow uploads that unchanging name alongside the versioned DMG
 for every general release (1.0.0 on), and `latest` skips prereleases. The
 Microsoft Store link stays greyed out as 近日公開 / Coming soon until the
-Windows version is out; the license key already covers it. The purchase stays
-greyed out as 準備中 / Coming soon until the live checkout exists.
+Windows version is out; the license key already covers it. "Buy" is the live
+Managed Payments Payment Link for the page's language (`?locale=en` /
+`?locale=ja`); it comes back to `/desktop/purchased` or `/ja/desktop/purchased`
+with the Checkout Session's id (`workers/license` in obutora/agent-orchestra
+makes the key from it).
 
 ## The purchase-complete page
 
