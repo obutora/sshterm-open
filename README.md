@@ -186,12 +186,29 @@ Play, and Stripe for SSH Term Desktop. They are plain HTML with no script, on
 `sheet.css` and `legal.css`, and keep `/*`'s headers (CSP, `noindex`). They
 cover the mobile app and SSH Term Desktop. The terms hold SSH Term
 Desktop's one-time purchase, its 14-day trial and its refunds (within 14
-days of purchase; Stripe may refund within 60 days; the key keeps working
-either way). The privacy policy states the apps', stagent's and the license
-Worker's data flows (where each app connects, what notifications carry, what
-stays on the device, what Stripe and Link, the Worker and Cloudflare Email
-Service receive when someone buys SSH Term Desktop); change it, its date and
-its history in both languages when those flows change.
+days of purchase; Stripe may refund within 60 days; either way the key of a
+refunded purchase stops working once the app next fetches the list of
+refunded purchases). The privacy policy states the apps', stagent's and the
+license Worker's data flows (where each app connects, what notifications
+carry, what stays on the device, what Stripe and Link, the Worker and
+Cloudflare Email Service receive when someone buys SSH Term Desktop, and
+that SSH Term Desktop, while a key is entered, fetches the signed list of
+refunded purchases from `/api/license/revoked` at launch at most once a day,
+sending neither the key nor an email address); change it, its date and its
+history in both languages when those flows change.
+
+## The contact page
+
+`https://sshterm.iru-yo.com/contact` (English) and `/ja/contact` (Japanese)
+are where to reach the operator about both the mobile app and SSH Term
+Desktop: the address `support.iruyo@gmail.com` (the Reply-To of the key
+email), the resend page for a lost key, how to ask for a refund (within 14
+days, from the address bought with; the refunded key stops working) and what
+to put in a message (the app and its version, the OS; not the key). SSH Term
+Desktop's license screen opens it (`ja` for Japanese, `en` otherwise). Plain
+HTML with no script, on `sheet.css` and `legal.css`, keeping `/*`'s headers.
+The sales, purchase-complete and resend pages, the terms and the privacy
+policy link to it from their foot.
 
 ## The SSH Term Desktop sales page
 
@@ -201,8 +218,16 @@ requirements, the price (¥1,500 / $9.99, other currencies by Stripe's
 Adaptive Pricing), the 14-day trial, the license key (any number of the
 buyer's own Macs and Windows PCs, separate from the mobile app) and refunds.
 Plain HTML with no script, on `sheet.css`, `legal.css` and `desktop.css`.
-The Mac download, the Microsoft Store link and the purchase are greyed out
-as 準備中 / Coming soon until the downloads and the checkout exist.
+Refunds are asked for through the contact page. The Mac download points at
+`https://github.com/obutora/sshterm-desktop/releases/latest/download/SSHTermDesktop.dmg`:
+the release workflow uploads that unchanging name alongside the versioned DMG
+for every general release (1.0.0 on), and `latest` skips prereleases. The
+Microsoft Store link stays greyed out as 近日公開 / Coming soon until the
+Windows version is out; the license key already covers it. "Buy" is the live
+Managed Payments Payment Link for the page's language (`?locale=en` /
+`?locale=ja`); it comes back to `/desktop/purchased` or `/ja/desktop/purchased`
+with the Checkout Session's id (`workers/license` in obutora/agent-orchestra
+makes the key from it).
 
 ## The purchase-complete page
 
@@ -455,12 +480,12 @@ Done on November 15, 2026 (account `df496aa8…`); to set it up again:
 - `public/`: the site, deployed to Cloudflare Pages (build command
   `npm run build`, output directory `public`). `/open` serves `open.html`,
   `/app` serves `app.html`, `/theme` serves `theme.html`, `/terms`,
-  `/privacy` and `/desktop` serve `terms.html`, `privacy.html` and
-  `desktop.html` (`ja/` the Japanese).
+  `/privacy`, `/contact` and `/desktop` serve `terms.html`, `privacy.html`,
+  `contact.html` and `desktop.html` (`ja/` the Japanese).
   `common.js` holds what the pages share: the platform by user agent, the
   language and filling in the strings. `sheet.css` is the look the theme
   pages share (`/theme`, the gallery and the format page) and the terms,
-  privacy policy and sales page use: the paper, the rules, the type, the
+  privacy policy, contact page and sales page use: the paper, the rules, the type, the
   button and the 見本.
 - Versions: the zone lets browsers keep `.css`, `.js`, `.png` and `.svg` for
   4 hours without asking (a lower `Cache-Control` from Pages cannot shorten
