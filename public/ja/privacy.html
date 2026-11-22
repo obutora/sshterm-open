@@ -22,7 +22,7 @@
     <p>SSH Term は、あなたのデータを運営者のサーバーに送りません。アカウントの登録もありません。デスクトップ版を買うときだけ、ライセンスキーを作って届けるために、下に書くものが運営者の Worker を通ります。Worker は何も保存しません。</p>
     <p>アクセス解析・広告・追跡・クラッシュレポートの SDK は入れていません。接続先の情報、パスワード、SSH 鍵は端末の中に暗号化して置きます。</p>
     <p>アンケートには、アプリではなくこのサイトで答えます。あなたが答えたときだけ、「Web でアンケートに答えたとき」に書くものを運営者が受け取って残します。</p>
-    <p class="dates">制定日：2026年11月5日 · 改定日：2026年11月15日</p>
+    <p class="dates">制定日：2026年11月5日 · 改定日：2026年11月23日</p>
   </div>
 </div>
 <main>
@@ -34,7 +34,7 @@
       <li>iOS と Android のアプリ SSH Term（スマホ版。iOS での表示名は SSH Term X、<code>com.obuto.sshterm</code>）</li>
       <li>Mac と Windows のアプリ SSH Term Desktop（デスクトップ版）</li>
       <li>アプリがあなたのホストに入れるエージェント stagent</li>
-      <li>デスクトップ版のライセンスキーを作って届ける Worker（<code>sshterm.iru-yo.com</code> の下）</li>
+      <li>デスクトップ版のライセンスキーを作って届け、返金した購入の一覧を出す Worker（<code>sshterm.iru-yo.com</code> の下）</li>
       <li>このサイト（<code>sshterm.iru-yo.com</code>）。アンケートのページ（<code>/polls/…</code>）と、答えを受け取る仕組みを含みます</li>
     </ul>
   </section>
@@ -86,9 +86,10 @@
     <p>デスクトップ版が扱うデータは、手元のマシンの中に置きます。運営者には届きません。</p>
     <ul>
       <li>接続先は <code>~/.ssh/config</code> から読むだけで、書き換えません。<code>~/.ssh</code> の known_hosts も読むだけで、新しく信じたホストの鍵はアプリの中に置きます。パスワードは OS の保管庫に置きます。SSH 鍵はアプリの中に持たず、<code>~/.ssh</code> と ssh-agent のものを使います。</li>
-      <li>通信するのは、あなたが指定した SSH サーバー、stagent を入れるときの GitHub（<code>github.com/obutora/stagent</code> のリリース）、Mac で更新を確かめて取得するときの GitHub（<code>github.com/obutora/sshterm-desktop</code> のリリース）だけです。Windows の更新は Microsoft Store が行います。手元のマシンの stagent は、ネットワークを通さずに起こします。</li>
+      <li>通信するのは、あなたが指定した SSH サーバー、stagent を入れるときの GitHub（<code>github.com/obutora/stagent</code> のリリース）、Mac で更新を確かめて取得するときの GitHub（<code>github.com/obutora/sshterm-desktop</code> のリリース）、ライセンスキーを入れているときに返金した購入の一覧を取るこのサイト（下に書きます）だけです。Windows の更新は Microsoft Store が行います。手元のマシンの stagent は、ネットワークを通さずに起こします。</li>
       <li>OS の通知は、アプリが手元のマシンで出します。stagent の通知の送り先（ntfy など）には何も書きません。</li>
-      <li>試用の期間は、アプリの中だけで数えます。ライセンスキーはアプリに埋め込んだ公開鍵で確かめるので、購入のあと、アプリがキーのために外へ通信することはありません。キーにメールアドレスは入りません。</li>
+      <li>試用の期間は、アプリの中だけで数えます。ライセンスキーはアプリに埋め込んだ公開鍵で確かめます。キーにメールアドレスは入りません。</li>
+      <li>ライセンスキーを入れているときは、起動したときに、前に確かめてから 1 日以上たっていれば、<code>https://sshterm.iru-yo.com/api/license/revoked</code> から返金した購入の一覧を取ります。取るのは最大で 1 日 1 回で、動いている間に繰り返し取ることはありません。キーもメールアドレスも送りません。一覧を取ってきて署名を確かめ、あなたのキーがそこにあるかはアプリの中で判定します。ほかの Web の通信と同じく、Cloudflare にはあなたの IP アドレスが届きます。</li>
       <li>クラッシュレポートの SDK は入れていません。</li>
     </ul>
   </section>
@@ -135,6 +136,7 @@
         <tbody>
         <tr><td>Stripe と Link（販売者）</td><td>決済の画面で入れたもの（メールアドレス、支払いの情報、国など）</td><td>決済、領収書、税、返金。<a href="https://link.com/privacy">Link のプライバシーポリシー</a>と <a href="https://stripe.com/privacy">Stripe のプライバシーポリシー</a>に従って扱われます。</td></tr>
         <tr><td>運営者の Worker（Cloudflare Workers）</td><td>購入が終わったページから、Checkout Session の id。Stripe から、その購入のメールアドレスと支払いの状態。送り直しのページでは、あなたが入れたメールアドレスと、あなたの IP アドレス。</td><td>支払い済みかを Stripe に確かめ、ライセンスキーを作って返し、メールで送るため。送り直しのページでは、IP アドレスは 1 つのアドレスから 10 分に送れる回数を絞るためだけに使い、その数はメモリにだけ置いて、時間が過ぎれば消えます。データベースを持たず、何も保存しません。</td></tr>
+        <tr><td>運営者の Worker（返金した購入の一覧）</td><td>Stripe から、全額返金された購入がどれか</td><td><code>/api/license/revoked</code> で、返金した購入の Checkout Session の id の短いハッシュだけを入れた署名つきの一覧を出し、デスクトップ版が返金した購入のキーを止めるため。メールアドレスなどの個人の情報は入れません。何も保存しません。一覧は Cloudflare が短い間キャッシュすることがあります。</td></tr>
         <tr><td>Cloudflare Email Service</td><td>送り先のメールアドレスと、メールの本文（ライセンスキー）</td><td><code>license@sshterm.iru-yo.com</code> からキーのメールを送るため。<a href="https://www.cloudflare.com/ja-jp/privacypolicy/">Cloudflare のプライバシーポリシー</a>に従って扱われます。</td></tr>
         <tr><td>Cloudflare Turnstile（送り直しのページだけ）</td><td>人とボットを見分けるために Turnstile が読む、ブラウザーと端末の情報と、あなたの IP アドレス</td><td>ボットに送り直しのページを使わせないため。<a href="https://www.cloudflare.com/turnstile-privacy-policy/">Cloudflare の Turnstile のプライバシーの補足</a>に従って扱われます。</td></tr>
         </tbody>
@@ -171,20 +173,21 @@
       <li>ntfy・Slack・Discord・Telegram に届いた通知は、各サービスで消してください。</li>
       <li>運営者の Worker は何も保存しません。デスクトップ版の購入の記録は、Link と Stripe のポリシーに従って Stripe に残ります。キーのメールは、あなたのメールボックスから消してください。</li>
       <li>アンケートの答え：1 票ずつの記録は締め切りから 1 時間ほどのうちに、自由記述は締め切りから 90 日たったあと 1 時間ほどのうちに消します。消したデータも、Cloudflare D1 の履歴に最大 30 日は戻せる状態で残ります。集計は公開し続けます。</li>
-      <li>お問い合わせのフォーム（Google フォーム）に書いた内容は、返信と対応のためだけに使います。</li>
+      <li>お問い合わせのフォーム（Google フォーム）に書いた内容と、<code>support.iruyo@gmail.com</code>（Gmail）に送ったメールは、返信と対応のためだけに使います。どちらも Google に置かれ、<a href="https://policies.google.com/privacy">Google のプライバシーポリシー</a>に従って扱われます。</li>
     </ul>
   </section>
 
   <section>
     <h2>お問い合わせ</h2>
     <p>運営者：iruyo software</p>
-    <p>お問い合わせは、アプリの 設定 › お問い合わせ、または<a href="https://docs.google.com/forms/d/e/1FAIpQLSdo6BOnIdgMTB6wtFsWVibKebY0heAj4DxIinRj-4ppUIDH-g/viewform">お問い合わせのフォーム</a>から受け付けます。</p>
+    <p>お問い合わせは <a href="mailto:support.iruyo@gmail.com">support.iruyo@gmail.com</a> で受け付けます（<a href="/ja/contact">お問い合わせ</a>のページ）。アプリの 設定 › お問い合わせ、または<a href="https://docs.google.com/forms/d/e/1FAIpQLSdo6BOnIdgMTB6wtFsWVibKebY0heAj4DxIinRj-4ppUIDH-g/viewform">お問い合わせのフォーム</a>からも受け付けます。</p>
   </section>
 
   <section>
     <h2>変更の履歴</h2>
     <p>このポリシーを変えたときは、ページの上の日付を更新し、ここに書きます。</p>
     <ul>
+      <li>2026年11月23日：デスクトップ版が、ライセンスキーを入れているときに、このサイトから返金した購入の一覧を取ること（起動のときに最大 1 日 1 回）と、それを出す運営者の Worker を足した。お問い合わせのメールアドレスを足した</li>
       <li>2026年11月15日：アンケート（アプリがこのサイトの <code>/polls/current.json</code> を読むこと、Web で答えたときに運営者が受け取って残すもの）を足した</li>
       <li>2026年11月14日：ライセンスキーの送り直しのページ（Cloudflare Turnstile と、運営者の Worker の IP アドレスごとの回数の制限）を足した</li>
       <li>2026年11月14日：デスクトップ版（SSH Term Desktop）と、その購入（Stripe と Link、運営者の Worker、Cloudflare Email Service）を足した</li>
@@ -195,6 +198,7 @@
 <div class="foot">
   <a href="/ja/terms">利用規約</a>
   <a href="/ja/privacy">プライバシーポリシー</a>
+  <a href="/ja/contact">お問い合わせ</a>
   <span class="coord">sshterm.iru-yo.com/ja/privacy</span>
 </div>
 </div>
