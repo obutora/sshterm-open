@@ -43,10 +43,10 @@ class FakeElement {
   }
 }
 
-const HTML = readFileSync(new URL('../public/theme.html', import.meta.url), 'utf8');
+const html = (page) => readFileSync(new URL(`../public/${page}.html`, import.meta.url), 'utf8');
 
-/** A page of theme.html at [hash], seen by a browser of [ua] and [language]. */
-export function fakePage(hash, { ua = 'Mozilla/5.0 (X11; Linux x86_64)', language = 'en', maxTouchPoints = 0 } = {}) {
+/** A page of public/<page>.html (theme.html by default) at [hash], seen by a browser of [ua] and [language]. */
+export function fakePage(hash, { ua = 'Mozilla/5.0 (X11; Linux x86_64)', language = 'en', maxTouchPoints = 0, page = 'theme' } = {}) {
   const navigations = [];
   const doc = {
     documentElement: { lang: '' },
@@ -71,7 +71,7 @@ export function fakePage(hash, { ua = 'Mozilla/5.0 (X11; Linux x86_64)', languag
     },
     all: [],
   };
-  for (const [, tag, rest] of HTML.matchAll(/<([a-z0-9]+)\b([^>]*)>/g)) {
+  for (const [, tag, rest] of html(page).matchAll(/<([a-z0-9]+)\b([^>]*)>/g)) {
     const attrs = {};
     for (const [, k, v] of rest.matchAll(/([a-z-]+)(?:="([^"]*)")?/g)) attrs[k] = v ?? '';
     if (!attrs.id && !attrs['data-t']) continue;
@@ -82,7 +82,7 @@ export function fakePage(hash, { ua = 'Mozilla/5.0 (X11; Linux x86_64)', languag
   const record = (how) => (url) => navigations.push([how, String(url)]);
   const location = {
     hash,
-    get href() { return `https://sshterm.iru-yo.com/theme${hash}`; },
+    get href() { return `https://sshterm.iru-yo.com/${page}${hash}`; },
     set href(url) { record('href')(url); },
     assign: record('assign'),
     replace: record('replace'),

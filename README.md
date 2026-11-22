@@ -102,6 +102,26 @@ and Node alike. `test/fixtures/theme_format/` is a copy of the app's
 fixtures and `test/fixtures/theme-link.txt` a link the app made; the tests
 check that both sides agree.
 
+## The import page
+
+`https://sshterm.iru-yo.com/import#k=<key>` is where the QR code that SSH
+Term Desktop shows for スマホ版から取り込む (importing hosts from the mobile
+app) leads.
+
+- `k` is the desktop's X25519 public key (32 bytes, base64url without
+  padding), in the fragment, so it never reaches the server. The page reads
+  only `k`; other keys are dropped. A missing, repeated or malformed `k`
+  (not exactly 32 bytes) shows a friendly error and nothing else.
+- It explains where the page came from and has an "Open in SSH Term" button
+  to `sshtermx://import?k=<the same k>`, where the app lets you choose the
+  hosts to copy to the desktop. It never goes there by itself; help and the
+  store links show as on `/theme`. On a computer it says to scan the QR with
+  the phone's camera.
+- It never shows `k` and sends it nowhere: no fetch, beacon, analytics or
+  storage. The `/*` block of `_headers` gives it the CSP (with no
+  `connect-src`), `noindex` and `Referrer-Policy: no-referrer`. It loads only
+  `import.js`, `common.js` and `open.css`. Languages are those of `/open`.
+
 ## The theme gallery
 
 `https://sshterm.iru-yo.com/themes/` lists the themes people sent to
