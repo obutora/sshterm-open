@@ -197,8 +197,13 @@ requirements, the price (¥1,500 / $9.99, other currencies by Stripe's
 Adaptive Pricing), the 14-day trial, the license key (any number of the
 buyer's own Macs and Windows PCs, separate from the mobile app) and refunds.
 Plain HTML with no script, on `sheet.css`, `legal.css` and `desktop.css`.
-The Mac download, the Microsoft Store link and the purchase are greyed out
-as 準備中 / Coming soon until the downloads and the checkout exist.
+The Mac download points at
+`https://github.com/obutora/sshterm-desktop/releases/latest/download/SSHTermDesktop.dmg`:
+the release workflow uploads that unchanging name alongside the versioned DMG
+for every general release (1.0.0 on), and `latest` skips prereleases. The
+Microsoft Store link stays greyed out as 近日公開 / Coming soon until the
+Windows version is out; the license key already covers it. The purchase stays
+greyed out as 準備中 / Coming soon until the live checkout exists.
 
 ## The purchase-complete page
 
