@@ -90,7 +90,11 @@ QR Code).
   the app shows its import screen. The page never goes there by itself, on
   any device. If the page is still in front about 2 seconds after the tap,
   or in an Android WebView, it shows help and the store links as `/open`
-  does. On a computer it says to open the link on a phone.
+  does. On a computer it says to open the link on a phone, and above that
+  button an "Open in SSH Term Desktop" button opens
+  `sshterm-desktop://theme?t=<the same t>` in SSH Term Desktop (Mac and
+  Windows), which shows the same import screen. The page never goes there by
+  itself either.
 - Languages, the CSP, `noindex` and `no-referrer` are the same as `/open`
   (the `/*` block of `_headers`); it loads only its own `theme.js`,
   `theme-format.js`, `common.js`, `sheet.css` and `theme.css`.

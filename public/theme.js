@@ -2,8 +2,10 @@
 // one SSH Term theme sent as a link. It reads only t from the fragment, which
 // never reaches this server, inflates it (stopping past 64KB), checks it with
 // the app's rules (theme-format.js) and draws the theme in a terminal-like
-// frame. Its button opens the theme in SSH Term as sshtermx://theme?t=…; the
-// page never goes there on its own. It stores nothing and loads nothing else.
+// frame. Its button opens the theme in SSH Term as sshtermx://theme?t=…; on a
+// computer a second button opens it in SSH Term Desktop as
+// sshterm-desktop://theme?t=…. The page never goes to either on its own. It
+// stores nothing and loads nothing else.
 
 import { localize, pickLang, platformOf } from './common.js';
 import { ANSI_KEYS, decodeThemeLink } from './theme-format.js';
@@ -17,6 +19,11 @@ export function paramFromHash(hash) {
 /** The app link the button opens. */
 export function appLink(t) {
   return `sshtermx://theme?t=${t}`;
+}
+
+/** The SSH Term Desktop link the computer's button opens. */
+export function desktopLink(t) {
+  return `sshterm-desktop://theme?t=${t}`;
 }
 
 /** The theme of a location.hash: {ok: true, theme, t} or {ok: false, reason}. */
@@ -34,6 +41,7 @@ export const STRINGS = {
     author: 'By {}',
     basedOn: 'Based on {}',
     open: 'Open in SSH Term',
+    openDesktop: 'Open in SSH Term Desktop',
     desktop: 'Open this link on your phone to add the theme to SSH Term.',
     trouble: "If it doesn't open",
     inApp: 'In-app browsers may not open it. Choose “Open in browser” from the menu.',
@@ -45,6 +53,7 @@ export const STRINGS = {
     author: '作者: {}',
     basedOn: '元にしたテーマ: {}',
     open: 'SSH Term で開く',
+    openDesktop: 'SSH Term Desktop で開く',
     desktop: 'スマホでこのリンクを開くと、SSH Term にテーマを追加できます。',
     trouble: '開かないときは',
     inApp: 'アプリ内のブラウザでは開けないことがあります。メニューから「ブラウザで開く」を選んでください。',
@@ -56,6 +65,7 @@ export const STRINGS = {
     author: '작성자: {}',
     basedOn: '원본 테마: {}',
     open: 'SSH Term에서 열기',
+    openDesktop: 'SSH Term Desktop에서 열기',
     desktop: '휴대폰에서 이 링크를 열면 SSH Term에 테마를 추가할 수 있습니다.',
     trouble: '열리지 않을 때',
     inApp: '앱 내 브라우저에서는 열리지 않을 수 있습니다. 메뉴에서 ‘브라우저에서 열기’를 선택하세요.',
@@ -67,6 +77,7 @@ export const STRINGS = {
     author: '作者：{}',
     basedOn: '基于主题：{}',
     open: '在 SSH Term 中打开',
+    openDesktop: '在 SSH Term Desktop 中打开',
     desktop: '在手机上打开此链接，即可将主题添加到 SSH Term。',
     trouble: '无法打开时',
     inApp: '应用内浏览器可能无法打开。请从菜单中选择“在浏览器中打开”。',
@@ -78,6 +89,7 @@ export const STRINGS = {
     author: '作者：{}',
     basedOn: '基於主題：{}',
     open: '在 SSH Term 中開啟',
+    openDesktop: '在 SSH Term Desktop 中開啟',
     desktop: '在手機上開啟此連結，即可將主題加入 SSH Term。',
     trouble: '無法開啟時',
     inApp: 'App 內建的瀏覽器可能無法開啟。請從選單中選擇「在瀏覽器中開啟」。',
@@ -194,6 +206,9 @@ export async function main(env = globalThis) {
 
   const platform = platformOf(navigator.userAgent, navigator.maxTouchPoints);
   if (platform === 'desktop') {
+    const desktop = $('openDesktop');
+    desktop.href = desktopLink(found.t);
+    desktop.hidden = false;
     $('desktop').hidden = false;
     return 'theme';
   }
