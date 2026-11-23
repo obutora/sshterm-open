@@ -85,6 +85,10 @@ h1 { font-size: clamp(26px, 4.4vw, 48px); line-height: 1.3; }
 h2 { font-size: clamp(22px, 3.2vw, 34px); line-height: 1.38; }
 h3 { font-size: 19px; line-height: 1.48; }
 :lang(en) h1, :lang(en) h2 { letter-spacing: -0.015em; }
+/* Japanese headings, buttons and case labels break only at spaces,
+   punctuation and the <wbr> phrase breaks in the markup: auto-phrase works
+   in Chrome only, so Safari would otherwise split words. */
+:lang(ja) :is(h1, h2, h3, .btn, .case-who) { word-break: keep-all; overflow-wrap: anywhere; }
 
 .nb { display: inline-block; }
 
@@ -152,6 +156,10 @@ h3 { font-size: 19px; line-height: 1.48; }
   .top nav .nav-lang { display: none; }
   .brand { font-size: 14.5px; gap: 8px; }
   .btn-sm { padding: 0 12px; font-size: 13px; }
+}
+@media (max-width: 359px) {
+  /* No room beside the name; the floating trial button below stays. */
+  .top nav .btn { display: none; }
 }
 
 /* ---------- Buttons & CTA Blocks ---------- */
@@ -781,6 +789,7 @@ h3 { font-size: 19px; line-height: 1.48; }
 .k-compare { display: grid; gap: 10px; }
 .k-row-cmp {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
@@ -805,7 +814,7 @@ h3 { font-size: 19px; line-height: 1.48; }
 }
 @media (max-width: 479px) {
   .k-row-cmp { flex-direction: column; align-items: flex-start; gap: 4px; }
-  .k-row-cmp b { text-align: left; }
+  .k-row-cmp b { text-align: left; white-space: normal; }
 }
 
 /* ---------- Mid-page Climax CTA ---------- */
@@ -903,7 +912,7 @@ h3 { font-size: 19px; line-height: 1.48; }
 .case-after b { color: var(--accent); }
 
 @media (max-width: 859px) {
-  .cases { grid-template-columns: 1fr; }
+  .cases { grid-template-columns: minmax(0, 1fr); }
 }
 
 /* ---------- Full Capability Breakdown (Clean 3-Column List) ---------- */
