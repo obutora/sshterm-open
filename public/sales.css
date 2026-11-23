@@ -320,74 +320,13 @@ h3 { font-size: 19px; line-height: 1.48; }
   border: 1px solid var(--term-edge);
   border-radius: 12px;
   background: var(--term);
-  color: var(--term-text);
-  font: 400 13px/1.6 var(--mono);
   box-shadow: 0 16px 40px rgb(0 0 0 / 0.35);
 }
-.mac-bar {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  height: 34px;
-  padding: 0 12px;
-  background: #171a23;
-  border-bottom: 1px solid var(--term-line);
-  color: var(--muted);
-  font: 600 12px/1 var(--sans);
-}
-.mac-bar i { width: 10px; height: 10px; border-radius: 50%; background: #454a57; }
-.mac-bar span { margin-left: 8px; }
-.mac-bar .mac-toast {
-  margin-left: auto;
-  padding: 3px 9px;
-  border-radius: 999px;
-  background: var(--warn-soft);
-  border: 1px solid rgb(240 122 106 / 0.4);
-  color: var(--warn);
-  font: 700 11px/1.2 var(--sans);
-  white-space: nowrap;
-}
-.mac-body {
-  display: grid;
-  grid-template-columns: 205px minmax(0, 1fr);
-  min-height: 320px;
-}
-.mac-side {
-  display: flex;
-  flex-direction: column;
-  padding: 12px 0;
-  background: #181c25;
-  border-right: 1px solid var(--term-line);
-  font-family: var(--sans);
-  font-size: 12px;
-  line-height: 1.45;
-}
-.mac-host { padding: 8px 14px 4px; color: var(--muted); font-weight: 700; font-size: 11px; letter-spacing: 0.03em; }
-.mac-row { display: flex; align-items: center; gap: 8px; padding: 7px 14px; }
-.mac-row small { margin-left: auto; color: var(--muted); font-size: 11px; white-space: nowrap; }
-.mac-row small.wait { color: var(--warn); font-weight: 700; }
-.mac-row.is-on { background: #262c3a; box-shadow: inset 3px 0 0 var(--accent); color: var(--text); font-weight: 700; }
-.mac-foot {
-  margin-top: auto;
-  padding: 10px 14px 2px;
-  border-top: 1px solid var(--term-line);
-  color: var(--muted);
-  font: 600 11px/1.5 var(--mono);
-  display: flex;
-  justify-content: space-between;
-}
-.mac-foot b { color: var(--accent); }
+.mac img { width: 100%; }
 
 .dot { flex: none; display: inline-block; width: 8px; height: 8px; border-radius: 2px; background: var(--blue); }
 .dot.wait { background: var(--warn); }
 .dot.run { background: var(--run); }
-
-.mac-pane { padding: 16px 20px; overflow: hidden; }
-.mac-pane p { white-space: pre; overflow: hidden; text-overflow: ellipsis; }
-.mac-pane .box { margin-bottom: 10px; padding: 6px 10px; border: 1px solid #d97a45; border-radius: 6px; white-space: normal; }
-.mac-pane .ok { color: var(--run); }
-.mac-pane .dim { color: var(--muted); }
-.mac-pane .busy { color: #e8935a; }
 
 .devices {
   display: grid;
@@ -396,8 +335,7 @@ h3 { font-size: 19px; line-height: 1.48; }
   gap: 18px;
   margin-top: 52px;
 }
-.device-mac .mac { border-bottom: 0; border-radius: 12px 12px 0 0; font-size: 13.5px; }
-.device-mac .mac-body { min-height: 460px; }
+.device-mac .mac { border-bottom: 0; border-radius: 12px 12px 0 0; }
 .device-phone .phone { max-width: 240px; border-bottom: 0; border-radius: 40px 40px 0 0; padding-bottom: 0; }
 .device-phone .phone img { border-radius: 30px 30px 0 0; }
 .same {
@@ -412,10 +350,6 @@ h3 { font-size: 19px; line-height: 1.48; }
 @media (max-width: 899px) {
   .devices { grid-template-columns: minmax(0, 1fr) 150px; gap: 12px; }
   .same { display: none; }
-  .device-mac .mac { font-size: 11px; }
-  .device-mac .mac-body { grid-template-columns: 1fr; min-height: 300px; }
-  .device-mac .mac-side { display: none; }
-  .device-mac .mac-pane { padding: 12px 14px; }
   .device-phone .phone { padding: 6px 6px 0; border-radius: 24px 24px 0 0; }
   .device-phone .phone img { border-radius: 19px 19px 0 0; }
 }
@@ -425,8 +359,6 @@ h3 { font-size: 19px; line-height: 1.48; }
   .device-mac { width: 100%; }
   .device-phone { width: 58%; margin-top: -155px; }
   .device-phone .device-label { display: none; }
-  .device-mac .mac-body { min-height: 270px; }
-  .mac-bar .mac-toast { display: none; }
 }
 
 /* ---------- WHAT IS IT (4 Pillars) ---------- */
@@ -876,15 +808,6 @@ h3 { font-size: 19px; line-height: 1.48; }
   height: 220px;
   object-fit: cover;
   object-position: top;
-}
-.case-media .mac {
-  border: 0;
-  border-radius: 0;
-  box-shadow: none;
-}
-.case-media .mac-side {
-  border-right: 0;
-  min-height: 186px;
 }
 .case-outcome {
   margin-bottom: 14px;

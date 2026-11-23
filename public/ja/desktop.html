@@ -46,33 +46,14 @@
         <p class="cta-meta">macOS 13 以降（Apple Silicon / Intel） · スマホ版なしでも単体で利用可 · 続けるなら <b>¥1,500</b> 買い切り（月額 0 円）</p>
       </div>
 
-      <div class="devices" role="img" aria-label="Mac の SSH Term Desktop とスマホ版 SSH Term で、同じ Claude Code のセッションを開いているイメージ">
+      <div class="devices" role="img" aria-label="Mac の SSH Term Desktop とスマホ版 SSH Term で、同じ Claude Code のセッションを開いている画面">
         <div class="device-mac">
           <p class="device-label"><b>Mac</b> · SSH Term Desktop</p>
           <div class="mac">
-            <div class="mac-bar"><i></i><i></i><i></i><span>SSH Term Desktop</span><span class="mac-toast">通知: mobile が承認待ち</span></div>
-            <div class="mac-body">
-              <div class="mac-side">
-                <p class="mac-host">手元のマシン</p>
-                <p class="mac-row"><span class="dot wait"></span>mobile<small class="wait">承認待ち 2分</small></p>
-                <p class="mac-row is-on"><span class="dot run"></span>web-app<small>作業中</small></p>
-                <p class="mac-host">build-linux（SSH）</p>
-                <p class="mac-row"><span class="dot run"></span>infra<small>作業中</small></p>
-                <p class="mac-foot"><span>Claude 5時間</span><b>42%</b></p>
-              </div>
-              <div class="mac-pane">
-                <p class="box">✻ Welcome to Claude Code!<br><span class="dim">cwd: ~/dev/web-app</span></p>
-                <p>&gt; 決済 API のテストを書いて、通るまで直して</p>
-                <p>● 決済 API の構成を読みます。</p>
-                <p><span class="ok">●</span> Read(src/payment/api.ts)</p>
-                <p class="dim">  ⎿ Read 182 lines</p>
-                <p>● テストを 12 件書きました。実行します。</p>
-                <p><span class="ok">●</span> Write(test/payment/api.test.ts)</p>
-                <p><span class="ok">●</span> Bash(npm test -- payment)</p>
-                <p class="dim">  ⎿ Tests: 2 failed, 10 passed</p>
-                <p class="busy">✻ テストの失敗を直しています…</p>
-              </div>
-            </div>
+            <picture>
+              <source media="(max-width: 899px)" srcset="/desktop/img/mac-chat-pane-ja.webp" width="1284" height="1200">
+              <img src="/desktop/img/mac-chat-ja.webp" width="1440" height="900" alt="">
+            </picture>
           </div>
         </div>
         <p class="same" aria-hidden="true">↔ 同じセッション</p>
@@ -83,7 +64,7 @@
           </div>
         </div>
       </div>
-      <p class="shot-note">画面はイメージです（スマホの画面はスマホ版の実際の表示をもとに作成）。</p>
+      <p class="shot-note">画面はアプリの実際の表示です（データは見本）。</p>
     </div>
   </section>
 
@@ -330,16 +311,7 @@
             <span class="case-who">並列で AI を回すとき</span>
           </div>
           <figure class="case-media">
-            <div class="mac" role="img" aria-label="SSH Term Desktop の一覧。承認待ちの web-app が先頭に表示されているイメージ">
-              <div class="mac-bar"><i></i><i></i><i></i><span>SSH Term Desktop</span></div>
-              <div class="mac-side">
-                <p class="mac-host">mac-studio</p>
-                <p class="mac-row is-on"><span class="dot wait"></span>web-app<small class="wait">承認待ち 2分</small></p>
-                <p class="mac-row"><span class="dot run"></span>mobile<small>作業中</small></p>
-                <p class="mac-host">build-linux</p>
-                <p class="mac-row"><span class="dot run"></span>infra<small>作業中</small></p>
-              </div>
-            </div>
+            <img src="/desktop/img/mac-list-ja.webp" width="636" height="420" alt="SSH Term Desktop のステータス別の一覧。承認待ちの mobile が先頭に、作業中の web-app と infra がその下に並ぶ画面" loading="lazy">
           </figure>
           <h3 class="case-outcome">承認待ちで 30&nbsp;分止まる<wbr>事故が<wbr>なくなる</h3>
           <div class="case-ba">
@@ -369,16 +341,7 @@
             <span class="case-who">リモートサーバーの編集</span>
           </div>
           <figure class="case-media">
-            <div class="mac" role="img" aria-label="端末のファイルリンクから内蔵 SFTP ファイラとコードエディタを開くイメージ">
-              <div class="mac-bar"><i></i><i></i><i></i><span>build-linux · ファイラ</span></div>
-              <div class="mac-pane">
-                <p><span class="ok">●</span> Updated src/payment/api.ts:42</p>
-                <p class="dim">  → クリックで内蔵ファイラ＆エディタへ</p>
-                <p>&nbsp;</p>
-                <p class="box">src/payment/api.ts（SFTP · 保存可）<br><span class="ok">+ 42: return verifySignature(payload);</span></p>
-                <p class="dim">Cmd+S でリモートへそのまま保存</p>
-              </div>
-            </div>
+            <img src="/desktop/img/mac-filer-ja.webp" width="1284" height="544" alt="build-linux の内蔵ファイラで、src/payment/api.ts を SFTP でコードエディタに開き、42 行目を示した画面" loading="lazy">
           </figure>
           <h3 class="case-outcome">承認から<wbr>コード確認・微調整まで 1&nbsp;ウィンドウで<wbr>完結</h3>
           <div class="case-ba">

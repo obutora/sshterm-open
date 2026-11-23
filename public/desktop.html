@@ -50,29 +50,10 @@
         <div class="device-mac">
           <p class="device-label"><b>Mac</b> · SSH Term Desktop</p>
           <div class="mac">
-            <div class="mac-bar"><i></i><i></i><i></i><span>SSH Term Desktop</span><span class="mac-toast">Alert: mobile needs approval</span></div>
-            <div class="mac-body">
-              <div class="mac-side">
-                <p class="mac-host">Local machine</p>
-                <p class="mac-row"><span class="dot wait"></span>mobile<small class="wait">Approval · 2m</small></p>
-                <p class="mac-row is-on"><span class="dot run"></span>web-app<small>Working</small></p>
-                <p class="mac-host">build-linux (SSH)</p>
-                <p class="mac-row"><span class="dot run"></span>infra<small>Working</small></p>
-                <p class="mac-foot"><span>Claude 5h</span><b>42%</b></p>
-              </div>
-              <div class="mac-pane">
-                <p class="box">✻ Welcome to Claude Code!<br><span class="dim">cwd: ~/dev/web-app</span></p>
-                <p>&gt; Write tests for the payment API and fix it until they all pass</p>
-                <p>● I'll read how the payment API is laid out.</p>
-                <p><span class="ok">●</span> Read(src/payment/api.ts)</p>
-                <p class="dim">  ⎿ Read 182 lines</p>
-                <p>● Wrote 12 tests. Running them now.</p>
-                <p><span class="ok">●</span> Write(test/payment/api.test.ts)</p>
-                <p><span class="ok">●</span> Bash(npm test -- payment)</p>
-                <p class="dim">  ⎿ Tests: 2 failed, 10 passed</p>
-                <p class="busy">✻ Fixing the failing tests…</p>
-              </div>
-            </div>
+            <picture>
+              <source media="(max-width: 899px)" srcset="/desktop/img/mac-chat-pane-en.webp" width="1284" height="1200">
+              <img src="/desktop/img/mac-chat-en.webp" width="1440" height="900" alt="">
+            </picture>
           </div>
         </div>
         <p class="same" aria-hidden="true">↔ Same session</p>
@@ -83,7 +64,7 @@
           </div>
         </div>
       </div>
-      <p class="shot-note">Screens are illustrative (the phone screen is captured from the mobile app with sample data).</p>
+      <p class="shot-note">Screens are from the apps themselves, with sample data.</p>
     </div>
   </section>
 
@@ -330,16 +311,7 @@
             <span class="case-who">Parallel AI tasks</span>
           </div>
           <figure class="case-media">
-            <div class="mac" role="img" aria-label="SSH Term Desktop list showing web-app needing approval at the top while mobile and infra keep working">
-              <div class="mac-bar"><i></i><i></i><i></i><span>SSH Term Desktop</span></div>
-              <div class="mac-side">
-                <p class="mac-host">mac-studio</p>
-                <p class="mac-row is-on"><span class="dot wait"></span>web-app<small class="wait">Approval · 2m</small></p>
-                <p class="mac-row"><span class="dot run"></span>mobile<small>Working</small></p>
-                <p class="mac-host">build-linux</p>
-                <p class="mac-row"><span class="dot run"></span>infra<small>Working</small></p>
-              </div>
-            </div>
+            <img src="/desktop/img/mac-list-en.webp" width="636" height="420" alt="SSH Term Desktop list grouped by status: mobile needing approval at the top, web-app and infra working below" loading="lazy">
           </figure>
           <h3 class="case-outcome">Zero half-hour stalls waiting for approval</h3>
           <div class="case-ba">
@@ -369,16 +341,7 @@
             <span class="case-who">Reviewing remote edits</span>
           </div>
           <figure class="case-media">
-            <div class="mac" role="img" aria-label="Clicking a file link in the terminal to inspect and edit it in the built-in SFTP filer">
-              <div class="mac-bar"><i></i><i></i><i></i><span>build-linux · Filer</span></div>
-              <div class="mac-pane">
-                <p><span class="ok">●</span> Updated src/payment/api.ts:42</p>
-                <p class="dim">  → Click to open in built-in filer &amp; editor</p>
-                <p>&nbsp;</p>
-                <p class="box">src/payment/api.ts (SFTP · editable)<br><span class="ok">+ 42: return verifySignature(payload);</span></p>
-                <p class="dim">Cmd+S saves straight back over SFTP</p>
-              </div>
-            </div>
+            <img src="/desktop/img/mac-filer-en.webp" width="1284" height="544" alt="The built-in filer on build-linux with src/payment/api.ts open in the code editor over SFTP, line 42 highlighted" loading="lazy">
           </figure>
           <h3 class="case-outcome">Approve, inspect, and tweak in one window</h3>
           <div class="case-ba">
