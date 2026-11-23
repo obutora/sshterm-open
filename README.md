@@ -243,10 +243,14 @@ separate from the mobile app), FAQ, closing
 CTA, and a floating trial button on narrow screens.
 
 Plain HTML with no script, on their own `sales.css` (the app's dark terminal
-ground, one mint for every button). The phone screens in `desktop/img/` are
-the mobile app's store shots (its own widgets drawn with made-up data, in
-each language); the Mac window is drawn in HTML and the page says the screens
-are illustrative. Refunds are asked for through the contact page. Japanese
+ground, one mint for every button). The screens in `desktop/img/` are real
+UI with made-up data, in each language: the phone ones are the mobile app's
+store shots (its own widgets; the host card rendered with the user `dev`);
+the Mac ones (`mac-*.webp`: the whole window,
+its chat pane for narrow screens, the status list, the filer) are SSH Term
+Desktop's own window rendered offscreen with a fake stagent and a fake SSH
+host (user `dev`, host `build-linux`), so no real host or path shows. Refunds
+are asked for through the contact page. Japanese
 headings, buttons and case labels break only at spaces, punctuation and the
 `<wbr>` between phrases (`word-break: keep-all`; `auto-phrase` is
 Chrome-only), so a new or reworded heading needs its own `<wbr>`s, and
