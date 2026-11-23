@@ -1,0 +1,257 @@
+<!doctype html>
+<!--
+  PROTOTYPE（obutora/agent-orchestra#1862）— 案 A「同じセッション」型。
+  仮説: いちばん買う見込みが高いのはスマホ版の利用者。その人に「スマホで動かしている agent に、Mac からそのまま入れる」を
+  最初の画面で、スマホと Mac に同じセッションが出ている絵で見せれば、無料の試用を始める人が増える。
+  スマホの画面は本物（アプリの widget を偽のデータで描いたもの）。Mac の画面は HTML で描いた仮で、スクリーンショットに差し替える。
+-->
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>SSH Term Desktop｜スマホの agent に、Mac からそのまま</title>
+<meta name="description" content="SSH Term のデスクトップ版。スマホから起動した Claude Code や保持シェルに、Mac からそのまま入れます。14 日間は無料、続けるなら ¥1,500 の買い切り。">
+<link rel="icon" href="/icon.png">
+<link rel="stylesheet" href="/prototype-cv/base.css">
+<link rel="stylesheet" href="/prototype-cv/a.css">
+<link rel="stylesheet" href="/prototype-cv/switcher.css">
+<script src="/prototype-cv/switcher.js" defer></script>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="/ja/desktop"><img src="/prototype-cv/img/desktop-icon.png" alt="" width="30" height="30">SSH Term Desktop</a>
+    <nav>
+      <a href="#how">しくみ</a>
+      <a href="#price">料金</a>
+      <a class="btn btn-sm" href="https://github.com/obutora/sshterm-desktop/releases/latest/download/SSHTermDesktop.dmg">無料で試す</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <section class="stage hero">
+    <div class="wrap">
+      <div class="hero-copy">
+        <p class="eyebrow">SSH Term（スマホ版）を使っている方へ</p>
+        <h1><span class="nb">スマホの agent に、</span><span class="nb">Mac からそのまま入れる。</span></h1>
+        <p class="lead">スマホから起動した Claude Code や保持シェルは、ホストで動き続けています。SSH Term Desktop で開けば、同じセッションがそのまま並び、続きを打てます。</p>
+        <div class="cta">
+          <a class="btn" href="https://github.com/obutora/sshterm-desktop/releases/latest/download/SSHTermDesktop.dmg">Mac で 14 日間 無料で試す</a>
+          <p class="cta-note">macOS 13 以降 · 登録もカードも不要<br>続けるなら <b>¥1,500</b>（買い切り）</p>
+        </div>
+      </div>
+
+      <div class="devices" aria-label="Mac とスマホで、同じ Claude Code のセッションを開いているところ">
+        <div class="device-mac">
+          <p class="device-label"><b>Mac</b> · SSH Term Desktop</p>
+          <div class="mac">
+            <div class="mac-bar"><i></i><i></i><i></i><span>SSH Term Desktop</span></div>
+            <div class="mac-body">
+              <div class="mac-side">
+                <p class="mac-host">mac-studio</p>
+                <p class="mac-row is-on"><span class="dot run"></span>web-app<small>作業中</small></p>
+                <p class="mac-row"><span class="dot wait"></span>mobile<small class="wait">承認待ち</small></p>
+                <p class="mac-host">build-linux</p>
+                <p class="mac-row"><span class="dot run"></span>infra<small>作業中</small></p>
+              </div>
+              <div class="mac-pane">
+                <p class="box">✻ Welcome to Claude Code!<br><span class="dim">cwd: ~/dev/web-app</span></p>
+                <p>&gt; 決済 API のテストを書いて、通るまで直して</p>
+                <p>● 決済 API の構成を読みます。</p>
+                <p><span class="ok">●</span> Read(src/payment/api.ts)</p>
+                <p class="dim">  ⎿ Read 182 lines</p>
+                <p>● テストを 12 件書きました。実行します。</p>
+                <p><span class="ok">●</span> Write(test/payment/api.test.ts)</p>
+                <p><span class="ok">●</span> Bash(npm test -- payment)</p>
+                <p class="dim">  ⎿ Tests: 2 failed, 10 passed</p>
+                <p class="busy">✻ テストの失敗を直しています…</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="same" aria-hidden="true">同じセッション</p>
+        <div class="device-phone">
+          <p class="device-label"><b>スマホ</b> · SSH Term</p>
+          <div class="phone">
+            <img src="/prototype-cv/img/phone-claude.webp" width="585" height="1266" alt="スマホの SSH Term。web-app で Claude Code が決済 API のテストを直している">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>外ではスマホで、席に戻ったら Mac で。</h2>
+        <p class="lead">セッションを移す作業はありません。どちらも、ホストで動いている同じ agent を見ています。</p>
+      </div>
+      <ol class="scenes">
+        <li class="scene">
+          <figure class="scene-shot"><img src="/prototype-cv/img/frag-claude.webp" width="585" height="700" alt="スマホの SSH Term で Claude Code に「決済 API のテストを書いて、通るまで直して」と頼んだところ" loading="lazy"></figure>
+          <div class="scene-text">
+            <p class="scene-when">外出先で</p>
+            <h3>スマホから claude に頼む</h3>
+            <p>いつもどおり SSH Term でホストに入って、指示を出します。日本語の長い指示もそのまま打てます。</p>
+          </div>
+        </li>
+        <li class="scene">
+          <figure class="scene-shot"><img src="/prototype-cv/img/frag-agents-card.webp" width="585" height="515" alt="スマホの SSH Term のホスト mac-studio のカード。web-app が承認待ち 2 分、mobile が作業中" loading="lazy"></figure>
+          <div class="scene-text">
+            <p class="scene-when">移動中</p>
+            <h3>アプリを閉じても、agent は止まらない</h3>
+            <p>agent はスマホではなくホストで動いています。承認や入力を待つと通知が届き、スマホのホームにも「承認待ち」が出ます。</p>
+          </div>
+        </li>
+        <li class="scene">
+          <figure class="scene-shot scene-shot-mac">
+            <div class="mac mac-mini">
+              <div class="mac-bar"><i></i><i></i><i></i><span>SSH Term Desktop</span></div>
+              <div class="mac-side">
+                <p class="mac-host">mac-studio</p>
+                <p class="mac-row is-on"><span class="dot wait"></span>web-app<small class="wait">承認待ち 2分</small></p>
+                <p class="mac-row"><span class="dot run"></span>mobile<small>作業中</small></p>
+                <p class="mac-host">build-linux</p>
+                <p class="mac-row"><span class="dot run"></span>infra<small>作業中</small></p>
+              </div>
+            </div>
+          </figure>
+          <div class="scene-text">
+            <p class="scene-when">席に戻ったら</p>
+            <h3>Mac の一覧に、同じ agent が並んでいる</h3>
+            <p>ホストをまとめた一覧に、手が要るものから順に並びます。チャット表示で承認して、端末はペインに割って並べて、続きを進めます。</p>
+          </div>
+        </li>
+      </ol>
+      <p class="scenes-reverse">逆も同じです。Mac で走らせたまま席を立てば、続きはスマホから。</p>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="how">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>同じセッションに入れるのは、agent がホストで動いているから。</h2>
+        <p class="lead">agent と保持シェルは、スマホでも Mac でもなく、ホストの stagent（SSH Term が入れる小さな補助プログラム）の中で動いています。デスクトップ版は、スマホ版が入れた stagent にそのままつなぎます。</p>
+      </div>
+      <figure class="how-figure" aria-label="スマホと Mac が、ホストの stagent にある同じ agent につながる図">
+        <div class="node">
+          <p class="node-name">スマホ</p>
+          <p class="node-app">SSH Term</p>
+        </div>
+        <p class="link">SSH</p>
+        <div class="node node-host">
+          <p class="node-name">ホスト · mac-studio</p>
+          <p class="node-app">stagent</p>
+          <ul>
+            <li><span class="dot wait"></span>web-app　claude</li>
+            <li><span class="dot run"></span>mobile　codex</li>
+            <li><span class="dot"></span>保持シェル</li>
+          </ul>
+        </div>
+        <p class="link">SSH</p>
+        <div class="node">
+          <p class="node-name">Mac</p>
+          <p class="node-app">SSH Term Desktop</p>
+        </div>
+      </figure>
+      <ul class="how-points">
+        <li>スマホと Mac で同時に開いても大丈夫です。どちらから返事を送っても、同じ agent に届きます。</li>
+        <li>通り道は SSH だけ。間にクラウドは挟みません。</li>
+        <li>スマホから入っていたその Mac にデスクトップ版を入れたなら、SSH なしで「手元のマシン」として同じ agent が並びます。</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>始めるまで 3 分</h2>
+      </div>
+      <ol class="steps">
+        <li><h3>DMG を開いて、アプリケーションに入れる</h3><p>登録もメールアドレスも要りません。</p></li>
+        <li><h3>ホストを足す</h3><p><code>~/.ssh/config</code> のホストは最初から並んでいます。ほかは「＋ 接続を足す」から。</p></li>
+        <li><h3>「接続する」を押す</h3><p>スマホで動かしている agent が、一覧に出てきます。</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="price">
+    <div class="wrap price">
+      <div class="price-main">
+        <h2>14 日使ってから、決めてください。</h2>
+        <div class="timeline" aria-label="最初の 14 日は無料、15 日目からは ¥1,500 の買い切り">
+          <div class="tl-free"><b>無料</b><span>今日〜14 日目</span></div>
+          <div class="tl-paid"><b>¥1,500</b><span>続けるなら · 買い切り</span></div>
+        </div>
+        <div class="cta">
+          <a class="btn" href="https://github.com/obutora/sshterm-desktop/releases/latest/download/SSHTermDesktop.dmg">Mac で 14 日間 無料で試す</a>
+          <a class="btn btn-ghost" href="https://buy.stripe.com/9B64gs7EN2YBeSQcIAffy02?locale=ja">¥1,500 で購入する</a>
+        </div>
+      </div>
+      <ul class="price-list">
+        <li><b>スマホ版とは別の購入です。</b>スマホ版を買っていても、デスクトップ版にはライセンスキーが要ります。</li>
+        <li><b>1 本のキーで、本人の Mac と Windows を何台でも。</b>あとから出る Windows のデスクトップ版にも使えます。</li>
+        <li><b>14 日を過ぎても、ホストの agent と保持シェルは止まりません。</b>アプリはキーを入れるまで使えなくなります。</li>
+        <li><b>購入から 14 日以内なら返金します。</b>買ったときのメールアドレスから<a href="/ja/contact">お問い合わせ</a>ください。返金したキーは使えなくなります。</li>
+        <li><b>Windows 11 は近日、Microsoft Store から。</b></li>
+      </ul>
+    </div>
+    <p class="wrap price-fine">ほかの通貨では、決済の画面にその国の通貨での値段が出ます（Stripe の Adaptive Pricing）。決済は Stripe の画面で行い、販売者は Link（Stripe の決済サービス）です。</p>
+  </section>
+
+  <section class="section">
+    <div class="wrap faq-wrap">
+      <h2>よくある質問</h2>
+      <div class="faq">
+        <details>
+          <summary>スマホと Mac で、同じ agent を同時に開いても大丈夫？</summary>
+          <p>大丈夫です。agent と保持シェルはホストで動いていて、スマホ版とデスクトップ版はそれぞれそこにつないでいるだけです。どちらから返事を送っても、同じ agent に届きます。</p>
+        </details>
+        <details>
+          <summary>スマホ版を使っていなくても使える？</summary>
+          <p>使えます。デスクトップ版だけでもホストにつなぎ、初めてつなぐときに stagent を入れます。手元のマシンの agent も SSH なしで並びます。</p>
+        </details>
+        <details>
+          <summary>14 日が過ぎたら、動いている agent は止まる？</summary>
+          <p>止まりません。止まるのはデスクトップ版のアプリだけで、ホストの agent と保持シェルは動き続けます。スマホ版からはそのまま見られます。</p>
+        </details>
+        <details>
+          <summary>Windows ではいつ使える？</summary>
+          <p>近日、Microsoft Store から入れられるようになります。今買ったライセンスキーも、そのまま使えます。</p>
+        </details>
+        <details>
+          <summary>ライセンスキーをなくしたら？</summary>
+          <p><a href="/ja/desktop/resend">送り直しのページ</a>から、買ったときのメールアドレスに送り直せます。</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="stage closing">
+    <div class="wrap">
+      <h2>いまスマホで動いている agent を、Mac で開いてみる。</h2>
+      <div class="cta">
+        <a class="btn" href="https://github.com/obutora/sshterm-desktop/releases/latest/download/SSHTermDesktop.dmg">Mac で 14 日間 無料で試す</a>
+        <p class="cta-note">macOS 13 以降 · 登録もカードも不要 · 続けるなら <b>¥1,500</b></p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <a href="/ja/terms">利用規約</a>
+    <a href="/ja/privacy">プライバシーポリシー</a>
+    <a href="/ja/contact">お問い合わせ</a>
+    <a href="https://iru-yo.com/tokushoho/">特定商取引法に基づく表記</a>
+    <a href="/desktop" hreflang="en" lang="en">English</a>
+  </div>
+</footer>
+
+</body>
+</html>

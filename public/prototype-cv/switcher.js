@@ -5,9 +5,8 @@
   if (location.hostname === "sshterm.iru-yo.com") return;
 
   const variants = [
-    { key: "c", name: "どこで動かす？診断" },
-    { key: "d", name: "14 日の試し方" },
-    { key: "e", name: "積み木で見せる" },
+    { key: "a", name: "同じセッション" },
+    { key: "b", name: "準備はもう済んでいる" },
   ];
   const match = location.pathname.match(/prototype-cv-([a-z])(?:\.html)?$/);
   const index = Math.max(0, variants.findIndex((v) => v.key === (match ? match[1] : "")));

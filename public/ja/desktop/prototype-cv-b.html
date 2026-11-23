@@ -1,0 +1,184 @@
+<!doctype html>
+<!--
+  PROTOTYPE（obutora/agent-orchestra#1862）— 案 B「準備はもう済んでいる」型。
+  仮説: スマホ版の利用者が試さないのは「また設定し直すのが面倒」と思うから。ホストの準備（stagent）はスマホ版で済んでいて、
+  残りは Mac にアプリを入れるだけだと、チェックリストで最初に見せる。スマホ版との分担は表 1 つで答える。短いページ。
+-->
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>SSH Term Desktop｜Mac で開く準備は、もう済んでいます</title>
+<meta name="description" content="SSH Term のデスクトップ版。スマホ版がホストに入れた stagent にそのままつなぎ、スマホで動かしている agent を Mac の一覧に並べます。14 日間は無料、続けるなら ¥1,500 の買い切り。">
+<link rel="icon" href="/icon.png">
+<link rel="stylesheet" href="/prototype-cv/base.css">
+<link rel="stylesheet" href="/prototype-cv/b.css">
+<link rel="stylesheet" href="/prototype-cv/switcher.css">
+<script src="/prototype-cv/switcher.js" defer></script>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="/ja/desktop"><img src="/prototype-cv/img/desktop-icon.png" alt="" width="30" height="30">SSH Term Desktop</a>
+    <nav>
+      <a href="#compare">スマホ版との違い</a>
+      <a href="#price">料金</a>
+      <a class="btn btn-sm" href="https://github.com/obutora/sshterm-desktop/releases/latest/download/SSHTermDesktop.dmg">無料で試す</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <section class="stage b-hero">
+    <div class="wrap b-hero-grid">
+      <div>
+        <p class="eyebrow">SSH Term を使っているなら</p>
+        <h1><span class="nb">Mac で開く準備は、</span><span class="nb">もう済んでいます。</span></h1>
+        <p class="lead">デスクトップ版は、スマホの SSH Term がホストに入れた stagent にそのままつなぎます。スマホで動かしている agent は、Mac で開いた時点で一覧に並んでいます。</p>
+
+        <ol class="check">
+          <li class="is-done">
+            <h3>ホストに stagent が入っている</h3>
+            <p>スマホ版で agent の一覧や保持シェルを使っていれば、もう入っています。</p>
+          </li>
+          <li class="is-done">
+            <h3>agent はホストで動いている</h3>
+            <p>スマホのアプリを閉じても、止まっていません。</p>
+          </li>
+          <li class="is-next">
+            <h3>Mac に SSH Term Desktop を入れる</h3>
+            <p>残っているのは、これだけです。</p>
+            <div class="cta">
+              <a class="btn" href="https://github.com/obutora/sshterm-desktop/releases/latest/download/SSHTermDesktop.dmg">Mac で 14 日間 無料で試す</a>
+              <p class="cta-note">macOS 13 以降 · 登録もカードも不要<br>続けるなら <b>¥1,500</b>（買い切り）</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+
+      <figure class="b-pair" aria-label="スマホのホームにある mac-studio の agent が、Mac の一覧にも同じように並ぶ">
+        <div>
+          <p class="device-label"><b>スマホ</b> · SSH Term のホーム</p>
+          <img class="b-card" src="/prototype-cv/img/frag-agents-card.webp" width="585" height="515" alt="スマホの SSH Term の mac-studio のカード。web-app が承認待ち 2 分、mobile が作業中">
+        </div>
+        <p class="b-arrow" aria-hidden="true">同じ agent</p>
+        <div>
+          <p class="device-label"><b>Mac</b> · SSH Term Desktop の一覧</p>
+          <div class="mac">
+            <div class="mac-bar"><i></i><i></i><i></i><span>SSH Term Desktop</span></div>
+            <div class="mac-side">
+              <p class="mac-host">mac-studio <small>手が要る 1</small></p>
+              <p class="mac-row is-on"><span class="dot wait"></span>web-app<small class="wait">承認待ち 2分</small></p>
+              <p class="mac-row"><span class="dot run"></span>mobile<small>作業中</small></p>
+              <p class="mac-host">build-linux</p>
+              <p class="mac-row"><span class="dot run"></span>infra<small>作業中</small></p>
+            </div>
+          </div>
+        </div>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="compare">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>スマホ版とデスクトップ版は、同じ agent を別の画面で見る道具です。</h2>
+        <p class="lead">どちらかに移すのではなく、場所で使い分けます。</p>
+      </div>
+      <div class="b-table-wrap">
+        <table class="b-table">
+          <thead>
+            <tr><th scope="col"></th><th scope="col">スマホ版（SSH Term）</th><th scope="col">デスクトップ版</th></tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">見られる agent</th><td colspan="2" class="b-same">同じホストの、同じ agent と保持シェル</td></tr>
+            <tr><th scope="row">向いているとき</th><td data-label="スマホ版">外出先、すき間の時間</td><td data-label="デスクトップ版">席での作業、長い返事</td></tr>
+            <tr><th scope="row">一度に見るもの</th><td data-label="スマホ版">1 つずつ、タブで切り替え</td><td data-label="デスクトップ版">ホストをまとめた一覧と、割ったペインで並べて</td></tr>
+            <tr><th scope="row">待っているときの知らせ</th><td data-label="スマホ版">プッシュ通知（ntfy）</td><td data-label="デスクトップ版">OS の通知。ウィンドウを閉じてもメニューバーで</td></tr>
+            <tr><th scope="row">その機械自身の agent</th><td data-label="スマホ版">—</td><td data-label="デスクトップ版">手元のマシンの agent も、SSH なしで一覧に</td></tr>
+            <tr><th scope="row">値段</th><td data-label="スマホ版">¥800（買い切り）</td><td data-label="デスクトップ版">¥1,500（買い切り）· 最初の 14 日は無料</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="b-note">App Store・Google Play とデスクトップ版は、別々の購入です。スマホ版を買っていても、デスクトップ版にはライセンスキーが要ります。</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap b-steps">
+      <h2>Mac で開いてからの 3 分</h2>
+      <ol class="steps">
+        <li><h3>DMG を開いて、アプリケーションに入れる</h3><p>登録もメールアドレスも要りません。</p></li>
+        <li><h3>スマホで使っているホストを足す</h3><p><code>~/.ssh/config</code> にあるホストは最初から並んでいます。ほかは「＋ 接続を足す」から。スマホから入っていたその Mac なら、足さなくても「手元のマシン」に並びます。</p></li>
+        <li><h3>「接続する」を押す</h3><p>スマホで動かしている agent が、承認待ちから順に並びます。</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="price">
+    <div class="wrap b-price">
+      <div>
+        <h2>14 日使ってから、決めてください。</h2>
+        <p class="lead">試用中も、買ったあとと同じ機能が使えます。続けるなら ¥1,500 の買い切りです。</p>
+      </div>
+      <dl class="b-facts">
+        <div><dt>キー</dt><dd>1 本で、本人の Mac と Windows を何台でも。</dd></div>
+        <div><dt>14 日のあと</dt><dd>アプリはキーを入れるまで使えません。ホストの agent と保持シェルは止まりません。</dd></div>
+        <div><dt>返金</dt><dd>購入から 14 日以内なら返金します（<a href="/ja/contact">お問い合わせ</a>）。返金したキーは使えなくなります。</dd></div>
+        <div><dt>Windows</dt><dd>近日、Microsoft Store から。今のキーがそのまま使えます。</dd></div>
+      </dl>
+      <div class="cta b-price-cta">
+        <a class="btn" href="https://github.com/obutora/sshterm-desktop/releases/latest/download/SSHTermDesktop.dmg">Mac で無料で試す</a>
+        <a class="btn btn-ghost" href="https://buy.stripe.com/9B64gs7EN2YBeSQcIAffy02?locale=ja">¥1,500 で購入する</a>
+      </div>
+    </div>
+    <p class="wrap price-fine">ほかの通貨では、決済の画面にその国の通貨での値段が出ます（Stripe の Adaptive Pricing）。決済は Stripe の画面で行い、販売者は Link（Stripe の決済サービス）です。</p>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head"><h2>よくある質問</h2></div>
+      <div class="faq">
+        <details>
+          <summary>スマホと Mac で、同じ agent を同時に開いても大丈夫？</summary>
+          <p>大丈夫です。どちらもホストで動いている agent につないでいるだけなので、どちらから返事を送っても同じ agent に届きます。</p>
+        </details>
+        <details>
+          <summary>スマホ版を使っていなくても使える？</summary>
+          <p>使えます。初めてつなぐときに、デスクトップ版がホストに stagent を入れます。</p>
+        </details>
+        <details>
+          <summary>ライセンスキーをなくしたら？</summary>
+          <p><a href="/ja/desktop/resend">送り直しのページ</a>から、買ったときのメールアドレスに送り直せます。</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="stage closing">
+    <div class="wrap">
+      <h2>スマホで動いている agent は、もう Mac で開けます。</h2>
+      <div class="cta">
+        <a class="btn" href="https://github.com/obutora/sshterm-desktop/releases/latest/download/SSHTermDesktop.dmg">Mac で 14 日間 無料で試す</a>
+        <p class="cta-note">macOS 13 以降 · 登録もカードも不要 · 続けるなら <b>¥1,500</b></p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <a href="/ja/terms">利用規約</a>
+    <a href="/ja/privacy">プライバシーポリシー</a>
+    <a href="/ja/contact">お問い合わせ</a>
+    <a href="https://iru-yo.com/tokushoho/">特定商取引法に基づく表記</a>
+    <a href="/desktop" hreflang="en" lang="en">English</a>
+  </div>
+</footer>
+
+</body>
+</html>

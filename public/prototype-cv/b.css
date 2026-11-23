@@ -1,0 +1,126 @@
+/* PROTOTYPE（#1862）: 案 B「準備はもう済んでいる」型のレイアウト。土台は base.css。 */
+
+.b-hero { padding: 72px 0 88px; }
+
+.b-hero-grid { display: grid; gap: 56px; align-items: center; }
+
+@media (min-width: 1000px) {
+  .b-hero-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 72px; }
+}
+
+@media (max-width: 767px) {
+  .b-hero { padding: 36px 0 64px; }
+}
+
+/* 済んだこと 2 つと、残り 1 つ */
+.check { margin: 36px 0 0; padding: 0; list-style: none; }
+
+.check li {
+  position: relative;
+  padding: 18px 0 18px 48px;
+  border-top: 1px solid #2a2e38;
+}
+
+.check li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 20px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+}
+
+.check .is-done::before { background: rgb(46 230 182 / 0.14); }
+.check .is-done::after {
+  content: "";
+  position: absolute;
+  left: 9px;
+  top: 28px;
+  width: 10px;
+  height: 6px;
+  border-left: 2.5px solid var(--mint);
+  border-bottom: 2.5px solid var(--mint);
+  transform: rotate(-45deg);
+}
+
+.check .is-done h3 { color: #c9cdd6; }
+.check .is-done p { color: #9aa0ad; font-size: 15px; }
+
+.check .is-next::before { box-shadow: inset 0 0 0 2px #fff; }
+.check .is-next h3 { font-size: 22px; }
+.check .is-next p { color: #fff; }
+.check .is-next .cta { margin-top: 18px; }
+
+/* スマホのホームのカードと、Mac の一覧を縦に並べる */
+.b-pair { display: grid; gap: 14px; margin: 0; }
+.b-card { width: 100%; max-width: 340px; border-radius: 18px; border: 1px solid var(--term-edge); }
+.b-pair .mac { border-color: var(--term-edge); }
+.b-pair .mac-side { border-right: 0; padding: 12px 0 22px; font-size: 16px; }
+.b-pair .mac-host { padding: 10px 18px 6px; }
+.b-pair .mac-row { padding: 10px 18px; gap: 12px; }
+.b-pair .mac-row small { font-size: 13px; }
+.b-pair .mac-host small { float: right; color: var(--warn); font-weight: 700; }
+
+.b-arrow {
+  justify-self: start;
+  margin: 0 0 0 40px;
+  padding: 14px 0 14px 22px;
+  border-left: 2px dashed var(--mint);
+  color: var(--mint);
+  font: 600 12px/1 var(--mono);
+}
+
+@media (max-width: 599px) {
+  .b-pair .mac-side { font-size: 12px; }
+}
+
+/* 分担の表 */
+.b-table-wrap { overflow-x: auto; }
+
+.b-table {
+  width: 100%;
+  min-width: 620px;
+  border-collapse: collapse;
+  background: transparent;
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+.b-table th,
+.b-table td { padding: 16px 20px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+.b-table thead th { border-bottom: 2px solid var(--accent); color: var(--text); font-size: 15px; }
+.b-table tbody th { width: 24%; color: var(--muted); font-size: 15px; font-weight: 700; }
+.b-table td { color: var(--body); }
+.b-table td:last-child { color: var(--text); }
+.b-table .b-same { background: var(--accent-soft); color: var(--accent); font-weight: 800; text-align: center; }
+
+.b-note { margin-top: 18px; color: var(--muted); font-size: 15px; }
+
+/* スマホの幅では、表を行ごとのかたまりにする */
+@media (max-width: 699px) {
+  .b-table { min-width: 0; }
+  .b-table thead { display: none; }
+  .b-table tr { display: block; padding: 14px 16px; border-bottom: 1px solid var(--line); }
+  .b-table th,
+  .b-table td { display: block; width: auto; padding: 4px 0; border: 0; }
+  .b-table tbody th { width: auto; margin-bottom: 4px; }
+  .b-table td[data-label]::before { content: attr(data-label) "：　"; color: var(--muted); font-weight: 400; font-size: 14px; }
+  .b-table .b-same { padding: 8px 10px; border-radius: 8px; text-align: left; }
+}
+
+.b-steps h2 { margin-bottom: 36px; }
+
+/* 料金 */
+.b-price { display: grid; gap: 32px; }
+
+@media (min-width: 1000px) {
+  .b-price { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px 64px; }
+  .b-price-cta { grid-column: 1; margin-top: 0; }
+}
+
+.b-facts { margin: 0; }
+.b-facts div { display: grid; grid-template-columns: 7em minmax(0, 1fr); gap: 12px; padding: 14px 0; border-top: 1px solid var(--line); }
+.b-facts dt { color: var(--text); font-weight: 800; }
+.b-facts dd { margin: 0; color: var(--body); }
+
