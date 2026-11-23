@@ -194,8 +194,12 @@ carry, what stays on the device, what Stripe and Link, the Worker and
 Cloudflare Email Service receive when someone buys SSH Term Desktop, and
 that SSH Term Desktop, while a key is entered, fetches the signed list of
 refunded purchases from `/api/license/revoked` at launch at most once a day,
-sending neither the key nor an email address); change it, its date and its
-history in both languages when those flows change.
+sending neither the key nor an email address). Its "SSH Term Desktop accounts
+and machines" section states what the Worker receives and stores once a
+purchase is linked to a Google or GitHub account (the account's ID, machine
+IDs with their OS and model, trial machines; obutora/agent-orchestra#1863),
+what for and for how long; change it, its date and its history in both
+languages when those flows change.
 
 ## The contact page
 
