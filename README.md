@@ -222,19 +222,23 @@ majority of developers running Claude Code, Codex, and other coding agents
 (whether standalone on Mac or alongside the mobile app): monitor local and
 remote agents in one window with OS approval notifications, chat view, split
 terminal panes, built-in local/SFTP filer, and seamless phone-to-Mac session
-continuity via stagent on the host. The page walks through a scannable
-capability strip, hero with live Mac+phone visual, 4-pillar overview, 5
-problem->benefit reasons with CSS diagrams, mid-page CTA, 4 Before/After use
-cases, full capability checklist, 5-step onboarding flow, price & risk-free
-guarantees (¥1,500 / $9.99 one-time, 14-day trial, 14-day refunds, one key for
-any number of the buyer's own Macs and Windows PCs, separate from the mobile
-app), FAQ, closing CTA, and a mobile floating CTA bar.
+continuity via stagent on the host. The page walks through a hero with a
+Mac+phone visual, 4-pillar overview, 5 problem->benefit reasons with CSS
+diagrams, mid-page CTA, 4 Before/After use cases, a 3-column feature list,
+5-step onboarding flow, price & risk-free guarantees (¥1,500 / $9.99
+one-time, 14-day trial, 14-day refunds, one key for any number of the
+buyer's own Macs and Windows PCs, separate from the mobile app), FAQ, closing
+CTA, and a floating trial button on narrow screens.
 
 Plain HTML with no script, on their own `sales.css` (the app's dark terminal
 ground, one mint for every button). The phone screens in `desktop/img/` are
 the mobile app's store shots (its own widgets drawn with made-up data, in
 each language); the Mac window is drawn in HTML and the page says the screens
-are illustrative. Refunds are asked for through the contact page.
+are illustrative. Refunds are asked for through the contact page. Japanese
+headings, buttons and case labels break only at spaces, punctuation and the
+`<wbr>` between phrases (`word-break: keep-all`; `auto-phrase` is
+Chrome-only), so a new or reworded heading needs its own `<wbr>`s, and
+`&nbsp;` keeps a number with its counter (`14&nbsp;日間`).
 
 Every "Try it free" / 無料で試す button is the Mac download,
 `https://github.com/obutora/sshterm-desktop/releases/latest/download/SSHTermDesktop.dmg`:
