@@ -1,0 +1,61 @@
+/* PROTOTYPE（#1862）: 案を行き来する浮いたバー（switcher.js が作る）。案のデザインとは別物に見えるよう、黒地に桃色の縁。 */
+.proto-switcher {
+  position: fixed;
+  left: 50%;
+  bottom: 10px;
+  transform: translateX(-50%);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  max-width: calc(100vw - 16px);
+  padding: 4px 6px;
+  border-radius: 999px;
+  background: #111;
+  color: #fff;
+  font: 600 13px/1 ui-monospace, "SF Mono", Menlo, monospace;
+  white-space: nowrap;
+  box-shadow: 0 6px 24px rgb(0 0 0 / 0.35), 0 0 0 2px #ff3df0;
+}
+
+.proto-arrow {
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 999px;
+  background: #2a2a2a;
+  color: #fff;
+  font: inherit;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.proto-arrow:hover {
+  background: #444;
+}
+
+.proto-label {
+  min-width: 10em;
+  padding: 0 8px;
+  overflow: hidden;
+  text-align: center;
+  text-overflow: ellipsis;
+}
+
+.proto-compare {
+  padding: 8px 10px;
+  border-left: 1px solid #444;
+  color: #bbb;
+  text-decoration: none;
+}
+
+.proto-compare:hover {
+  color: #fff;
+}
+
+@media (max-width: 480px) {
+  .proto-label {
+    min-width: 0;
+    max-width: 12em;
+  }
+}

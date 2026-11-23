@@ -1,0 +1,832 @@
+/* PROTOTYPE (#1862) variant c: the 診断 page. On top of /sheet.css.
+   The diagnosis is CSS only: every radio sits at the top of .fit, and the
+   chips, the echoed command line and the result are later siblings that
+   react through `:checked ~`. No script. */
+
+body {
+  /* Room under the sheet for the dock and the switcher bar. */
+  padding-bottom: 132px;
+}
+
+code {
+  font: 0.92em var(--mono);
+}
+
+.fine {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.fine a {
+  text-underline-offset: 3px;
+}
+
+/* The bar: its CTA cell in vermilion. */
+
+.bar > a.bar-cta {
+  background: var(--accent);
+  color: var(--on-accent);
+  border-left: 0;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.bar > a.bar-cta::after {
+  content: "→";
+  margin-left: 10px;
+  font: 400 15px/1 var(--sans);
+}
+
+/* Hero: who it is for, the question, the one-line answer, one button. */
+
+.c-hero {
+  display: grid;
+  border-bottom: 1px solid var(--rule);
+}
+
+.callout {
+  margin: 0;
+  padding: 26px var(--pad) 0;
+  font: 600 12px/1.5 var(--mono);
+  letter-spacing: 0.04em;
+  color: var(--accent);
+}
+
+.c-hero h1 {
+  padding: 14px var(--pad) 0;
+  font-size: clamp(28px, 7.4vw, 60px);
+  line-height: 1.12;
+  text-transform: none;
+}
+
+.answer {
+  max-width: 36em;
+  margin: 0;
+  padding: 16px var(--pad) 24px;
+}
+
+.hero-cta {
+  padding: 0 var(--pad) 26px;
+}
+
+.hero-cta .button {
+  max-width: 420px;
+}
+
+@media (min-width: 900px) {
+  .c-hero {
+    grid-template-columns: minmax(0, 1fr) minmax(300px, 400px);
+    grid-template-areas: "call cta" "h1 cta" "ans cta";
+  }
+
+  .callout { grid-area: call; padding-top: 48px; }
+  .c-hero h1 { grid-area: h1; }
+  .answer { grid-area: ans; padding-bottom: 40px; }
+
+  .hero-cta {
+    grid-area: cta;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 24px var(--pad) 40px;
+    border-left: 1px solid var(--rule);
+  }
+}
+
+/* Section heads shared below the diagnosis. */
+
+.sec-h {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 14px;
+  margin: 0;
+  padding: 26px var(--pad) 18px;
+}
+
+.sec-h .label {
+  color: var(--accent);
+}
+
+main > section + section {
+  border-top: 1px solid var(--rule);
+}
+
+/* The diagnosis: a terminal window drawn on the sheet. */
+
+.fit {
+  position: relative;
+  border-bottom: 1px solid var(--rule);
+}
+
+/* The radios: out of sight, still in the tab order. */
+.fit > input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  opacity: 0;
+}
+
+.term-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px var(--pad);
+  background: var(--rule-soft);
+  border-bottom: 1px solid var(--rule);
+}
+
+.term-head h2 {
+  font-size: 15px;
+}
+
+.term-head .label {
+  margin-left: auto;
+}
+
+.dots {
+  display: flex;
+  gap: 6px;
+}
+
+.dots i {
+  width: 9px;
+  height: 9px;
+  border: 1px solid var(--muted);
+  border-radius: 50%;
+}
+
+.cmd {
+  margin: 0;
+  padding: 16px var(--pad);
+  font: 13px/1.6 var(--mono);
+  overflow-wrap: anywhere;
+  border-bottom: 1px dashed var(--rule);
+}
+
+.prompt {
+  color: var(--accent);
+}
+
+.cmd .a {
+  display: none;
+  color: var(--accent);
+}
+
+.cursor {
+  display: inline-block;
+  width: 0.6em;
+  height: 1.1em;
+  margin-left: 4px;
+  vertical-align: text-bottom;
+  background: var(--ink);
+  animation: blink 1.1s steps(1) infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor { animation: none; }
+}
+
+#q1-mac:checked ~ .cmd .a-mac,
+#q1-win:checked ~ .cmd .a-win,
+#q2-local:checked ~ .cmd .a-local,
+#q2-ssh:checked ~ .cmd .a-ssh,
+#q2-orca:checked ~ .cmd .a-orca,
+#q3-claude:checked ~ .cmd .a-claude,
+#q3-codex:checked ~ .cmd .a-codex,
+#q3-other:checked ~ .cmd .a-other {
+  display: inline;
+}
+
+/* Questions and their chips. */
+
+.qs {
+  display: grid;
+}
+
+.q {
+  padding: 16px var(--pad);
+}
+
+.q + .q {
+  border-top: 1px solid var(--rule-soft);
+}
+
+.q-h {
+  margin: 0 0 10px;
+  font-weight: 700;
+}
+
+.q-n {
+  margin-right: 10px;
+  font: 600 11px/1 var(--mono);
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chips label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--rule);
+  font: 600 13px/1.3 var(--mono);
+  cursor: pointer;
+  user-select: none;
+}
+
+.chips label::before {
+  content: "○";
+  color: var(--muted);
+}
+
+.chips label:hover {
+  border-color: var(--ink);
+}
+
+#q1-mac:checked ~ .qs label[for="q1-mac"],
+#q1-win:checked ~ .qs label[for="q1-win"],
+#q2-local:checked ~ .qs label[for="q2-local"],
+#q2-ssh:checked ~ .qs label[for="q2-ssh"],
+#q2-orca:checked ~ .qs label[for="q2-orca"],
+#q3-claude:checked ~ .qs label[for="q3-claude"],
+#q3-codex:checked ~ .qs label[for="q3-codex"],
+#q3-other:checked ~ .qs label[for="q3-other"] {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+}
+
+#q1-mac:checked ~ .qs label[for="q1-mac"]::before,
+#q1-win:checked ~ .qs label[for="q1-win"]::before,
+#q2-local:checked ~ .qs label[for="q2-local"]::before,
+#q2-ssh:checked ~ .qs label[for="q2-ssh"]::before,
+#q2-orca:checked ~ .qs label[for="q2-orca"]::before,
+#q3-claude:checked ~ .qs label[for="q3-claude"]::before,
+#q3-codex:checked ~ .qs label[for="q3-codex"]::before,
+#q3-other:checked ~ .qs label[for="q3-other"]::before {
+  content: "✔";
+  color: var(--accent);
+}
+
+/* The radio has the focus; its chip shows it. */
+#q1-mac:focus-visible ~ .qs label[for="q1-mac"],
+#q1-win:focus-visible ~ .qs label[for="q1-win"],
+#q2-local:focus-visible ~ .qs label[for="q2-local"],
+#q2-ssh:focus-visible ~ .qs label[for="q2-ssh"],
+#q2-orca:focus-visible ~ .qs label[for="q2-orca"],
+#q3-claude:focus-visible ~ .qs label[for="q3-claude"],
+#q3-codex:focus-visible ~ .qs label[for="q3-codex"],
+#q3-other:focus-visible ~ .qs label[for="q3-other"] {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+@media (min-width: 900px) {
+  .qs {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .q + .q {
+    border-top: 0;
+    border-left: 1px solid var(--rule-soft);
+  }
+}
+
+/* The result: 01 入れる / 02 つなぐ / 03 見守る, then the line for after. */
+
+.result {
+  border-top: 1px solid var(--rule);
+}
+
+.result-h {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin: 0;
+  padding: 18px var(--pad) 6px;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.result-h .label {
+  color: var(--accent);
+}
+
+.path {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.step {
+  padding: 14px var(--pad) 20px;
+}
+
+.step + .step {
+  border-top: 1px solid var(--rule-soft);
+}
+
+.step-h {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 10px;
+  font-weight: 700;
+}
+
+.step-n {
+  display: inline-grid;
+  place-items: center;
+  width: 30px;
+  height: 22px;
+  border: 1px solid var(--rule);
+  font: 600 11px/1 var(--mono);
+  color: var(--muted);
+}
+
+/* An answered step: its number in vermilion. */
+#q1-mac:checked ~ .result .step:nth-child(1) .step-n,
+#q1-win:checked ~ .result .step:nth-child(1) .step-n,
+#q2-local:checked ~ .result .step:nth-child(2) .step-n,
+#q2-ssh:checked ~ .result .step:nth-child(2) .step-n,
+#q2-orca:checked ~ .result .step:nth-child(2) .step-n,
+#q3-claude:checked ~ .result .step:nth-child(3) .step-n,
+#q3-codex:checked ~ .result .step:nth-child(3) .step-n,
+#q3-other:checked ~ .result .step:nth-child(3) .step-n {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+}
+
+.step p,
+.step ul {
+  margin: 0 0 10px;
+}
+
+.step ul {
+  padding-left: 1.2em;
+}
+
+.step li + li {
+  margin-top: 4px;
+}
+
+.step .ok {
+  font-weight: 600;
+}
+
+.step .button {
+  max-width: 460px;
+}
+
+.step .button.big {
+  min-height: 72px;
+  font-size: 14px;
+}
+
+.five {
+  font: 600 13px/1.6 var(--mono);
+}
+
+/* Which answer shows. By default: the waiting lines and the Mac button. */
+
+.r,
+.r-claude,
+.r-codex {
+  display: none;
+}
+
+.r-none,
+.r-wait2,
+.r-wait3 {
+  display: block;
+}
+
+.r-wait2,
+.r-wait3 {
+  color: var(--muted);
+  font: 13px/1.5 var(--mono);
+}
+
+.r-wait2::before,
+.r-wait3::before {
+  content: "… ";
+}
+
+#q1-mac:checked ~ .result .r-none,
+#q1-win:checked ~ .result .r-none,
+#q2-local:checked ~ .result .r-wait2,
+#q2-ssh:checked ~ .result .r-wait2,
+#q2-orca:checked ~ .result .r-wait2,
+#q3-claude:checked ~ .result .r-wait3,
+#q3-codex:checked ~ .result .r-wait3,
+#q3-other:checked ~ .result .r-wait3 {
+  display: none;
+}
+
+#q1-mac:checked ~ .result .r-mac,
+#q1-win:checked ~ .result .r-win,
+#q2-local:checked ~ .result .r-local,
+#q2-ssh:checked ~ .result .r-ssh,
+#q2-orca:checked ~ .result .r-orca,
+#q3-claude:checked ~ .result .r-cc,
+#q3-codex:checked ~ .result .r-cc,
+#q3-other:checked ~ .result .r-other {
+  display: block;
+}
+
+#q3-claude:checked ~ .result .r-claude,
+#q3-codex:checked ~ .result .r-codex {
+  display: inline;
+}
+
+.win-next {
+  padding: 10px 14px 10px 2em;
+  border-left: 3px solid var(--accent);
+  background: var(--rule-soft);
+}
+
+.after {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 14px;
+  margin: 0;
+  padding: 14px var(--pad);
+  border-top: 1px dashed var(--rule);
+  font-size: 14px;
+}
+
+.after a {
+  font: 600 12px/1.4 var(--mono);
+  text-underline-offset: 3px;
+}
+
+@media (min-width: 900px) {
+  .path {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .step + .step {
+    border-top: 0;
+    border-left: 1px solid var(--rule-soft);
+  }
+}
+
+/* What you get: three drawn figures, a caption each. */
+
+.gets-row {
+  display: grid;
+  border-top: 1px solid var(--rule);
+}
+
+.get {
+  margin: 0;
+  padding: 18px var(--pad) 22px;
+}
+
+.get + .get {
+  border-top: 1px solid var(--rule);
+}
+
+.get figcaption {
+  margin-top: 12px;
+  font-size: 14px;
+}
+
+.get figcaption strong {
+  display: block;
+  margin-bottom: 2px;
+  font-size: 16px;
+}
+
+.fig-cap {
+  display: block;
+  margin-bottom: 6px;
+  font: 500 10px/1.4 var(--mono);
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.fig {
+  height: 168px;
+  padding: 10px;
+  border: 1px solid var(--ink);
+  font: 11px/1.4 var(--mono);
+  overflow: hidden;
+}
+
+@media (min-width: 900px) {
+  .gets-row {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .get + .get {
+    border-top: 0;
+    border-left: 1px solid var(--rule);
+  }
+}
+
+/* 一覧 */
+.fig-list .lh {
+  display: flex;
+  justify-content: space-between;
+  margin: 2px 0 4px;
+  font-weight: 700;
+}
+
+.fig-list .lh + .li,
+.fig-list .li + .li {
+  margin-top: 4px;
+}
+
+.fig-list .li + .lh {
+  margin-top: 10px;
+}
+
+.fig-list .lh b {
+  padding: 0 5px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 700;
+}
+
+.fig-list .li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-left: 8px;
+}
+
+.fig-list .li i {
+  width: 8px;
+  height: 8px;
+  flex: none;
+  border: 1px solid var(--ink);
+}
+
+.fig-list .need i {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.fig-list .run i {
+  background: var(--ink);
+}
+
+.fig-list .done {
+  color: var(--muted);
+}
+
+.fig-list .done i {
+  border-color: var(--muted);
+}
+
+.fig-list .unread::after {
+  content: "";
+  width: 6px;
+  height: 6px;
+  margin-left: auto;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+/* 通知とチャット表示 */
+.fig-chat {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.fig-chat .notif {
+  padding: 5px 8px;
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--accent);
+}
+
+.fig-chat .notif b {
+  margin-right: 8px;
+}
+
+.fig-chat .bubble {
+  align-self: flex-start;
+  max-width: 88%;
+  padding: 5px 8px;
+  background: var(--rule-soft);
+  font-family: var(--sans);
+}
+
+.fig-chat .choices {
+  display: flex;
+  gap: 6px;
+}
+
+.fig-chat .choices span {
+  padding: 3px 8px;
+  border: 1px solid var(--ink);
+}
+
+.fig-chat .choices span:first-child {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+}
+
+.fig-chat .reply {
+  margin-top: auto;
+  padding: 5px 8px;
+  border-top: 1px solid var(--rule);
+  color: var(--muted);
+  font-family: var(--sans);
+}
+
+/* ペイン */
+.fig-panes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 4px;
+}
+
+.fig-panes .pane {
+  position: relative;
+  border: 1px solid var(--rule);
+  padding: 0;
+}
+
+.fig-panes .pane span {
+  display: block;
+  padding: 2px 6px;
+  border-bottom: 1px solid var(--rule);
+  background: var(--rule-soft);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fig-panes .pane::after {
+  content: "$ _";
+  display: block;
+  padding: 4px 6px;
+  color: var(--muted);
+}
+
+.fig-panes .p1 {
+  grid-row: 1 / 3;
+}
+
+.fig-panes .p2 span {
+  border-bottom-color: var(--accent);
+}
+
+/* The spec sheet. */
+
+.spec {
+  width: 100%;
+  border-collapse: collapse;
+  border-top: 1px solid var(--rule);
+}
+
+.spec th,
+.spec td {
+  padding: 12px var(--pad);
+  border-bottom: 1px solid var(--rule-soft);
+  text-align: left;
+  vertical-align: top;
+}
+
+.spec tr:last-child th,
+.spec tr:last-child td {
+  border-bottom: 0;
+}
+
+.spec th {
+  width: 8.5em;
+  font: 600 11px/1.9 var(--mono);
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.spec td a {
+  text-underline-offset: 3px;
+}
+
+@media (max-width: 480px) {
+  .spec th {
+    width: auto;
+    padding-right: 6px;
+    white-space: normal;
+  }
+}
+
+/* FAQ */
+
+.faq details {
+  border-top: 1px solid var(--rule-soft);
+}
+
+.faq summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 52px;
+  padding: 0 var(--pad);
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+}
+
+.faq summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq summary::before {
+  content: "+";
+  width: 1em;
+  font: 600 15px/1 var(--mono);
+  color: var(--accent);
+}
+
+.faq details[open] summary::before {
+  content: "−";
+}
+
+.faq details p {
+  max-width: 40em;
+  margin: 0;
+  padding: 0 var(--pad) 18px calc(var(--pad) + 1em + 12px);
+}
+
+.faq a {
+  text-underline-offset: 3px;
+}
+
+/* Final CTA */
+
+.final {
+  padding: 40px var(--pad) 44px;
+}
+
+.final h2 {
+  font-size: clamp(22px, 4.4vw, 36px);
+}
+
+.final p {
+  margin: 12px 0 20px;
+  color: var(--muted);
+}
+
+.final-cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 20px;
+}
+
+.final-cta .button {
+  flex: 1 1 300px;
+  max-width: 460px;
+}
+
+/* The dock: a fixed CTA above the switcher bar. */
+
+.dock {
+  position: fixed;
+  right: 12px;
+  bottom: 64px;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  padding: 9px 16px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font: 700 13px/1.3 var(--mono);
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  box-shadow: 0 0 0 1px var(--paper);
+}
+
+.dock-sub {
+  font-weight: 500;
+  font-size: 10px;
+  opacity: 0.85;
+}

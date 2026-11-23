@@ -1,0 +1,1108 @@
+/* PROTOTYPE (#1862) variant d, "14 日の試し方": the free trial is the page.
+   On top of /sheet.css only. One extra colour: --warn (yellow) for the
+   積み木 caps and the 上限 meters. No script: the strip is anchor links, the
+   dock is fixed and fades in with a scroll timeline where supported. */
+
+:root {
+  --warn: #b98a00;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --warn: #e2b53c;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  padding-bottom: 136px;
+}
+
+code {
+  font: 0.92em var(--mono);
+}
+
+.label {
+  margin: 0;
+}
+
+/* Bar: the trial is the one action up here. */
+
+.bar > a.bar-cta {
+  background: var(--accent);
+  color: var(--on-accent);
+  border-left: 0;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* Top: the call-out, the trial headline, the button and what it does not
+   ask for; under them the 14 days as a strip of links. */
+
+.top {
+  display: grid;
+  border-bottom: 1px solid var(--rule);
+}
+
+.top-main {
+  padding: 28px var(--pad) 22px;
+}
+
+.callout {
+  margin: 0 0 16px;
+  font: 600 13px/1.4 var(--sans);
+  color: var(--accent);
+}
+
+.head {
+  font-size: clamp(34px, 9vw, 84px);
+  line-height: 1.04;
+  text-transform: none;
+}
+
+.sub {
+  max-width: 34em;
+  margin: 18px 0 0;
+}
+
+.top-act {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 0 var(--pad) 22px;
+}
+
+.nope {
+  padding: 12px 14px;
+  border: 1px solid var(--rule);
+}
+
+.nope ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  margin: 8px 0 6px;
+  padding: 0;
+  list-style: none;
+  font-weight: 700;
+}
+
+.nope li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nope li::before {
+  content: "✕";
+  display: inline-grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  font: 700 10px/1 var(--mono);
+}
+
+.nope-note {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.win {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.win .label {
+  display: block;
+  margin-bottom: 2px;
+}
+
+.strip {
+  grid-column: 1 / -1;
+  border-top: 1px solid var(--rule);
+}
+
+.strip-label {
+  padding: 10px var(--pad) 8px;
+}
+
+.strip ol {
+  display: grid;
+  grid-template-columns: repeat(15, minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--rule-soft);
+}
+
+.strip li {
+  min-height: 46px;
+  border-left: 1px solid var(--rule-soft);
+}
+
+.strip li:first-child {
+  border-left: 0;
+}
+
+.strip a,
+.strip .rest {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 46px;
+  padding: 6px 0;
+  text-decoration: none;
+}
+
+.strip b {
+  font: 700 13px/1 var(--mono);
+}
+
+.strip .rest b {
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.strip a {
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  color: var(--ink);
+}
+
+.strip a b {
+  color: var(--accent);
+}
+
+.strip a span {
+  display: none;
+  margin-top: 5px;
+  font: 500 10px/1.2 var(--sans);
+}
+
+.strip .last a {
+  background: transparent;
+  outline: 1.5px solid var(--ink);
+  outline-offset: -1.5px;
+}
+
+.strip .last a b {
+  color: var(--ink);
+}
+
+.strip a:hover,
+.strip a:focus-visible {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.strip a:hover b,
+.strip a:focus-visible b {
+  color: var(--on-accent);
+}
+
+@media (min-width: 720px) {
+  .strip a span {
+    display: block;
+  }
+
+  .strip li {
+    min-height: 58px;
+  }
+}
+
+@media (min-width: 960px) {
+  .top {
+    grid-template-columns: minmax(0, 1fr) 400px;
+  }
+
+  .top-main {
+    padding: 56px var(--pad) 40px;
+  }
+
+  .top-act {
+    justify-content: flex-end;
+    padding: 40px var(--pad) 32px;
+    border-left: 1px solid var(--rule);
+  }
+}
+
+/* Section heads. */
+
+main > section {
+  border-bottom: 1px solid var(--rule);
+}
+
+.sec-head {
+  padding: 34px var(--pad) 22px;
+}
+
+.sec-head h2 {
+  margin-top: 8px;
+  font-size: clamp(22px, 4vw, 32px);
+}
+
+.sec-head p:not(.label) {
+  max-width: 38em;
+  margin: 12px 0 0;
+  color: var(--muted);
+}
+
+/* The calendar: one row per day. Day label | what to do and see | figure. */
+
+.days {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--rule);
+}
+
+.day {
+  display: grid;
+  gap: 14px;
+  padding: 22px var(--pad) 26px;
+  border-bottom: 1px solid var(--rule-soft);
+  scroll-margin-top: 12px;
+}
+
+.days .day:last-child {
+  border-bottom: 0;
+}
+
+.day:target {
+  background: color-mix(in srgb, var(--accent) 6%, transparent);
+}
+
+.when {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.dnum {
+  font: 700 26px/1 var(--mono);
+  letter-spacing: -0.03em;
+  color: var(--accent);
+}
+
+.final .dnum {
+  color: var(--ink);
+}
+
+.dtime {
+  font: 500 11px/1.4 var(--mono);
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.what h3 {
+  margin: 0 0 10px;
+  font-size: 19px;
+  line-height: 1.3;
+}
+
+.what p {
+  margin: 0 0 10px;
+}
+
+.tag {
+  display: inline-block;
+  margin-right: 8px;
+  padding: 1px 6px;
+  border: 1px solid var(--rule);
+  font: 600 10px/1.5 var(--mono);
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  vertical-align: 2px;
+}
+
+.final .see .tag {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+
+@media (min-width: 900px) {
+  .day {
+    grid-template-columns: 120px minmax(0, 1fr) 340px;
+    gap: 28px;
+    padding: 30px var(--pad);
+  }
+
+  .when {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .dnum {
+    font-size: 30px;
+  }
+}
+
+/* Figures: hairline schematics, never screenshots. */
+
+.fig {
+  margin: 0;
+  padding: 12px;
+  border: 1px dashed var(--rule);
+  font: 12px/1.4 var(--sans);
+}
+
+.fig figcaption {
+  margin-top: 10px;
+  font: 500 10px/1.4 var(--mono);
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  text-align: right;
+}
+
+.fig p {
+  margin: 0;
+}
+
+.fig em {
+  font-style: normal;
+  color: var(--muted);
+}
+
+.win-frame {
+  border: 1px solid var(--ink);
+}
+
+.win-title {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 8px;
+  border-bottom: 1px solid var(--ink);
+  font: 500 10px/1 var(--mono);
+}
+
+.win-title i {
+  width: 7px;
+  height: 7px;
+  border: 1px solid var(--ink);
+  border-radius: 50%;
+}
+
+.win-title span {
+  margin-left: 6px;
+  color: var(--muted);
+}
+
+.win-body {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  min-height: 120px;
+}
+
+.side {
+  padding: 8px;
+  border-right: 1px solid var(--rule);
+}
+
+.host {
+  margin-bottom: 6px !important;
+  font: 700 11px/1.3 var(--mono);
+}
+
+.host em {
+  display: block;
+  font: 400 10px var(--sans);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 0;
+  font: 11px/1.3 var(--mono);
+}
+
+.row s,
+.run s,
+.dot-need {
+  width: 7px;
+  height: 7px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--muted);
+}
+
+.row.need s,
+.dot-need {
+  background: var(--accent);
+}
+
+.row.work s,
+.run s {
+  background: var(--ink);
+}
+
+.row span {
+  margin-left: auto;
+  color: var(--muted);
+  font: 10px var(--sans);
+}
+
+.row.need span {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.row u {
+  padding: 0 3px;
+  border: 1px solid var(--ink);
+  font: 9px/1.4 var(--sans);
+  text-decoration: none;
+}
+
+.pane-mock {
+  display: flex;
+  align-items: flex-end;
+  padding: 8px;
+}
+
+.check {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+}
+
+.box {
+  width: 11px;
+  height: 11px;
+  flex: none;
+  border: 1px solid var(--ink);
+}
+
+.box.on {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.list-mock {
+  padding: 4px 8px 8px;
+}
+
+.hrow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--rule-soft);
+  font: 11px/1.3 var(--mono);
+}
+
+.hrow em {
+  font: 10px var(--sans);
+}
+
+.pill {
+  padding: 2px 8px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font: 700 10px/1.5 var(--sans);
+  white-space: nowrap;
+}
+
+.pill.ghost {
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--ink);
+}
+
+.orca {
+  padding-top: 9px;
+}
+
+/* Day 2: menu bar, notification, chat. */
+
+.menubar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px;
+  border-bottom: 1px solid var(--ink);
+}
+
+.glyph.mini {
+  width: 18px;
+  height: 18px;
+  border-width: 1px;
+  font-size: 7px;
+}
+
+.toast {
+  width: 82%;
+  margin: 8px 0 12px auto;
+  padding: 7px 9px;
+  border: 1px solid var(--ink);
+  border-left: 3px solid var(--accent);
+}
+
+.t-app {
+  font: 700 10px/1.3 var(--mono);
+}
+
+.chat {
+  padding: 8px;
+  border: 1px solid var(--rule);
+}
+
+.bubble {
+  display: inline-block;
+  padding: 6px 9px;
+  border: 1px solid var(--ink);
+}
+
+.choices {
+  display: flex;
+  gap: 6px;
+  margin: 8px 0 !important;
+}
+
+.choices b {
+  padding: 2px 8px;
+  border: 1px solid var(--ink);
+  font-size: 11px;
+}
+
+.choices b:first-child {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+}
+
+.reply {
+  padding: 5px 8px;
+  border: 1px solid var(--rule);
+  color: var(--muted);
+}
+
+/* Day 4: the 積み木. */
+
+.iso {
+  display: block;
+  width: 100%;
+  max-width: 340px;
+  height: auto;
+  margin: 0 auto;
+}
+
+.iso polygon {
+  stroke: var(--paper);
+  stroke-width: 1;
+  stroke-linejoin: round;
+}
+
+.iso .board {
+  fill: none;
+  stroke: var(--ink);
+}
+
+.iso .ink-t { fill: var(--ink); }
+.iso .ink-l { fill: var(--muted); }
+.iso .ink-r { fill: var(--ink); }
+.iso .red-t,
+.iso .red-l,
+.iso .red-r { fill: var(--accent); }
+.iso .warn-t,
+.iso .warn-l,
+.iso .warn-r { fill: var(--warn); }
+
+.iso-t {
+  fill: var(--muted);
+  font: 10px var(--mono);
+}
+
+/* Day 5: panes. */
+
+.panes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 64px 64px;
+  border: 1px solid var(--ink);
+}
+
+.p {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 5px 7px;
+}
+
+.p-a {
+  grid-row: 1 / 3;
+  border-right: 1px solid var(--ink);
+}
+
+.p-b {
+  border-bottom: 1px solid var(--ink);
+}
+
+.p-h {
+  margin-bottom: 6px;
+  font: 600 9px/1.3 var(--mono);
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.p code {
+  font-size: 10px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* Day 7: context menu and tasks. */
+
+.ctx {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  align-items: start;
+  gap: 0;
+  margin-bottom: 10px;
+}
+
+.ctx-host {
+  padding: 4px 8px;
+  border: 1px solid var(--ink);
+  font: 700 11px/1.3 var(--mono);
+}
+
+.menu {
+  margin: 14px 0 0 -4px;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+}
+
+.sub-menu {
+  margin: 14px 0 0 -1px;
+}
+
+.mi {
+  padding: 4px 8px;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.mi.on {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.task-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 0;
+  border-top: 1px solid var(--rule-soft);
+  font: 11px/1.3 var(--mono);
+}
+
+.task-row em {
+  font: 10px var(--sans);
+}
+
+@media (max-width: 420px) {
+  .ctx {
+    grid-template-columns: auto 1fr;
+  }
+
+  .sub-menu {
+    grid-column: 2;
+    margin: 4px 0 0 -4px;
+  }
+}
+
+/* Day 10: 上限の枠. */
+
+.meters {
+  display: grid;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid var(--ink);
+}
+
+.m {
+  display: grid;
+  grid-template-columns: 1fr 34px;
+  gap: 3px 8px;
+  align-items: center;
+}
+
+.m-n {
+  grid-column: 1 / -1;
+  font: 10px/1.3 var(--mono);
+  color: var(--muted);
+}
+
+.m-bar {
+  height: 7px;
+  border: 1px solid var(--rule);
+}
+
+.m-bar i {
+  display: block;
+  height: 100%;
+  background: var(--ink);
+}
+
+.m.warn .m-bar i { background: var(--warn); }
+.m.red .m-bar i { background: var(--accent); }
+
+.w30 { width: 30%; }
+.w42 { width: 42%; }
+.w64 { width: 64%; }
+.w83 { width: 83%; }
+
+.m-v {
+  font: 700 11px/1 var(--mono);
+  text-align: right;
+}
+
+.m.warn .m-v { color: var(--warn); }
+.m.red .m-v { color: var(--accent); }
+
+/* Day 14: the app waits for a key; the host keeps going. */
+
+.split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid var(--ink);
+}
+
+.split > div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+}
+
+.s-app {
+  border-right: 1px solid var(--ink);
+}
+
+.s-h {
+  font: 700 10px/1.3 var(--mono);
+}
+
+.keybox {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 10px;
+  color: var(--muted);
+}
+
+.keybox i {
+  height: 18px;
+  border: 1px solid var(--ink);
+}
+
+.run {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+}
+
+.s-note {
+  margin-top: auto !important;
+  font: 600 10px/1.3 var(--mono);
+  color: var(--muted);
+}
+
+.s-host .s-note {
+  color: var(--ink);
+}
+
+/* The secondary action: buying. A hairline box, never vermilion. */
+
+.buy {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-top: 6px;
+  padding: 0 0 0 14px;
+  border: 1px solid var(--ink);
+  font: 700 12px/1.3 var(--mono);
+  letter-spacing: 0.04em;
+  text-decoration: none;
+}
+
+.buy::after {
+  content: "→";
+  display: grid;
+  place-items: center;
+  align-self: stretch;
+  width: 44px;
+  margin-left: 14px;
+  border-left: 1px solid var(--ink);
+  font: 400 16px/1 var(--sans);
+}
+
+.buy:hover,
+.buy:focus-visible {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.buy:hover::after,
+.buy:focus-visible::after {
+  border-color: var(--paper);
+}
+
+/* Mid CTA after Day 2. */
+
+.mid {
+  display: grid;
+  gap: 16px;
+  padding: 26px var(--pad);
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  background: color-mix(in srgb, var(--accent) 7%, transparent);
+}
+
+.mid-punch {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+@media (min-width: 900px) {
+  .mid {
+    grid-template-columns: minmax(0, 1fr) 380px;
+    align-items: center;
+  }
+}
+
+/* 15 日目から. */
+
+.after-grid {
+  display: grid;
+  border-top: 1px solid var(--rule);
+}
+
+.price-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 22px var(--pad);
+  border-bottom: 1px solid var(--rule);
+}
+
+.price {
+  margin: 0;
+  font: 700 clamp(40px, 8vw, 64px)/1 var(--sans);
+  letter-spacing: -0.03em;
+}
+
+.price span {
+  font-size: 0.45em;
+  color: var(--muted);
+}
+
+.price-note {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.facts {
+  margin: 0;
+}
+
+.facts > div {
+  display: grid;
+  gap: 4px;
+  padding: 14px var(--pad);
+  border-bottom: 1px solid var(--rule-soft);
+}
+
+.facts > div:last-child {
+  border-bottom: 0;
+}
+
+.facts dt {
+  font: 600 11px/1.4 var(--mono);
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.facts dd {
+  margin: 0;
+}
+
+.env .facts {
+  border-top: 1px solid var(--rule);
+}
+
+@media (min-width: 900px) {
+  .after-grid {
+    grid-template-columns: 380px minmax(0, 1fr);
+  }
+
+  .price-cell {
+    border-bottom: 0;
+    border-right: 1px solid var(--rule);
+  }
+
+  .facts > div {
+    grid-template-columns: 120px minmax(0, 1fr);
+    gap: 24px;
+  }
+}
+
+/* FAQ. */
+
+.faq details {
+  border-top: 1px solid var(--rule-soft);
+}
+
+.faq summary {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 15px var(--pad);
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+}
+
+.faq summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq summary::after {
+  content: "+";
+  flex: none;
+  font: 400 18px/1 var(--mono);
+  color: var(--accent);
+}
+
+.faq details[open] summary::after {
+  content: "−";
+}
+
+.faq details p {
+  max-width: 40em;
+  margin: 0;
+  padding: 0 var(--pad) 18px;
+}
+
+/* Final CTA. */
+
+.last-cta {
+  display: grid;
+  gap: 20px;
+  padding: 40px var(--pad);
+}
+
+.last-cta h2 {
+  font-size: clamp(28px, 6vw, 52px);
+}
+
+.last-act {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.last-act .buy {
+  align-self: flex-start;
+  margin-top: 10px;
+}
+
+@media (min-width: 900px) {
+  .last-cta {
+    grid-template-columns: minmax(0, 1fr) 400px;
+    align-items: end;
+    padding: 64px var(--pad);
+  }
+}
+
+/* The dock: the trial button, fixed above the switcher bar. */
+
+.dock {
+  position: fixed;
+  z-index: 50;
+  right: 12px;
+  bottom: 64px;
+  left: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 52px;
+  padding: 0 16px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font: 700 14px/1.2 var(--mono);
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  box-shadow: 0 0 0 1px var(--paper), 0 6px 18px rgb(0 0 0 / 0.18);
+}
+
+.dock span {
+  font: 500 11px/1.2 var(--sans);
+  opacity: 0.9;
+}
+
+.dock::after {
+  content: "→";
+  font: 400 20px/1 var(--sans);
+}
+
+@media (min-width: 900px) {
+  .dock {
+    left: auto;
+    right: 28px;
+    width: 340px;
+  }
+}
+
+/* Where scroll timelines exist, keep the dock out of the way over the hero
+   (which already has the button) and bring it in once the reader scrolls. */
+
+@supports (animation-timeline: scroll()) {
+  .dock {
+    animation: dock-in linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 480px;
+  }
+
+  @keyframes dock-in {
+    0%,
+    60% {
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(12px);
+    }
+
+    100% {
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

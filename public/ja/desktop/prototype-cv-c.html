@@ -1,0 +1,254 @@
+<!doctype html>
+<!--
+  PROTOTYPE（#1862）案 c: 「どこで agent を動かしている？」診断型。
+  仮説: 来た人は「自分の環境（Mac か Windows か・手元だけかホストもか・Orca から来たか）に合うか」が分からず、
+  Windows の人はグレーのボタンで行き止まる。3 つの小さな選択（ラジオ・CSS だけで動く）のあとに
+  「あなたの道筋」とボタン 1 つを出すほうが、試用（DMG）のダウンロードにつながる。
+-->
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>SSH Term Desktop · Mac と Windows</title>
+<meta name="description" content="複数のホストで動く coding agent を、1 つのウィンドウで見守る。Mac と Windows の SSH Term。最初の 14 日は無料で試せます。">
+<link rel="icon" href="/icon.png">
+<link rel="stylesheet" href="/sheet.css">
+<link rel="stylesheet" href="/prototype-cv/c.css">
+<link rel="stylesheet" href="/prototype-cv/switcher.css">
+<script src="/prototype-cv/switcher.js" defer></script>
+</head>
+<body>
+<div class="sheet">
+<div class="bar">
+  <a class="mark" href="/ja/desktop"><span class="glyph" aria-hidden="true">&gt;_</span>SSH Term Desktop</a>
+  <a class="bar-cta" href="https://github.com/obutora/sshterm-desktop/releases/latest/download/SSHTermDesktop.dmg">無料で 14 日試す</a>
+</div>
+
+<header class="c-hero">
+  <p class="callout">＼ Claude Code・Codex をいくつも動かしている人へ ／</p>
+  <h1>agent、いくつの端末を<br>行き来して見ていますか？</h1>
+  <p class="answer">SSH Term Desktop は、手元のマシンとリモートのホストで動く agent を 1 つのウィンドウにまとめて見守る拠点です。手が要るものから順に並べ、承認や返事もその場でします。</p>
+  <div class="hero-cta">
+    <a class="button" href="https://github.com/obutora/sshterm-desktop/releases/latest/download/SSHTermDesktop.dmg">Mac で無料で 14 日試す</a>
+    <p class="fine">登録・カード・ライセンスキー不要。DMG を開くだけ · macOS 13 以降</p>
+    <p class="fine"><a href="#fit">Windows の人・自分の環境に合うか確かめたい人は、下の 3 問へ ↓</a></p>
+  </div>
+</header>
+
+<main>
+<section class="fit" id="fit" aria-labelledby="fit-h">
+  <input type="radio" name="os" id="q1-mac" aria-describedby="q1-h">
+  <input type="radio" name="os" id="q1-win" aria-describedby="q1-h">
+  <input type="radio" name="where" id="q2-local" aria-describedby="q2-h">
+  <input type="radio" name="where" id="q2-ssh" aria-describedby="q2-h">
+  <input type="radio" name="where" id="q2-orca" aria-describedby="q2-h">
+  <input type="radio" name="agent" id="q3-claude" aria-describedby="q3-h">
+  <input type="radio" name="agent" id="q3-codex" aria-describedby="q3-h">
+  <input type="radio" name="agent" id="q3-other" aria-describedby="q3-h">
+
+  <div class="term-head">
+    <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <h2 id="fit-h">自分に合うか、3 問で</h2>
+    <span class="label">fit.sh</span>
+  </div>
+
+  <p class="cmd" aria-hidden="true"><span class="prompt">$</span> sshterm-desktop --fit<span class="a a-mac"> --os=mac</span><span class="a a-win"> --os=windows</span><span class="a a-local"> --where=local</span><span class="a a-ssh"> --where=ssh</span><span class="a a-orca"> --where=orca</span><span class="a a-claude"> --agent=claude-code</span><span class="a a-codex"> --agent=codex</span><span class="a a-other"> --agent=other</span><span class="cursor"></span></p>
+
+  <div class="qs">
+    <div class="q">
+      <p class="q-h" id="q1-h"><span class="q-n">Q1</span>使っているのは？</p>
+      <div class="chips">
+        <label for="q1-mac">Mac</label>
+        <label for="q1-win">Windows</label>
+      </div>
+    </div>
+    <div class="q">
+      <p class="q-h" id="q2-h"><span class="q-n">Q2</span>agent を動かしている場所は？</p>
+      <div class="chips">
+        <label for="q2-local">このマシンだけ</label>
+        <label for="q2-ssh">SSH の先のホストも</label>
+        <label for="q2-orca">Orca で動かしている</label>
+      </div>
+    </div>
+    <div class="q">
+      <p class="q-h" id="q3-h"><span class="q-n">Q3</span>主に使う agent は？</p>
+      <div class="chips">
+        <label for="q3-claude">Claude Code</label>
+        <label for="q3-codex">Codex</label>
+        <label for="q3-other">ほかの CLI</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="result" aria-live="polite">
+    <p class="result-h"><span class="label">output</span>あなたの道筋</p>
+
+    <ol class="path">
+      <li class="step">
+        <p class="step-h"><span class="step-n">01</span>入れる</p>
+        <div class="r r-none">
+          <p>Mac なら、今日から 14 日を無料で試せます。Windows の人は Q1 で「Windows」を選んでください。</p>
+          <a class="button" href="https://github.com/obutora/sshterm-desktop/releases/latest/download/SSHTermDesktop.dmg">無料で 14 日試す（macOS 13 以降）</a>
+        </div>
+        <div class="r r-mac">
+          <p class="ok">✔ Mac で動きます。macOS 13 以降、Apple Silicon と Intel。DMG を開くだけで、あとは自動で更新されます。</p>
+          <a class="button big" href="https://github.com/obutora/sshterm-desktop/releases/latest/download/SSHTermDesktop.dmg">無料で 14 日試す（macOS 13 以降）</a>
+          <p class="fine">登録・メールアドレス・カードは要りません。</p>
+        </div>
+        <div class="r r-win">
+          <p class="ok">Windows 11（x64）は、近日 Microsoft Store から無料で入れられるようになります。今はまだダウンロードできません。</p>
+          <ul class="win-next">
+            <li>ライセンスキーは Windows 版にも使えます。1 本で、本人の Mac と Windows なら何台でも。</li>
+            <li>手元に Mac があれば、今日からそちらで 14 日を試せます。同じホストの agent を見守れます。</li>
+          </ul>
+          <a class="go" href="https://github.com/obutora/sshterm-desktop/releases/latest/download/SSHTermDesktop.dmg">Mac で無料で 14 日試す</a>
+        </div>
+      </li>
+
+      <li class="step">
+        <p class="step-h"><span class="step-n">02</span>つなぐ</p>
+        <p class="r r-wait2">Q2 を選ぶと、つなぎ方が出ます。</p>
+        <div class="r r-local">
+          <p class="ok">✔ 手元のマシンは SSH を通さず、ホストの 1 つとしてそのまま一覧に出ます。</p>
+          <p class="fine">あとでリモートのホストを足すときは、<code>~/.ssh/config</code> をそのまま読みます。</p>
+        </div>
+        <div class="r r-ssh">
+          <p class="ok">✔ <code>~/.ssh/config</code> のホストをそのまま読みます（Include・ProxyJump・IdentityFile など）。</p>
+          <ul>
+            <li>初めてつなぐとき、アプリがホストに stagent（小さな補助プログラム。スマホ版と同じ）を入れます。</li>
+            <li>保持シェルは、アプリを閉じてもホストで動き続けます。</li>
+            <li>パスワードとパスフレーズは OS の保管庫（Mac はキーチェーン）に置きます。</li>
+          </ul>
+        </div>
+        <div class="r r-orca">
+          <p class="ok">✔ 「Orca から取り込む」で、Orca のホストと開いていた端末を一度だけ写します。</p>
+          <p class="fine">端末は同じフォルダで作り直し、agent は会話を再開します。</p>
+        </div>
+      </li>
+
+      <li class="step">
+        <p class="step-h"><span class="step-n">03</span>見守る</p>
+        <p class="r r-wait3">Q3 を選ぶと、何が見えるかが出ます。</p>
+        <div class="r r-cc">
+          <p class="ok">✔ <span class="r-claude">Claude Code</span><span class="r-codex">Codex</span> は、状態の一覧・チャット表示・上限の枠がそろって使えます。</p>
+          <p class="fine">上限の枠は 5 時間と週の使った割合を左下に出します（60% から黄、80% から赤）。</p>
+        </div>
+        <div class="r r-other">
+          <p class="ok">状態の一覧とチャット表示が分かるのは、次の 5 つです。</p>
+          <p class="five">Claude Code · Codex · Oh My Pi · Pi · Copilot CLI</p>
+          <p class="fine">ほかの CLI も、端末（ペイン）でそのまま動きます。上限の枠は Claude Code・Codex だけです。</p>
+        </div>
+      </li>
+    </ol>
+
+    <p class="after"><span class="label">14 日のあと</span>¥1,500 の買い切り。1 本で本人の Mac と Windows を何台でも。購入から 14 日以内なら返金します。<a href="https://buy.stripe.com/9B64gs7EN2YBeSQcIAffy02?locale=ja">購入する →</a></p>
+  </div>
+</section>
+
+<section class="gets" aria-labelledby="gets-h">
+  <h2 id="gets-h" class="sec-h"><span class="label">what you get</span>14 日で試せること（買ったときと同じ機能）</h2>
+  <div class="gets-row">
+    <figure class="get">
+      <div class="fig fig-list" aria-hidden="true">
+        <div class="lh"><span>mac-studio</span><b>手が要る 1</b></div>
+        <div class="li need"><i></i>claude · api-fix</div>
+        <div class="li run"><i></i>codex · docs</div>
+        <div class="lh"><span>build-linux</span></div>
+        <div class="li run"><i></i>claude · migrate</div>
+        <div class="li done unread"><i></i>codex · tests</div>
+      </div>
+      <figcaption>
+        <span class="fig-cap">画面のイメージ</span>
+        <strong>一覧</strong>
+        ホストごとに「手が要る → 作業中 → 終わった」の順。終わって見ていないものに未読の印。
+      </figcaption>
+    </figure>
+    <figure class="get">
+      <div class="fig fig-chat" aria-hidden="true">
+        <div class="notif"><b>承認待ち</b>build-linux · claude</div>
+        <div class="bubble">migrations/ のファイルを書き換えてよいですか？</div>
+        <div class="choices"><span>1. はい</span><span>2. いいえ</span></div>
+        <div class="reply">返事を書く…</div>
+      </div>
+      <figcaption>
+        <span class="fig-cap">画面のイメージ</span>
+        <strong>OS の通知とチャット表示</strong>
+        承認待ち・入力待ち・完了を通知。吹き出しで読み、選択肢はボタンで返事します。
+      </figcaption>
+    </figure>
+    <figure class="get">
+      <div class="fig fig-panes" aria-hidden="true">
+        <div class="pane p1"><span>local · zsh</span></div>
+        <div class="pane p2"><span>build-linux · 保持シェル</span></div>
+        <div class="pane p3"><span>mac-studio · ssh</span></div>
+      </div>
+      <figcaption>
+        <span class="fig-cap">画面のイメージ</span>
+        <strong>ペイン</strong>
+        手元の端末と SSH の端末を、右や下へ好きな数に割って並べます。
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="facts" aria-labelledby="facts-h">
+  <h2 id="facts-h" class="sec-h"><span class="label">spec</span>値段・試用・キー・返金</h2>
+  <table class="spec">
+    <tbody>
+      <tr><th scope="row">試用</th><td>最初に起動してから 14 日は、ライセンスキーなしで使えます。機能は買ったときと同じ。登録・メールアドレス・カードは要りません。</td></tr>
+      <tr><th scope="row">値段</th><td><b>¥1,500 / $9.99 の買い切り</b>。サブスクはありません。ほかの通貨は決済の画面にその国の通貨で出ます（Stripe の Adaptive Pricing）。販売者は Link（Stripe の決済サービス）。</td></tr>
+      <tr><th scope="row">ライセンスキー</th><td>1 本で、買った本人の Mac と Windows の機械なら何台でも。あとから出る Windows 版にも使えます。購入が終わったページに出し、メールでも送ります。</td></tr>
+      <tr><th scope="row">返金</th><td>購入から 14 日以内なら返金します。買ったときのメールアドレスから<a href="/ja/contact">お問い合わせ</a>へ。詳しくは<a href="/ja/terms">利用規約</a>。</td></tr>
+      <tr><th scope="row">対応</th><td>Mac: macOS 13 以降（Apple Silicon と Intel）。Windows 11（x64）は近日 Microsoft Store から。</td></tr>
+      <tr><th scope="row">言語</th><td>English、日本語、한국어、简体中文、繁體中文、Tiếng Việt</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="faq" aria-labelledby="faq-h">
+  <h2 id="faq-h" class="sec-h"><span class="label">faq</span>よくある質問</h2>
+  <details>
+    <summary>試用に何が要る？</summary>
+    <p>DMG を落として開くだけです。アカウントがないので、登録・メールアドレス・カード・ライセンスキーは要りません。最初に起動してから 14 日、買ったときと同じ機能で使えます。</p>
+  </details>
+  <details>
+    <summary>14 日後、agent は止まる？</summary>
+    <p>止まりません。14 日を過ぎるとライセンスキーを入れるまでアプリは使えませんが、ホストで動いている agent と保持シェルはそのまま動き続けます。</p>
+  </details>
+  <details>
+    <summary>スマホ版を買ったけど？</summary>
+    <p>スマホ版（iPhone・iPad・Android の <a href="/app">SSH Term</a>）の購入とはつながりません。デスクトップ版にはライセンスキーが要ります。ホストに入れる stagent はスマホ版と同じものです。</p>
+  </details>
+  <details>
+    <summary>Windows はいつ？</summary>
+    <p>近日、Microsoft Store から無料で入れられるようになります。先にキーを買っても、Windows 版にそのまま使えます。手元に Mac があれば、今日からそちらで試せます。</p>
+  </details>
+  <details>
+    <summary>返金は？</summary>
+    <p>購入から 14 日以内なら返金します。買ったときのメールアドレスから<a href="/ja/contact">お問い合わせ</a>ください。返金した購入のキーは、アプリが次に返金した購入の一覧を取ったときから使えなくなります。キーをなくしたときは<a href="/ja/desktop/resend">送り直しのページ</a>へ。</p>
+  </details>
+</section>
+
+<section class="final" aria-labelledby="final-h">
+  <h2 id="final-h">まず 14 日、いつものホストをつないでみる。</h2>
+  <p>合わなければ、そのまま使うのをやめるだけ。登録もカードもありません。</p>
+  <div class="final-cta">
+    <a class="button" href="https://github.com/obutora/sshterm-desktop/releases/latest/download/SSHTermDesktop.dmg">Mac で無料で 14 日試す</a>
+    <a class="go" href="https://buy.stripe.com/9B64gs7EN2YBeSQcIAffy02?locale=ja">もう決めた · ¥1,500 で購入</a>
+  </div>
+</section>
+</main>
+
+<div class="foot">
+  <a href="/ja/terms">利用規約</a>
+  <a href="/ja/privacy">プライバシーポリシー</a>
+  <a href="/ja/contact">お問い合わせ</a>
+  <a href="https://iru-yo.com/tokushoho/">特定商取引法に基づく表記</a>
+  <span class="coord">sshterm.iru-yo.com/ja/desktop</span>
+</div>
+</div>
+
+<a class="dock" href="https://github.com/obutora/sshterm-desktop/releases/latest/download/SSHTermDesktop.dmg">無料で 14 日試す <span class="dock-sub">Mac · 登録不要</span></a>
+</body>
+</html>

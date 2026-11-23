@@ -1,0 +1,446 @@
+<!doctype html>
+<!--
+  PROTOTYPE（#1862）案 e「積み木で見せる」
+  仮説: スクリーンショットもレビューもなく名前も一般的なので、「タブのあるターミナルと何が違うか」が見えない。
+  最初にこの製品だけの絵（いちばん長く待たせている agent が赤い頭で立つ積み木）を見せ、
+  「〜しがち → だから〜」の約束と小さな証拠ウィンドウ、作り手と返金・キーの事実で、14 日の試用（DMG）へ運ぶ。
+-->
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>SSH Term Desktop · Mac と Windows</title>
+<meta name="description" content="複数のホストで動く coding agent を、1 つのウィンドウで見守る。Mac と Windows の SSH Term。">
+<link rel="icon" href="/icon.png">
+<link rel="stylesheet" href="/sheet.css">
+<link rel="stylesheet" href="/prototype-cv/e.css">
+<link rel="stylesheet" href="/prototype-cv/switcher.css">
+<script src="/prototype-cv/switcher.js" defer></script>
+</head>
+<body>
+<div class="sheet e">
+<div class="bar">
+  <a class="mark" href="/ja/desktop"><span class="glyph" aria-hidden="true">&gt;_</span>SSH Term Desktop</a>
+  <a class="e-barcta" href="https://github.com/obutora/sshterm-desktop/releases/latest/download/SSHTermDesktop.dmg">無料で 14 日試す</a>
+</div>
+
+<header class="e-hero">
+  <div class="e-hero-text">
+    <p class="e-call">＼ 複数のホストで coding agent を動かしている人へ ／</p>
+    <h1 class="e-h1">どの agent を、<br>どれだけ待たせているか。</h1>
+    <p class="e-def">SSH Term Desktop は、手元のマシンとリモートのホストで動く coding agent を、1 つのウィンドウで見守る拠点です。積み木にすると、待たせている agent は柱の頭の赤・黄で、その長さまで分かります。</p>
+  </div>
+  <figure class="e-blocks">
+    <svg class="e-svg" viewBox="0 30 520 395" role="img" aria-labelledby="e-blocks-title e-blocks-desc">
+    <title id="e-blocks-title">積み木の略図</title>
+    <desc id="e-blocks-desc">3 枚の板（手元のマシン・mac-studio・build-linux）に、墨を積んだ柱（agent）が立っている。mac-studio のいちばん高い柱の頭が赤く「承認待ち · 長い」、手元のマシンの低い柱の頭が黄色く「入力待ち」。</desc>
+    <g class="e-boards">
+    <polygon class="kb-l" points="72.1,202.5 150.0,247.5 150.0,240.0 72.1,195.0"/>
+    <polygon class="kb-r" points="227.9,202.5 150.0,247.5 150.0,240.0 227.9,195.0"/>
+    <polygon class="kb-t" points="150.0,150.0 227.9,195.0 150.0,240.0 72.1,195.0"/>
+    <line class="kg" x1="176.0" y1="165.0" x2="98.0" y2="210.0"/>
+    <line class="kg" x1="124.0" y1="165.0" x2="202.0" y2="210.0"/>
+    <line class="kg" x1="202.0" y1="180.0" x2="124.0" y2="225.0"/>
+    <line class="kg" x1="98.0" y1="180.0" x2="176.0" y2="225.0"/>
+    <polygon class="kb-l" points="202.0,277.5 279.9,322.5 279.9,315.0 202.0,270.0"/>
+    <polygon class="kb-r" points="357.8,277.5 279.9,322.5 279.9,315.0 357.8,270.0"/>
+    <polygon class="kb-t" points="279.9,225.0 357.8,270.0 279.9,315.0 202.0,270.0"/>
+    <line class="kg" x1="305.9" y1="240.0" x2="227.9" y2="285.0"/>
+    <line class="kg" x1="253.9" y1="240.0" x2="331.9" y2="285.0"/>
+    <line class="kg" x1="331.9" y1="255.0" x2="253.9" y2="300.0"/>
+    <line class="kg" x1="227.9" y1="255.0" x2="305.9" y2="300.0"/>
+    <polygon class="kb-l" points="331.9,352.5 409.8,397.5 409.8,390.0 331.9,345.0"/>
+    <polygon class="kb-r" points="487.7,352.5 409.8,397.5 409.8,390.0 487.7,345.0"/>
+    <polygon class="kb-t" points="409.8,300.0 487.7,345.0 409.8,390.0 331.9,345.0"/>
+    <line class="kg" x1="435.8" y1="315.0" x2="357.8" y2="360.0"/>
+    <line class="kg" x1="383.8" y1="315.0" x2="461.8" y2="360.0"/>
+    <line class="kg" x1="461.8" y1="330.0" x2="383.8" y2="375.0"/>
+    <line class="kg" x1="357.8" y1="330.0" x2="435.8" y2="375.0"/>
+    </g>
+    <g class="e-pillars">
+    <polygon class="k-l" points="132.9,165.0 150.0,174.9 150.0,159.9 132.9,150.0"/>
+    <polygon class="k-r" points="167.1,165.0 150.0,174.9 150.0,159.9 167.1,150.0"/>
+    <polygon class="k-t" points="150.0,140.1 167.1,150.0 150.0,159.9 132.9,150.0"/>
+    <polygon class="k-l" points="132.9,150.0 150.0,159.9 150.0,144.9 132.9,135.0"/>
+    <polygon class="k-r" points="167.1,150.0 150.0,159.9 150.0,144.9 167.1,135.0"/>
+    <polygon class="k-t" points="150.0,125.1 167.1,135.0 150.0,144.9 132.9,135.0"/>
+    <polygon class="k-l" points="132.9,135.0 150.0,144.9 150.0,129.9 132.9,120.0"/>
+    <polygon class="k-r" points="167.1,135.0 150.0,144.9 150.0,129.9 167.1,120.0"/>
+    <polygon class="k-t" points="150.0,110.1 167.1,120.0 150.0,129.9 132.9,120.0"/>
+    <polygon class="k-l" points="132.9,120.0 150.0,129.9 150.0,114.9 132.9,105.0"/>
+    <polygon class="k-r" points="167.1,120.0 150.0,129.9 150.0,114.9 167.1,105.0"/>
+    <polygon class="k-t" points="150.0,95.1 167.1,105.0 150.0,114.9 132.9,105.0"/>
+    <polygon class="k-l" points="184.8,195.0 202.0,204.9 202.0,189.9 184.8,180.0"/>
+    <polygon class="k-r" points="219.1,195.0 202.0,204.9 202.0,189.9 219.1,180.0"/>
+    <polygon class="k-t" points="202.0,170.1 219.1,180.0 202.0,189.9 184.8,180.0"/>
+    <polygon class="k-l" points="184.8,180.0 202.0,189.9 202.0,174.9 184.8,165.0"/>
+    <polygon class="k-r" points="219.1,180.0 202.0,189.9 202.0,174.9 219.1,165.0"/>
+    <polygon class="k-t" points="202.0,155.1 219.1,165.0 202.0,174.9 184.8,165.0"/>
+    <polygon class="k-l" points="106.9,210.0 124.0,219.9 124.0,204.9 106.9,195.0"/>
+    <polygon class="k-r" points="141.2,210.0 124.0,219.9 124.0,204.9 141.2,195.0"/>
+    <polygon class="k-t" points="124.0,185.1 141.2,195.0 124.0,204.9 106.9,195.0"/>
+    <polygon class="ky-l" points="106.9,195.0 124.0,204.9 124.0,191.4 106.9,181.5"/>
+    <polygon class="ky-r" points="141.2,195.0 124.0,204.9 124.0,191.4 141.2,181.5"/>
+    <polygon class="ky-t" points="124.0,171.6 141.2,181.5 124.0,191.4 106.9,181.5"/>
+    <polygon class="k-l" points="262.8,240.0 279.9,249.9 279.9,234.9 262.8,225.0"/>
+    <polygon class="k-r" points="297.1,240.0 279.9,249.9 279.9,234.9 297.1,225.0"/>
+    <polygon class="k-t" points="279.9,215.1 297.1,225.0 279.9,234.9 262.8,225.0"/>
+    <polygon class="k-l" points="262.8,225.0 279.9,234.9 279.9,219.9 262.8,210.0"/>
+    <polygon class="k-r" points="297.1,225.0 279.9,234.9 279.9,219.9 297.1,210.0"/>
+    <polygon class="k-t" points="279.9,200.1 297.1,210.0 279.9,219.9 262.8,210.0"/>
+    <polygon class="k-l" points="262.8,210.0 279.9,219.9 279.9,204.9 262.8,195.0"/>
+    <polygon class="k-r" points="297.1,210.0 279.9,219.9 279.9,204.9 297.1,195.0"/>
+    <polygon class="k-t" points="279.9,185.1 297.1,195.0 279.9,204.9 262.8,195.0"/>
+    <polygon class="k-l" points="262.8,195.0 279.9,204.9 279.9,189.9 262.8,180.0"/>
+    <polygon class="k-r" points="297.1,195.0 279.9,204.9 279.9,189.9 297.1,180.0"/>
+    <polygon class="k-t" points="279.9,170.1 297.1,180.0 279.9,189.9 262.8,180.0"/>
+    <polygon class="k-l" points="262.8,180.0 279.9,189.9 279.9,174.9 262.8,165.0"/>
+    <polygon class="k-r" points="297.1,180.0 279.9,189.9 279.9,174.9 297.1,165.0"/>
+    <polygon class="k-t" points="279.9,155.1 297.1,165.0 279.9,174.9 262.8,165.0"/>
+    <polygon class="k-l" points="262.8,165.0 279.9,174.9 279.9,159.9 262.8,150.0"/>
+    <polygon class="k-r" points="297.1,165.0 279.9,174.9 279.9,159.9 297.1,150.0"/>
+    <polygon class="k-t" points="279.9,140.1 297.1,150.0 279.9,159.9 262.8,150.0"/>
+    <polygon class="kr-l" points="262.8,150.0 279.9,159.9 279.9,146.4 262.8,136.5"/>
+    <polygon class="kr-r" points="297.1,150.0 279.9,159.9 279.9,146.4 297.1,136.5"/>
+    <polygon class="kr-t" points="279.9,126.6 297.1,136.5 279.9,146.4 262.8,136.5"/>
+    <polygon class="k-l" points="210.8,270.0 227.9,279.9 227.9,264.9 210.8,255.0"/>
+    <polygon class="k-r" points="245.1,270.0 227.9,279.9 227.9,264.9 245.1,255.0"/>
+    <polygon class="k-t" points="227.9,245.1 245.1,255.0 227.9,264.9 210.8,255.0"/>
+    <polygon class="k-l" points="210.8,255.0 227.9,264.9 227.9,249.9 210.8,240.0"/>
+    <polygon class="k-r" points="245.1,255.0 227.9,264.9 227.9,249.9 245.1,240.0"/>
+    <polygon class="k-t" points="227.9,230.1 245.1,240.0 227.9,249.9 210.8,240.0"/>
+    <polygon class="k-l" points="288.7,285.0 305.9,294.9 305.9,279.9 288.7,270.0"/>
+    <polygon class="k-r" points="323.0,285.0 305.9,294.9 305.9,279.9 323.0,270.0"/>
+    <polygon class="k-t" points="305.9,260.1 323.0,270.0 305.9,279.9 288.7,270.0"/>
+    <polygon class="k-l" points="288.7,270.0 305.9,279.9 305.9,264.9 288.7,255.0"/>
+    <polygon class="k-r" points="323.0,270.0 305.9,279.9 305.9,264.9 323.0,255.0"/>
+    <polygon class="k-t" points="305.9,245.1 323.0,255.0 305.9,264.9 288.7,255.0"/>
+    <polygon class="k-l" points="288.7,255.0 305.9,264.9 305.9,249.9 288.7,240.0"/>
+    <polygon class="k-r" points="323.0,255.0 305.9,264.9 305.9,249.9 323.0,240.0"/>
+    <polygon class="k-t" points="305.9,230.1 323.0,240.0 305.9,249.9 288.7,240.0"/>
+    <polygon class="k-l" points="418.6,330.0 435.8,339.9 435.8,324.9 418.6,315.0"/>
+    <polygon class="k-r" points="452.9,330.0 435.8,339.9 435.8,324.9 452.9,315.0"/>
+    <polygon class="k-t" points="435.8,305.1 452.9,315.0 435.8,324.9 418.6,315.0"/>
+    <polygon class="k-l" points="418.6,315.0 435.8,324.9 435.8,309.9 418.6,300.0"/>
+    <polygon class="k-r" points="452.9,315.0 435.8,324.9 435.8,309.9 452.9,300.0"/>
+    <polygon class="k-t" points="435.8,290.1 452.9,300.0 435.8,309.9 418.6,300.0"/>
+    <polygon class="k-l" points="418.6,300.0 435.8,309.9 435.8,294.9 418.6,285.0"/>
+    <polygon class="k-r" points="452.9,300.0 435.8,309.9 435.8,294.9 452.9,285.0"/>
+    <polygon class="k-t" points="435.8,275.1 452.9,285.0 435.8,294.9 418.6,285.0"/>
+    <polygon class="k-l" points="418.6,285.0 435.8,294.9 435.8,279.9 418.6,270.0"/>
+    <polygon class="k-r" points="452.9,285.0 435.8,294.9 435.8,279.9 452.9,270.0"/>
+    <polygon class="k-t" points="435.8,260.1 452.9,270.0 435.8,279.9 418.6,270.0"/>
+    <polygon class="k-l" points="418.6,270.0 435.8,279.9 435.8,264.9 418.6,255.0"/>
+    <polygon class="k-r" points="452.9,270.0 435.8,279.9 435.8,264.9 452.9,255.0"/>
+    <polygon class="k-t" points="435.8,245.1 452.9,255.0 435.8,264.9 418.6,255.0"/>
+    <polygon class="k-l" points="340.7,345.0 357.8,354.9 357.8,339.9 340.7,330.0"/>
+    <polygon class="k-r" points="375.0,345.0 357.8,354.9 357.8,339.9 375.0,330.0"/>
+    <polygon class="k-t" points="357.8,320.1 375.0,330.0 357.8,339.9 340.7,330.0"/>
+    <polygon class="k-l" points="340.7,330.0 357.8,339.9 357.8,324.9 340.7,315.0"/>
+    <polygon class="k-r" points="375.0,330.0 357.8,339.9 357.8,324.9 375.0,315.0"/>
+    <polygon class="k-t" points="357.8,305.1 375.0,315.0 357.8,324.9 340.7,315.0"/>
+    <polygon class="k-l" points="340.7,315.0 357.8,324.9 357.8,309.9 340.7,300.0"/>
+    <polygon class="k-r" points="375.0,315.0 357.8,324.9 357.8,309.9 375.0,300.0"/>
+    <polygon class="k-t" points="357.8,290.1 375.0,300.0 357.8,309.9 340.7,300.0"/>
+    <polygon class="k-l" points="392.7,375.0 409.8,384.9 409.8,369.9 392.7,360.0"/>
+    <polygon class="k-r" points="427.0,375.0 409.8,384.9 409.8,369.9 427.0,360.0"/>
+    <polygon class="k-t" points="409.8,350.1 427.0,360.0 409.8,369.9 392.7,360.0"/>
+    </g>
+    <text class="kt kt-host" x="103" y="249" text-anchor="end">手元のマシン</text>
+    <line class="kl" x1="107" y1="231" x2="99" y2="236"/>
+    <text class="kt kt-host" x="233" y="324" text-anchor="end">mac-studio</text>
+    <line class="kl" x1="237" y1="306" x2="229" y2="311"/>
+    <text class="kt kt-host" x="363" y="399" text-anchor="end">build-linux</text>
+    <line class="kl" x1="367" y1="381" x2="359" y2="386"/>
+    <polyline class="kl" points="280,132 310,62 324,62"/>
+    <text class="kt kt-red" x="330" y="67">承認待ち · 長い</text>
+    <polyline class="kl" points="120,178 84,118 70,118"/>
+    <text class="kt" x="66" y="123" text-anchor="end">入力待ち</text>
+    <line class="kd" x1="461" y1="255" x2="461" y2="270"/>
+    <line class="kd" x1="457" y1="255" x2="465" y2="255"/>
+    <line class="kd" x1="457" y1="270" x2="465" y2="270"/>
+    <text class="kt kt-dim" x="469" y="268">10 分</text>
+    </svg>
+    <figcaption>
+      <span class="e-cap">画面のイメージ</span>
+      <dl class="e-legend">
+        <div><dt><span class="e-sw e-sw-board" aria-hidden="true"></span>板</dt><dd>ホスト</dd></div>
+        <div><dt><span class="e-sw e-sw-pillar" aria-hidden="true"></span>柱</dt><dd>agent</dd></div>
+        <div><dt><span class="e-sw e-sw-ink" aria-hidden="true"></span>墨 1 個</dt><dd>動いている 10 分</dd></div>
+        <div><dt><span class="e-sw e-sw-caps" aria-hidden="true"></span>頭の赤・黄</dt><dd>待たせている長さ</dd></div>
+      </dl>
+    </figcaption>
+  </figure>
+  <div class="e-hero-cta">
+    <a class="button" href="https://github.com/obutora/sshterm-desktop/releases/latest/download/SSHTermDesktop.dmg">Mac で無料で 14 日試す</a>
+    <p class="e-fine">登録・カード・キー不要 · その後 ¥1,500 買い切り</p>
+    <p class="e-req">macOS 13 以降（Apple Silicon・Intel）。Windows 11 は近日 Microsoft Store から。</p>
+  </div>
+</header>
+
+<main class="e-main">
+
+  <section class="e-sec" aria-labelledby="e-ba-h">
+    <div class="e-head">
+      <p class="e-num">01 · Before / After</p>
+      <h2 id="e-ba-h">タブを回るか、積み木を見るか。</h2>
+    </div>
+    <table class="e-ba">
+      <thead>
+        <tr>
+          <td></td>
+          <th scope="col" class="e-ba-before">ターミナルのタブを回る</th>
+          <th scope="col" class="e-ba-after">SSH Term Desktop</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">どれが待っているか</th>
+          <td>タブを順に開いて確かめる。</td>
+          <td>一覧は「手が要る → 作業中 → 終わった」の順。積み木なら柱の頭の赤・黄で、待たせている長さまで見える。</td>
+        </tr>
+        <tr>
+          <th scope="row">席を外したとき</th>
+          <td>戻ってタブを開くまで分からない。</td>
+          <td>承認待ち・入力待ち・ターンの完了を OS の通知で知らせる。ウィンドウを閉じても、メニューバーで見張りを続ける。</td>
+        </tr>
+        <tr>
+          <th scope="row">リモートのホスト</th>
+          <td>ホストごとに SSH のタブを開いて回る。</td>
+          <td><code>~/.ssh/config</code> のホストをそのまま読み、ホストごとにまとめて 1 つの一覧に。手元のマシンもホストの 1 つとして並ぶ。</td>
+        </tr>
+        <tr>
+          <th scope="row">上限</th>
+          <td>使った割合は、別の画面へ見に行く。</td>
+          <td>Claude Code・Codex の 5 時間と週の枠の使った割合を、左の面の左下に。60% から黄、80% から赤。</td>
+        </tr>
+        <tr>
+          <th scope="row">作業の場所（worktree）</th>
+          <td>worktree とブランチを手で作り、そこで agent を起こす。</td>
+          <td>ホストの右クリックから、Issue / PR か名前でタスク（worktree とブランチ）を作って agent を始める。消すときは未コミットの変更などを確かめてから。</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="e-sec" aria-labelledby="e-pr-h">
+    <div class="e-head">
+      <p class="e-num">02 · 約束</p>
+      <h2 id="e-pr-h">agent と作業の「しがち」に、先回りします。</h2>
+    </div>
+    <ol class="e-promises">
+      <li class="e-p">
+        <div class="e-p-text">
+          <p class="e-p-no">約束 01</p>
+          <p class="e-habit">agent は、こちらが見ていないときに限って承認を待ちがち。</p>
+          <p class="e-so"><span class="e-so-mark">だから</span>承認待ち・入力待ち・ターンの完了を、OS の通知で知らせます。ウィンドウを閉じてもメニューバーで見張りを続け、返事はチャット表示の返事の欄からできます。</p>
+        </div>
+        <figure class="e-win">
+          <figcaption class="e-win-bar"><span class="e-win-name">alerts.log</span><span class="e-win-tag">画面のイメージ</span></figcaption>
+          <pre class="e-win-body">14:02  mac-studio  claude  <span class="e-c-red">承認待ち</span>
+14:02  OS の通知を出す
+14:03  チャット表示で承認する
+14:03  mac-studio  claude  作業中
+<span class="e-c-mute">— ウィンドウを閉じても、メニューバーで見張り</span></pre>
+        </figure>
+      </li>
+      <li class="e-p">
+        <div class="e-p-text">
+          <p class="e-p-no">約束 02</p>
+          <p class="e-habit">作業は、上限の枠に気づいたときには残りが少なくなりがち。</p>
+          <p class="e-so"><span class="e-so-mark">だから</span>Claude Code・Codex の 5 時間と週の枠の使った割合を、左の面の左下に出しておきます。60% から黄、80% から赤になります。</p>
+        </div>
+        <figure class="e-win">
+          <figcaption class="e-win-bar"><span class="e-win-name">limits</span><span class="e-win-tag">画面のイメージ</span></figcaption>
+          <div class="e-win-body e-limits">
+            <div class="e-lim"><span class="e-lim-name">claude 5h</span><span class="e-meter"><span class="e-fill e-w62 e-fill-yel"></span></span><span class="e-lim-pct">62%</span></div>
+            <div class="e-lim"><span class="e-lim-name">claude week</span><span class="e-meter"><span class="e-fill e-w41"></span></span><span class="e-lim-pct">41%</span></div>
+            <div class="e-lim"><span class="e-lim-name">codex 5h</span><span class="e-meter"><span class="e-fill e-w83 e-fill-red"></span></span><span class="e-lim-pct">83%</span></div>
+            <p class="e-c-mute">60% から黄 · 80% から赤</p>
+          </div>
+        </figure>
+      </li>
+      <li class="e-p">
+        <div class="e-p-text">
+          <p class="e-p-no">約束 03</p>
+          <p class="e-habit">リモートのホストへのつなぎ方は、もう <code>~/.ssh/config</code> に書いてありがち。</p>
+          <p class="e-so"><span class="e-so-mark">だから</span>そのまま読みます。Include・ProxyJump・IdentityFile なども。パスワードとパスフレーズは OS の保管庫（Mac はキーチェーン）に入れます。手元のマシンは SSH を通さずに、ホストの 1 つとして並びます。</p>
+        </div>
+        <figure class="e-win">
+          <figcaption class="e-win-bar"><span class="e-win-name">~/.ssh/config</span><span class="e-win-tag">画面のイメージ</span></figcaption>
+          <pre class="e-win-body">Include ~/.ssh/config.d/*
+
+Host mac-studio
+  HostName mac-studio.local
+
+Host build-linux
+  HostName build.example.com
+  ProxyJump bastion
+  IdentityFile ~/.ssh/id_ed25519
+<span class="e-c-mute">— 書き直さずに、このまま読む</span></pre>
+        </figure>
+      </li>
+      <li class="e-p">
+        <div class="e-p-text">
+          <p class="e-p-no">約束 04</p>
+          <p class="e-habit">agent を並べるほど、worktree は増えて残りがち。</p>
+          <p class="e-so"><span class="e-so-mark">だから</span>ホストの右クリックから、GitHub の Issue / PR か自分でつけた名前でタスク（worktree とブランチ）を作り、agent を始めます。終わったら「worktree を消す」。消す前に確かめます。</p>
+        </div>
+        <figure class="e-win">
+          <figcaption class="e-win-bar"><span class="e-win-name">task</span><span class="e-win-tag">画面のイメージ</span></figcaption>
+          <pre class="e-win-body">build-linux を右クリック → タスク
+  Issue #123 → worktree とブランチ
+  agent を始める
+  …
+worktree を消す。その前に確かめる
+  <span class="e-c-ok">✓</span> 未コミットの変更
+  <span class="e-c-ok">✓</span> push していないコミット
+  <span class="e-c-ok">✓</span> 動いているセッション</pre>
+        </figure>
+      </li>
+      <li class="e-p">
+        <div class="e-p-text">
+          <p class="e-p-no">約束 05</p>
+          <p class="e-habit">道具の支払いは、毎月の請求で積み上がりがち。</p>
+          <p class="e-so"><span class="e-so-mark">だから</span>¥1,500 の買い切りです。1 本のキーで、買った本人の Mac と Windows を何台でも。キーもメールアドレスもどこにも送らず、購入から 14 日以内なら返金します。</p>
+        </div>
+        <figure class="e-win">
+          <figcaption class="e-win-bar"><span class="e-win-name">license.txt</span></figcaption>
+          <dl class="e-win-body e-kv">
+            <div><dt>値段</dt><dd>¥1,500 / $9.99 · 買い切り</dd></div>
+            <div><dt>台数</dt><dd>本人の Mac と Windows、何台でも</dd></div>
+            <div><dt>試用</dt><dd>最初の起動から 14 日、キー不要</dd></div>
+            <div><dt>送信</dt><dd>キーもメールアドレスもどこにも送らない</dd></div>
+            <div><dt>返金</dt><dd>購入から 14 日以内なら返金</dd></div>
+          </dl>
+        </figure>
+      </li>
+    </ol>
+  </section>
+
+  <section class="e-mid" aria-label="試用">
+    <p class="e-punch">探しに行く前に、赤い頭が立っています。</p>
+    <div class="e-cta">
+      <a class="button" href="https://github.com/obutora/sshterm-desktop/releases/latest/download/SSHTermDesktop.dmg">Mac で無料で 14 日試す</a>
+      <p class="e-fine">登録・カード・キー不要 · その後 ¥1,500 買い切り</p>
+    </div>
+  </section>
+
+  <section class="e-sec" aria-labelledby="e-who-h">
+    <div class="e-head">
+      <p class="e-num">03 · Who makes it</p>
+      <h2 id="e-who-h">作っている人</h2>
+    </div>
+    <div class="e-who">
+      <div class="e-mono" aria-hidden="true">芳</div>
+      <div class="e-who-text">
+        <p class="e-who-name">Hagakun（芳賀邦彦）</p>
+        <p>個人で開発しています。iPhone・iPad・Android の SSH Term（スマホ版）の作者です。</p>
+        <p>デスクトップ版のリモートのホストへは、スマホ版と同じ stagent でつなぎます。stagent はホストで動く小さな補助プログラムで、初めてつなぐときにアプリが入れます。</p>
+        <a class="go" href="/app">スマホ版 SSH Term</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="e-sec" id="price" aria-labelledby="e-price-h">
+    <div class="e-head">
+      <p class="e-num">04 · 値段と試用</p>
+      <h2 id="e-price-h">14 日使ってから、決めてください。</h2>
+    </div>
+    <ol class="e-flow">
+      <li><span class="e-flow-no">1</span><span>DMG を開く。登録・メールアドレス・カードは要りません。</span></li>
+      <li><span class="e-flow-no">2</span><span>14 日、買ったときと同じ機能で使う。</span></li>
+      <li><span class="e-flow-no">3</span><span>続けるなら、¥1,500 でライセンスキーを買う。</span></li>
+    </ol>
+    <dl class="e-sheet">
+      <div>
+        <dt>値段</dt>
+        <dd><p class="e-price">¥1,500 <span>/</span> $9.99</p><p>買い切りです。サブスクはありません。ほかの通貨では、決済の画面にその国の通貨での値段が出ます（Stripe の Adaptive Pricing）。決済は Stripe の画面で行い、販売者は Link（Stripe の決済サービス）です。</p></dd>
+      </div>
+      <div>
+        <dt>試用</dt>
+        <dd><p>最初に起動してから 14 日は、ライセンスキーなしで使えます。使える機能は買ったときと同じです。</p><p>14 日を過ぎると、ライセンスキーを入れるまで使えません。ホストで動いている agent と保持シェルは止まりません。</p></dd>
+      </div>
+      <div>
+        <dt>ライセンスキー</dt>
+        <dd><p>1 本のキーで、買った本人の Mac と Windows の機械なら何台でも使えます。あとから出る Windows 版にも使えます。キーは購入が終わったページに出し、メールでも送ります。</p><p>キーはアプリの中で確かめ、キーもメールアドレスもどこにも送りません。起動のときに最大 1 日 1 回、このサイトから返金した購入の一覧を取り、あなたのキーがそこにあるかをアプリの中で確かめます。</p></dd>
+      </div>
+      <div>
+        <dt>返金</dt>
+        <dd><p>購入から 14 日以内なら返金します。買ったときのメールアドレスから申し出てください（<a href="/ja/contact">お問い合わせ</a>）。返金した購入のライセンスキーは、アプリが次に返金した購入の一覧を取ったときから使えなくなります。詳しくは<a href="/ja/terms">利用規約</a>に書いています。</p></dd>
+      </div>
+      <div>
+        <dt>対応する環境</dt>
+        <dd><p>Mac：macOS 13 以降（Apple Silicon と Intel）。このページからダウンロードし、そのあとは自動で更新されます。</p><p>Windows：Windows 11（x64）。近日、Microsoft Store から無料で入れられるようになります。</p><p>アプリの言語：English、日本語、한국어、简体中文、繁體中文、Tiếng Việt。</p></dd>
+      </div>
+    </dl>
+    <div class="e-actions">
+      <div class="e-cell">
+        <p class="e-label">Mac · macOS 13 以降 · 14 日の試用</p>
+        <a class="button" href="https://github.com/obutora/sshterm-desktop/releases/latest/download/SSHTermDesktop.dmg">Mac で無料で 14 日試す</a>
+      </div>
+      <div class="e-cell">
+        <p class="e-label">買い切り · ¥1,500 / $9.99</p>
+        <a class="button e-ink" href="https://buy.stripe.com/9B64gs7EN2YBeSQcIAffy02?locale=ja">ライセンスキーを買う</a>
+      </div>
+      <div class="e-cell">
+        <p class="e-label">Windows 11 · Microsoft Store</p>
+        <span class="button e-soon" aria-disabled="true">近日公開</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="e-sec" aria-labelledby="e-faq-h">
+    <div class="e-head">
+      <p class="e-num">05 · よくある質問</p>
+      <h2 id="e-faq-h">よくある質問</h2>
+    </div>
+    <div class="e-faq">
+      <details>
+        <summary>14 日の試用が終わったら、ホストの作業は止まりますか？</summary>
+        <p>止まりません。14 日を過ぎるとライセンスキーを入れるまでアプリは使えませんが、ホストで動いている agent と保持シェルはそのまま動き続けます。</p>
+      </details>
+      <details>
+        <summary>どの agent の状態が分かりますか？</summary>
+        <p>状態の一覧とチャット表示が分かるのは、Claude Code・Codex・Oh My Pi・Pi・Copilot CLI です（スマホ版と同じ 5 つ）。ほかの CLI も、端末ではそのまま動きます。</p>
+      </details>
+      <details>
+        <summary>スマホ版の SSH Term を買っています。キーは要りますか？</summary>
+        <p>要ります。スマホ版（iPhone・iPad・Android）の購入とデスクトップ版はつながっていません。</p>
+      </details>
+      <details>
+        <summary>Windows ではいつ使えますか？</summary>
+        <p>Windows 11（x64）は、近日 Microsoft Store から無料で入れられるようになります。Mac で買ったライセンスキーは、Windows 版にもそのまま使えます。</p>
+      </details>
+      <details>
+        <summary>ライセンスキーをなくしました。</summary>
+        <p><a href="/ja/desktop/resend">送り直しのページ</a>から送り直せます。</p>
+      </details>
+    </div>
+  </section>
+
+  <div class="e-sticky">
+    <a class="button" href="https://github.com/obutora/sshterm-desktop/releases/latest/download/SSHTermDesktop.dmg">Mac で無料で 14 日試す</a>
+    <span class="e-sticky-note">キー不要 · ¥1,500 買い切り</span>
+  </div>
+</main>
+
+<section class="e-final" aria-labelledby="e-final-h">
+  <h2 id="e-final-h">待たせている agent を、<br>積み木で見つける。</h2>
+  <div class="e-cta">
+    <a class="button" href="https://github.com/obutora/sshterm-desktop/releases/latest/download/SSHTermDesktop.dmg">Mac で無料で 14 日試す</a>
+    <p class="e-fine">登録・カード・キー不要 · その後 ¥1,500 買い切り · 購入から 14 日以内なら返金</p>
+  </div>
+</section>
+
+<div class="foot">
+  <a href="/ja/terms">利用規約</a>
+  <a href="/ja/privacy">プライバシーポリシー</a>
+  <a href="/ja/contact">お問い合わせ</a>
+  <a href="https://iru-yo.com/tokushoho/">特定商取引法に基づく表記</a>
+  <span class="coord">sshterm.iru-yo.com/ja/desktop</span>
+</div>
+</div>
+</body>
+</html>
