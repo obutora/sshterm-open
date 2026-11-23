@@ -213,15 +213,18 @@ policy link to it from their foot.
 ## The SSH Term Desktop sales page
 
 `https://sshterm.iru-yo.com/desktop` (English) and `/ja/desktop` (Japanese)
-sell SSH Term Desktop, the Mac and Windows app. They speak first to people
-who already use the mobile app: the agents and kept shells they start from
-the phone run in stagent on the host, and SSH Term Desktop opens the same
-sessions on the Mac. The first screen shows one Claude Code session on a Mac
-window and on a phone; then the phone-then-Mac moments, how both apps reach
-the same stagent, getting started, the price (¥1,500 / $9.99, other
-currencies by Stripe's Adaptive Pricing), the 14-day trial, the license key
-(any number of the buyer's own Macs and Windows PCs, separate from the mobile
-app), refunds and questions.
+sell SSH Term Desktop, the Mac and Windows app. They speak to the broad
+majority of developers running Claude Code, Codex, and other coding agents
+(whether standalone on Mac or alongside the mobile app): monitor local and
+remote agents in one window with OS approval notifications, chat view, split
+terminal panes, built-in local/SFTP filer, and seamless phone-to-Mac session
+continuity via stagent on the host. The page walks through a scannable
+capability strip, hero with live Mac+phone visual, 4-pillar overview, 5
+problem->benefit reasons with CSS diagrams, mid-page CTA, 4 Before/After use
+cases, full capability checklist, 5-step onboarding flow, price & risk-free
+guarantees (¥1,500 / $9.99 one-time, 14-day trial, 14-day refunds, one key for
+any number of the buyer's own Macs and Windows PCs, separate from the mobile
+app), FAQ, closing CTA, and a mobile floating CTA bar.
 
 Plain HTML with no script, on their own `sales.css` (the app's dark terminal
 ground, one mint for every button). The phone screens in `desktop/img/` are

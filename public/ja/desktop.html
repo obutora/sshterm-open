@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="dark">
-<title>SSH Term Desktop｜スマホの agent に、Mac からそのまま</title>
-<meta name="description" content="SSH Term のデスクトップ版。スマホから起動した Claude Code や保持シェルに、Mac からそのまま入れます。14 日間は無料、続けるなら ¥1,500 の買い切り。">
+<title>SSH Term Desktop｜Claude Code・Codex の承認待ちを、1画面でまとめて見守る</title>
+<meta name="description" content="手元のMacもリモートサーバーも、動くAIエージェントを1画面で見守るデスクトップ版クライアント。承認待ちのOS通知、チャット表示、端末ペイン分割、内蔵ファイラ、スマホ版と同じセッションの継続まで。14日間無料、続けるなら買い切り¥1,500。">
 <link rel="icon" href="/icon.png">
 <link rel="alternate" hreflang="en" href="https://sshterm.iru-yo.com/desktop">
 <link rel="stylesheet" href="/sales.css">
@@ -15,41 +15,74 @@
 <header class="top">
   <div class="wrap">
     <a class="brand" href="/ja/desktop"><img src="/desktop/img/app-icon.png" alt="" width="30" height="30">SSH Term Desktop</a>
-    <nav>
-      <a href="#how">しくみ</a>
-      <a href="#price">料金</a>
-      <a href="/desktop" hreflang="en" lang="en">English</a>
-      <a class="btn btn-sm" href="https://github.com/obutora/sshterm-desktop/releases/latest/download/SSHTermDesktop.dmg">無料で試す</a>
+    <nav aria-label="ページ内ナビゲーション">
+      <a class="nav-link" href="#what">特徴</a>
+      <a class="nav-link" href="#reasons">5つの理由</a>
+      <a class="nav-link" href="#scenes">活用シーン</a>
+      <a class="nav-link" href="#features">できること</a>
+      <a class="nav-link" href="#flow">始め方</a>
+      <a class="nav-link" href="#price">料金</a>
+      <a class="nav-link" href="#faq">FAQ</a>
+      <a class="nav-lang" href="/desktop" hreflang="en" lang="en">English</a>
+      <a class="btn btn-sm" href="https://github.com/obutora/sshterm-desktop/releases/latest/download/SSHTermDesktop.dmg">14日間 無料で試す</a>
     </nav>
   </div>
 </header>
+
+<div class="cap-strip" aria-label="主な対応範囲">
+  <div class="wrap">
+    <ul class="cap-strip-list">
+      <li>#Claude Code</li>
+      <li>#Codex</li>
+      <li>#承認待ちOS通知</li>
+      <li>#複数ホスト一括監視</li>
+      <li>#チャット表示</li>
+      <li>#端末ペイン分割</li>
+      <li>#内蔵ファイラ</li>
+      <li class="is-hi">#14日間無料 → 買い切り¥1,500</li>
+    </ul>
+  </div>
+</div>
 
 <main>
 
   <section class="hero">
     <div class="wrap">
       <div class="hero-copy">
-        <p class="eyebrow">SSH Term（スマホ版）を使っている方へ</p>
-        <h1><span class="nb">スマホの agent に、</span><span class="nb">Mac からそのまま入れる。</span></h1>
-        <p class="lead">スマホから起動した Claude Code や保持シェルは、ホストで動き続けています。SSH Term Desktop で開けば、同じセッションがそのまま並び、続きを打てます。</p>
-        <div class="cta">
-          <a class="btn" href="https://github.com/obutora/sshterm-desktop/releases/latest/download/SSHTermDesktop.dmg">Mac で 14 日間 無料で試す</a>
-          <p class="cta-note">macOS 13 以降 · 登録もカードも不要<br>続けるなら <b>¥1,500</b>（買い切り）· Windows は近日</p>
+        <p class="fv-callout">＼ Claude Code・Codex を使うすべての開発者へ ／</p>
+        <h1><span class="nb">AI の承認待ち、</span><span class="nb">まだウィンドウを探してる？</span></h1>
+        <div class="fv-bars">
+          <span class="fv-bar">手元の Mac もリモートも <b>1 画面で一覧・即通知</b></span>
+          <span class="fv-bar">アプリを閉じても止まらない · <b>買い切り ¥1,500</b></span>
         </div>
+        <p class="lead">Claude Code や Codex を複数動かしていると、「どれが承認待ちか」「どこまで進んだか」を見失いがちです。SSH Term Desktop は、手が要る agent だけを先頭にまとめ、チャット表示と OS 通知で迷わず次へ進められるデスクトップ版クライアントです。</p>
+        <div class="cta">
+          <a class="btn btn-primary" href="https://github.com/obutora/sshterm-desktop/releases/latest/download/SSHTermDesktop.dmg">
+            <span class="btn-txt"><small>登録・カード不要 · 自動課金なし</small>Mac で 14 日間 無料で試す</span>
+            <span class="btn-arrow" aria-hidden="true">→</span>
+          </a>
+          <a class="btn btn-ghost" href="#price">料金と返金保証を見る</a>
+        </div>
+        <ul class="trust-pills">
+          <li>macOS 13 以降（Apple Silicon / Intel）</li>
+          <li>スマホ版なしでも単体で使える</li>
+          <li>続けるなら ¥1,500 買い切り（月額 0 円）</li>
+        </ul>
       </div>
 
-      <div class="devices" role="img" aria-label="Mac とスマホで、同じ Claude Code のセッションを開いているところ">
+      <div class="devices" role="img" aria-label="Mac の SSH Term Desktop とスマホ版 SSH Term で、同じ Claude Code のセッションを開いているイメージ">
         <div class="device-mac">
           <p class="device-label"><b>Mac</b> · SSH Term Desktop</p>
           <div class="mac">
-            <div class="mac-bar"><i></i><i></i><i></i><span>SSH Term Desktop</span></div>
+            <div class="mac-bar"><i></i><i></i><i></i><span>SSH Term Desktop</span><span class="mac-toast">通知: mobile が承認待ち</span></div>
             <div class="mac-body">
               <div class="mac-side">
-                <p class="mac-host">mac-studio</p>
+                <p class="mac-host">手元のマシン</p>
+                <p class="mac-row"><span class="dot wait"></span>mobile<small class="wait">承認待ち 2分</small></p>
                 <p class="mac-row is-on"><span class="dot run"></span>web-app<small>作業中</small></p>
-                <p class="mac-row"><span class="dot wait"></span>mobile<small class="wait">承認待ち</small></p>
-                <p class="mac-host">build-linux</p>
+                <p class="mac-host">build-linux（SSH）</p>
                 <p class="mac-row"><span class="dot run"></span>infra<small>作業中</small></p>
+                <p class="mac-foot"><span>Claude 5時間</span><b>42%</b></p>
               </div>
               <div class="mac-pane">
                 <p class="box">✻ Welcome to Claude Code!<br><span class="dim">cwd: ~/dev/web-app</span></p>
@@ -66,44 +99,297 @@
             </div>
           </div>
         </div>
-        <p class="same" aria-hidden="true">同じセッション</p>
+        <p class="same" aria-hidden="true">スマホとも同じセッション</p>
         <div class="device-phone">
-          <p class="device-label"><b>スマホ</b> · SSH Term</p>
+          <p class="device-label"><b>スマホ版</b> · SSH Term</p>
           <div class="phone">
             <img src="/desktop/img/phone-claude-ja.webp" width="585" height="1266" alt="">
           </div>
         </div>
       </div>
-      <p class="shot-note">画面はイメージです。</p>
+      <p class="shot-note">画面はイメージです（スマホの画面はスマホ版の実際の表示をもとに作成）。</p>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section section-alt" id="what">
     <div class="wrap">
-      <div class="section-head">
-        <h2>外ではスマホで、席に戻ったら Mac で。</h2>
-        <p class="lead">セッションを移す作業はありません。どちらも、ホストで動いている同じ agent を見ています。</p>
+      <div class="section-head section-head-center">
+        <p class="eyebrow eyebrow-center">WHAT IS SSH TERM DESKTOP</p>
+        <h2>SSH Term Desktop とは？</h2>
+        <div class="def-bars">
+          <span class="def-bar">複数の AI エージェントと端末を</span>
+          <span class="def-bar"><b>「見守る・返す・確かめる」</b></span>
+          <span class="def-bar">開発者専用のコマンドセンターです</span>
+        </div>
       </div>
-      <ol class="scenes">
-        <li class="scene">
-          <figure><img src="/desktop/img/phone-claude-top-ja.webp" width="585" height="700" alt="スマホの SSH Term で、Claude Code に「決済 API のテストを書いて、通るまで直して」と頼んだところ" loading="lazy"></figure>
-          <div class="scene-text">
-            <p class="scene-when">外出先で</p>
-            <h3>スマホから claude に頼む</h3>
-            <p>いつもどおり SSH Term でホストに入って、指示を出します。日本語の長い指示もそのまま打てます。</p>
+
+      <div class="pillars">
+        <article class="pillar">
+          <span class="pillar-tag">#01 見守る</span>
+          <h3>全ホストを 1 画面に集約</h3>
+          <p>手元のマシンもリモートサーバーもまとめて一覧表示。「承認待ち」「入力待ち」など手が要る agent が常にいちばん上に並びます。</p>
+          <p class="pillar-foot">手元は SSH 不要 · リモートは SSH</p>
+        </article>
+        <article class="pillar">
+          <span class="pillar-tag">#02 すぐ返す</span>
+          <h3>OS 通知＆チャット表示</h3>
+          <p>ウィンドウを閉じていても承認待ちや完了を OS 通知でお知らせ。チャット表示からワンクリックで承認・返信できます。</p>
+          <p class="pillar-foot">スラッシュコマンド補完に対応</p>
+        </article>
+        <article class="pillar">
+          <span class="pillar-tag">#03 確かめる</span>
+          <h3>ペイン分割＆内蔵ファイラ</h3>
+          <p>端末を右や下へ好きな数に割って作業可能。AI が書いたコードも内蔵ファイラとコードエディタでその場で確認・編集できます。</p>
+          <p class="pillar-foot">手元も SFTP リモートも対応</p>
+        </article>
+        <article class="pillar">
+          <span class="pillar-tag">#04 引き継ぐ</span>
+          <h3>外ではスマホ、席では Mac</h3>
+          <p>agent と保持シェルはホスト側で動き続けるため、アプリを閉じても止まりません。スマホ版と同じセッションの続きをそのまま開けます。</p>
+          <p class="pillar-foot">スマホ版なしでも単体利用 OK</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="reasons">
+    <div class="wrap">
+      <div class="section-head section-head-center">
+        <p class="eyebrow eyebrow-center">WHY SSH TERM DESKTOP</p>
+        <h2>なぜ普通のターミナルより、<br>開発の手が止まらないのか？</h2>
+        <div class="five-badge">
+          <p class="five-badge-title">選ばれる <strong>5</strong> つの理由</p>
+          <div class="five-jumps" aria-label="5つの理由へ移動">
+            <a href="#reason-01">01</a>
+            <a href="#reason-02">02</a>
+            <a href="#reason-03">03</a>
+            <a href="#reason-04">04</a>
+            <a href="#reason-05">05</a>
           </div>
-        </li>
-        <li class="scene">
-          <figure><img src="/desktop/img/phone-host-card-ja.webp" width="585" height="515" alt="スマホの SSH Term のホスト mac-studio のカード。web-app が承認待ち 2 分、mobile が作業中" loading="lazy"></figure>
-          <div class="scene-text">
-            <p class="scene-when">移動中</p>
-            <h3>アプリを閉じても、agent は止まらない</h3>
-            <p>agent はスマホではなくホストで動いています。承認や入力を待つと通知が届き、スマホのホームにも「承認待ち」が出ます。</p>
+        </div>
+      </div>
+
+      <div class="reasons">
+        <article class="reason" id="reason-01">
+          <div>
+            <p class="reason-no"><small>REASON</small><b>01</b></p>
+            <div class="reason-problem">
+              <span class="reason-problem-label">よくあるストレス</span>
+              <p>ターミナルやエディタが何枚も開いていて、どの AI が承認待ちか気づけない</p>
+            </div>
+            <div class="reason-arrow" aria-hidden="true">
+              <span class="reason-arrow-line">↓</span>
+              <span class="reason-so">だから</span>
+            </div>
+            <h3 class="reason-gain">「手が要る agent」だけを先頭に集め、<b>OS 通知で即気づける</b></h3>
+            <p class="reason-body">承認待ち・入力待ち・質問・作業中をホストをまたいで整理し、すぐ対応すべきものから順に表示します。別アプリで作業中やウィンドウを閉じている間も OS の通知が届くため、AI が止まったまま放置してしまう無駄な待ち時間をなくせます。使用量の上限の枠も足元でひと目です。</p>
           </div>
-        </li>
-        <li class="scene">
-          <figure>
-            <div class="mac" role="img" aria-label="SSH Term Desktop の一覧。mac-studio の web-app が承認待ち 2 分、mobile と build-linux の infra が作業中">
+          <div class="koma" role="img" aria-label="承認待ち通知と優先順リスト、Claude 5時間の上限の枠の図解">
+            <div class="koma-bar"><i></i><i></i><i></i><span>agent_monitor.view</span></div>
+            <div class="koma-body">
+              <div class="k-notif"><span class="k-notif-badge">OS通知</span><span>mac-studio / web-app が承認を待っています</span></div>
+              <div class="k-list">
+                <div class="k-item is-top"><span class="dot wait"></span><span>web-app（mac-studio）</span><small class="wait">承認待ち 2分</small></div>
+                <div class="k-item"><span class="dot run"></span><span>mobile（手元のマシン）</span><small class="run">作業中</small></div>
+                <div class="k-item"><span class="dot"></span><span>infra（build-linux）</span><small>完了</small></div>
+              </div>
+              <div class="k-meter">
+                <span>Claude 5時間</span>
+                <span class="k-bar"><i></i></span>
+                <span>42%</span>
+              </div>
+            </div>
+            <p class="koma-note">※画面構成のイメージです</p>
+          </div>
+        </article>
+
+        <article class="reason" id="reason-02">
+          <div>
+            <p class="reason-no"><small>REASON</small><b>02</b></p>
+            <div class="reason-problem">
+              <span class="reason-problem-label">よくあるストレス</span>
+              <p>長いログの中から確認メッセージを探し、別エディタでファイルを開き直すのが面倒</p>
+            </div>
+            <div class="reason-arrow" aria-hidden="true">
+              <span class="reason-arrow-line">↓</span>
+              <span class="reason-so">だから</span>
+            </div>
+            <h3 class="reason-gain"><b>チャット表示</b>で迷わず承認、<b>内蔵ファイラ</b>でその場でコード確認</h3>
+            <p class="reason-body">承認や返信は読みやすいチャット表示から。端末をそのまま触りたいときはペインに割って並べられます。さらに手元のマシンもリモートサーバー（SFTP）も、内蔵ファイラとコードエディタでその場で確認・保存でき、端末に出たファイルパスからもすぐ開けます。</p>
+          </div>
+          <div class="koma" role="img" aria-label="左にチャット表示での承認ボタン、右に内蔵ファイラとコード表示が並ぶ図解">
+            <div class="koma-bar"><i></i><i></i><i></i><span>chat_and_filer.view</span></div>
+            <div class="koma-body">
+              <div class="k-split">
+                <div class="k-pane">
+                  <p class="k-pane-hd">チャット表示</p>
+                  <p class="k-bubble">npm test -- payment を実行してよいですか？</p>
+                  <div class="k-choices">
+                    <span class="k-choice is-ok">1. 許可する</span>
+                    <span class="k-choice">2. 断る</span>
+                  </div>
+                </div>
+                <div class="k-pane">
+                  <p class="k-pane-hd">内蔵ファイラ（SFTP）</p>
+                  <ul class="k-tree">
+                    <li>▾ src/payment/</li>
+                    <li class="is-cur">  api.ts</li>
+                    <li>  webhook.ts</li>
+                  </ul>
+                  <p class="k-code">+ export function verify()</p>
+                </div>
+              </div>
+            </div>
+            <p class="koma-note">※画面構成のイメージです</p>
+          </div>
+        </article>
+
+        <article class="reason" id="reason-03">
+          <div>
+            <p class="reason-no"><small>REASON</small><b>03</b></p>
+            <div class="reason-problem">
+              <span class="reason-problem-label">よくあるストレス</span>
+              <p>席を立ったりアプリを閉じたりするたびに、AI との作業の流れが途切れてしまう</p>
+            </div>
+            <div class="reason-arrow" aria-hidden="true">
+              <span class="reason-arrow-line">↓</span>
+              <span class="reason-so">だから</span>
+            </div>
+            <h3 class="reason-gain">ホスト側で動き続けるから、<b>外ではスマホ・席では Mac で同じ続きを打てる</b></h3>
+            <p class="reason-body">agent と保持シェルは、アプリの中ではなくホスト側（小さな補助プログラム stagent）で動き続けます。外出先でスマホ版 SSH Term から頼んだ作業を、席に戻って Mac からそのまま引き継ぐことも、逆も自在。スマホと Mac で同時に開いてどちらから返事を送っても同じ agent に届きます。</p>
+          </div>
+          <div class="koma" role="img" aria-label="スマホ版 SSH Term と Mac の SSH Term Desktop が、ホストの同じセッションに SSH でつながる図">
+            <div class="koma-bar"><i></i><i></i><i></i><span>session_bridge.net</span></div>
+            <div class="koma-body">
+              <div class="k-bridge">
+                <div class="k-node">
+                  <p class="k-node-k">外出先</p>
+                  <p class="k-node-v">スマホ版</p>
+                </div>
+                <p class="k-wire">← SSH →</p>
+                <div class="k-node k-node-host">
+                  <p class="k-node-k">ホスト · mac-studio</p>
+                  <p class="k-node-v">stagent（ホスト常駐）</p>
+                  <ul>
+                    <li><span class="dot wait"></span>web-app claude</li>
+                    <li><span class="dot run"></span>mobile codex</li>
+                    <li><span class="dot"></span>保持シェル</li>
+                  </ul>
+                </div>
+                <p class="k-wire">← SSH →</p>
+                <div class="k-node">
+                  <p class="k-node-k">デスク</p>
+                  <p class="k-node-v">Desktop</p>
+                </div>
+              </div>
+            </div>
+            <p class="koma-note">※手元のマシンに導入すれば SSH なしで直接表示</p>
+          </div>
+        </article>
+
+        <article class="reason" id="reason-04">
+          <div>
+            <p class="reason-no"><small>REASON</small><b>04</b></p>
+            <div class="reason-problem">
+              <span class="reason-problem-label">よくあるストレス</span>
+              <p>仕事の大事なコードや SSH 鍵を扱うのに、外部クラウド経由のツールは使いづらい</p>
+            </div>
+            <div class="reason-arrow" aria-hidden="true">
+              <span class="reason-arrow-line">↓</span>
+              <span class="reason-so">だから</span>
+            </div>
+            <h3 class="reason-gain"><b>クラウド中継なし・SSH 直結</b>で、仕事のリポジトリでも安心</h3>
+            <p class="reason-body">リモートホストとの通り道は標準の SSH だけ。間にクラウドサーバーを一切挟まないため、コードや会話が外部に預けられることはありません。パスワードやパスフレーズは macOS キーチェーン等の OS 保管庫に保存され、ライセンスキーもアプリ内で検証します。</p>
+          </div>
+          <div class="koma" role="img" aria-label="クラウド中継なし、アカウント登録不要、OSキーチェーン保管、アプリ内キー検証のチェックリスト">
+            <div class="koma-bar"><i></i><i></i><i></i><span>security_check.log</span></div>
+            <div class="koma-body">
+              <ul class="k-checks">
+                <li>クラウド中継サーバーなし（SSH 直結）</li>
+                <li>アカウント登録・ログイン不要</li>
+                <li>パスワード等は OS の保管庫で管理</li>
+                <li>キーもメールアドレスも外部へ送信なし</li>
+              </ul>
+              <span class="k-stamp">DIRECT SSH ONLY</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="reason" id="reason-05">
+          <div>
+            <p class="reason-no"><small>REASON</small><b>05</b></p>
+            <div class="reason-problem">
+              <span class="reason-problem-label">よくあるストレス</span>
+              <p>AI の利用料だけで毎月固定費がかかるのに、管理アプリまで月額課金を増やしたくない</p>
+            </div>
+            <div class="reason-arrow" aria-hidden="true">
+              <span class="reason-arrow-line">↓</span>
+              <span class="reason-so">だから</span>
+            </div>
+            <h3 class="reason-gain">14 日間すべて無料で試せて、続けるなら <b>¥1,500 の買い切りだけ</b></h3>
+            <p class="reason-body">最初の 14 日間は登録もカードも不要で、購入後とまったく同じ全機能を試せます。気に入ったときだけ ¥1,500 を一度払えば完了。サブスクは一切なく、1 本のライセンスキーでご自身の Mac と今後出る Windows PC を何台でも使えます。</p>
+          </div>
+          <div class="koma" role="img" aria-label="月額サブスクと買い切り¥1,500の比較図">
+            <div class="koma-bar"><i></i><i></i><i></i><span>pricing_model.csv</span></div>
+            <div class="koma-body">
+              <div class="k-compare">
+                <div class="k-row-cmp">
+                  <span>一般的な月額ツール</span>
+                  <b>毎月ずっと課金</b>
+                </div>
+                <div class="k-row-cmp is-ours">
+                  <span>SSH Term Desktop</span>
+                  <b>14日無料 → ¥1,500 買い切り</b>
+                </div>
+              </div>
+              <div class="k-sub-tags">
+                <span>月額 ¥0</span>
+                <span>自動課金なし</span>
+                <span>自分の PC 何台でも</span>
+                <span>14日以内返金保証</span>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="climax" aria-label="無料試用の案内">
+    <div class="wrap climax-box">
+      <p class="eyebrow eyebrow-center">START FREE TODAY</p>
+      <h2>AI と並走する毎日に、<br><span class="mark">専用の見守り画面</span>を。</h2>
+      <p class="lead">まずは今動かしている Claude Code や Codex を、14 日間タダで開いてみてください。登録もカードも不要、3 分でいつもの環境につながります。</p>
+      <div class="cta cta-center">
+        <a class="btn btn-primary" href="https://github.com/obutora/sshterm-desktop/releases/latest/download/SSHTermDesktop.dmg">
+          <span class="btn-txt"><small>登録・カード不要 · 自動課金なし</small>Mac で 14 日間 無料で試す</span>
+          <span class="btn-arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+      <ul class="trust-pills trust-pills-center">
+        <li>全機能アンロックで 14 日間無料</li>
+        <li>試用が終わってもホストの AI は止まらない</li>
+        <li>購入後も 14 日以内は返金対応</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="scenes">
+    <div class="wrap">
+      <div class="section-head section-head-center">
+        <p class="eyebrow eyebrow-center">USE CASES</p>
+        <h2>こんな開発の 1 日が変わります</h2>
+        <p class="lead">Mac 単体で開発する方も、スマホ版 SSH Term と組み合わせる方も。よくある 4 つの場面での変化をまとめました。</p>
+      </div>
+
+      <div class="cases">
+        <article class="case-card">
+          <div class="case-top">
+            <span class="case-no">CASE 01</span>
+            <span class="case-who">並列で AI を回すとき</span>
+          </div>
+          <figure class="case-media">
+            <div class="mac" role="img" aria-label="SSH Term Desktop の一覧。承認待ちの web-app が先頭に表示されているイメージ">
               <div class="mac-bar"><i></i><i></i><i></i><span>SSH Term Desktop</span></div>
               <div class="mac-side">
                 <p class="mac-host">mac-studio</p>
@@ -114,113 +400,231 @@
               </div>
             </div>
           </figure>
-          <div class="scene-text">
-            <p class="scene-when">席に戻ったら</p>
-            <h3>Mac の一覧に、同じ agent が並んでいる</h3>
-            <p>ホストをまとめた一覧に、手が要るものから順に並びます。チャット表示で承認して、端末はペインに割って並べて、続きを進めます。ウィンドウを閉じても、承認待ちや完了は OS の通知で届きます。</p>
+          <h3 class="case-outcome"><span>承認待ちで 30 分止まる事故がなくなる</span></h3>
+          <div class="case-ba">
+            <p class="case-before"><b>BEFORE</b>複数のターミナルを順番に覗かないと気づけず、別作業をしている間に AI が止まっていた。</p>
+            <p class="case-after"><b>AFTER</b>手が要る agent が一覧の一番上に並び、OS 通知から即座にチャット表示で承認して先へ進められる。</p>
           </div>
-        </li>
-      </ol>
-      <p class="scenes-after">逆も同じです。Mac で走らせたまま席を立てば、続きはスマホから。</p>
+        </article>
+
+        <article class="case-card">
+          <div class="case-top">
+            <span class="case-no">CASE 02</span>
+            <span class="case-who">外で指示 → 席に戻ったとき</span>
+          </div>
+          <figure class="case-media">
+            <img src="/desktop/img/phone-claude-top-ja.webp" width="585" height="700" alt="スマホの SSH Term で、Claude Code に決済 API のテスト作成を頼んでいる画面" loading="lazy">
+          </figure>
+          <h3 class="case-outcome"><span>外出先で頼んだ作業の続きを、そのまま Mac で</span></h3>
+          <div class="case-ba">
+            <p class="case-before"><b>BEFORE</b>出先でスマホから始めた作業を、席に戻ってから Mac 側で探し直したりやり直したりしていた。</p>
+            <p class="case-after"><b>AFTER</b>ホスト側で動き続けているため、Mac を開けば同じセッションが並んでいる。逆（Mac → スマホ）もシームレス。</p>
+          </div>
+        </article>
+
+        <article class="case-card">
+          <div class="case-top">
+            <span class="case-no">CASE 03</span>
+            <span class="case-who">リモートサーバーの編集</span>
+          </div>
+          <figure class="case-media">
+            <div class="mac" role="img" aria-label="端末のファイルリンクから内蔵 SFTP ファイラとコードエディタを開くイメージ">
+              <div class="mac-bar"><i></i><i></i><i></i><span>build-linux · ファイラ</span></div>
+              <div class="mac-pane">
+                <p><span class="ok">●</span> Updated src/payment/api.ts:42</p>
+                <p class="dim">  → クリックで内蔵ファイラ＆エディタへ</p>
+                <p>&nbsp;</p>
+                <p class="box">src/payment/api.ts（SFTP · 保存可）<br><span class="ok">+ 42: return verifySignature(payload);</span></p>
+                <p class="dim">Cmd+S でリモートへそのまま保存</p>
+              </div>
+            </div>
+          </figure>
+          <h3 class="case-outcome"><span>承認からコード確認・微調整まで 1 ウィンドウで完結</span></h3>
+          <div class="case-ba">
+            <p class="case-before"><b>BEFORE</b>AI が直したリモート上のファイルを確認するのに、別エディタや SFTP ソフトを毎回立ち上げていた。</p>
+            <p class="case-after"><b>AFTER</b>端末に出たファイルリンクから内蔵ファイラで即開いて確認・編集。そのまま次の指示を出せる。</p>
+          </div>
+        </article>
+
+        <article class="case-card">
+          <div class="case-top">
+            <span class="case-no">CASE 04</span>
+            <span class="case-who">既存環境からの取り込み</span>
+          </div>
+          <figure class="case-media">
+            <img src="/desktop/img/phone-host-card-ja.webp" width="585" height="515" alt="スマホ版 SSH Term のホストカード。web-app が承認待ち、mobile が作業中" loading="lazy">
+          </figure>
+          <h3 class="case-outcome"><span><code>~/.ssh/config</code> もスマホ版の接続先もすぐ使える</span></h3>
+          <div class="case-ba">
+            <p class="case-before"><b>BEFORE</b>新しいツールを入れるたびに、たくさんのサーバー設定や鍵をゼロから手入力するのが面倒だった。</p>
+            <p class="case-after"><b>AFTER</b><code>~/.ssh/config</code> を自動読込。スマホ版からはサーバーを通さない暗号化 QR で取り込め、Orca からの取り込みにも対応。</p>
+          </div>
+        </article>
+      </div>
     </div>
   </section>
 
-  <section class="section section-alt" id="how">
+  <section class="section section-grid" id="features">
     <div class="wrap">
-      <div class="section-head">
-        <h2>同じセッションに入れるのは、agent がホストで動いているから。</h2>
-        <p class="lead">agent と保持シェルは、スマホでも Mac でもなく、ホストの stagent（SSH Term が入れる小さな補助プログラム）の中で動いています。デスクトップ版は、スマホ版が入れた stagent にそのままつなぎます。</p>
+      <div class="section-head section-head-center">
+        <p class="eyebrow eyebrow-center">ALL CAPABILITIES</p>
+        <h2>これ 1 つで、ここまでカバー</h2>
+        <p class="lead">試用中も買い切り後も、すべての機能を制限なく使えます。</p>
       </div>
-      <figure class="how-figure" role="img" aria-label="スマホと Mac が、ホストの stagent にある同じ agent につながる図">
-        <div class="node">
-          <p class="node-name">スマホ</p>
-          <p class="node-app">SSH Term</p>
-        </div>
-        <p class="link">SSH</p>
-        <div class="node node-host">
-          <p class="node-name">ホスト · mac-studio</p>
-          <p class="node-app">stagent</p>
-          <ul>
-            <li><span class="dot wait"></span>web-app　claude</li>
-            <li><span class="dot run"></span>mobile　codex</li>
-            <li><span class="dot"></span>保持シェル</li>
-          </ul>
-        </div>
-        <p class="link">SSH</p>
-        <div class="node">
-          <p class="node-name">Mac</p>
-          <p class="node-app">SSH Term Desktop</p>
-        </div>
-      </figure>
-      <ul class="checks">
-        <li>スマホと Mac で同時に開いても大丈夫です。どちらから返事を送っても、同じ agent に届きます。</li>
-        <li>通り道は SSH だけです。間にクラウドは挟みません。</li>
-        <li>スマホから入っていたその Mac にデスクトップ版を入れたなら、SSH なしで「手元のマシン」として同じ agent が並びます。</li>
+      <ul class="caps-list">
+        <li>手元のマシンの agent 監視（SSH 不要）</li>
+        <li>リモートホスト一括監視（SSH）</li>
+        <li>Claude Code / Codex ほか対応</li>
+        <li>承認待ち・入力待ち・完了の OS 通知</li>
+        <li>チャット表示（スラッシュコマンド補完）</li>
+        <li>端末ペインの自由な分割・並べ替え</li>
+        <li>保持シェル（アプリを閉じても継続）</li>
+        <li>内蔵ファイラ＆コードエディタ（手元 / SFTP）</li>
+        <li>端末からのファイルリンク移動</li>
+        <li>使用量・上限の枠（5時間 / 週）チェック</li>
+        <li>スマホ版 SSH Term と同じセッションを共有</li>
+        <li>スマホ版から暗号化 QR 取り込み（中継なし）</li>
+        <li>Orca から取り込み</li>
+        <li>~/.ssh/config 自動読込</li>
+        <li>OS キーチェーン / 資格情報マネージャー保管</li>
+        <li>カスタムテーマ・背景画像・ウィンドウ透過</li>
+        <li>6 言語対応（日・英・韓・中・越）</li>
+        <li>macOS 13+（Apple Silicon / Intel）</li>
+        <li class="is-soon">Windows 11（近日公開 · 同じキーで利用可）</li>
       </ul>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section" id="flow">
     <div class="wrap">
-      <div class="section-head">
-        <h2>始めるまで 3 分</h2>
+      <div class="section-head section-head-center">
+        <p class="eyebrow eyebrow-center">FLOW</p>
+        <h2>ダウンロードから定着までの流れ</h2>
+        <p class="lead">会員登録もクレジットカードも要りません。いま動かしている環境のまま 3 分で始められます。</p>
       </div>
-      <ol class="steps">
-        <li><h3>DMG を開いて、アプリケーションに入れる</h3><p>登録もメールアドレスも要りません。macOS 13 以降（Apple Silicon と Intel）。</p></li>
-        <li><h3>ホストを足す</h3><p><code>~/.ssh/config</code> のホストは最初から並んでいます。ほかは「＋ 接続を足す」から。</p></li>
-        <li><h3>「接続する」を押す</h3><p>スマホで動かしている agent が、一覧に出てきます。</p></li>
-      </ol>
+
+      <div class="flow">
+        <ol class="flow-steps">
+          <li class="flow-step">
+            <span class="flow-no">01</span>
+            <div class="flow-card">
+              <h3>DMG をダウンロード（無料）</h3>
+              <p>このページのボタンから Mac 用 DMG をそのまま取得。メールアドレスの登録やアカウント作成は一切ありません。</p>
+            </div>
+          </li>
+          <li class="flow-step">
+            <span class="flow-no">02</span>
+            <div class="flow-card">
+              <h3>アプリケーションに入れて起動</h3>
+              <p>手元のマシンの agent は SSH なしで自動検出されます。<code>~/.ssh/config</code> のリモートホストも最初から並び、「スマホ版から取り込む」「Orca から取り込む」も利用できます。</p>
+            </div>
+          </li>
+          <li class="flow-step">
+            <span class="flow-no">03</span>
+            <div class="flow-card">
+              <h3>14 日間、すべての機能を無料で試す</h3>
+              <p>機能制限なしで購入後と同じ体験をじっくりお試しください。14 日を過ぎても自動で課金されることはなく、ホストで動いている agent や保持シェルも止まりません。</p>
+            </div>
+          </li>
+          <li class="flow-step">
+            <span class="flow-no">04</span>
+            <div class="flow-card">
+              <h3>気に入ったら ¥1,500 の買い切りで購入</h3>
+              <p>続けたいと感じたときだけ Stripe の決済画面で購入。購入完了ページとメールでライセンスキーが届き、ご自身の Mac や今後出る Windows PC を何台でも使えます。</p>
+            </div>
+          </li>
+          <li class="flow-step flow-step-goal">
+            <span class="flow-no">05</span>
+            <div class="flow-card">
+              <h3>もう承認待ちで止まらない開発スタイルへ</h3>
+              <p>万一購入後に環境に合わなかった場合も、購入から 14 日以内であれば返金に対応しています。リスクなく普段の開発に取り入れていただけます。</p>
+            </div>
+          </li>
+        </ol>
+      </div>
     </div>
   </section>
 
   <section class="section section-alt" id="price">
-    <div class="wrap price">
-      <div>
-        <h2>14 日使ってから、決めてください。</h2>
-        <div class="timeline" role="img" aria-label="最初の 14 日は無料、そのあとは続けるなら ¥1,500 の買い切り">
-          <div class="tl-free"><b>無料</b><span>最初に起動してから 14 日</span></div>
-          <div class="tl-paid"><b>¥1,500</b><span>続けるなら · 買い切り</span></div>
-        </div>
-        <div class="cta">
-          <a class="btn" href="https://github.com/obutora/sshterm-desktop/releases/latest/download/SSHTermDesktop.dmg">Mac で 14 日間 無料で試す</a>
-          <a class="btn btn-ghost" href="https://buy.stripe.com/9B64gs7EN2YBeSQcIAffy02?locale=ja">¥1,500 で購入する</a>
-        </div>
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">PRICE &amp; GUARANTEE</p>
+        <h2>14 日じっくり試してから、決めてください。</h2>
+        <p class="lead">買い切り ¥1,500・月額 0 円。まずは無料試用で普段の開発に合うかを確かめてから購入できます。</p>
       </div>
-      <ul class="price-list">
-        <li><b>試用中も、買ったあとと同じ機能が使えます。</b>14 日を過ぎるとキーを入れるまで使えなくなりますが、ホストで動いている agent と保持シェルは止まりません。</li>
-        <li><b>スマホ版とは別の購入です。</b>スマホ版（iPhone・iPad・Android の <a href="/app">SSH Term</a>）を買っていても、デスクトップ版にはライセンスキーが要ります。</li>
-        <li><b>1 本のキーで、本人の Mac と Windows を何台でも。</b>あとから出る Windows 版にも使えます。キーは購入が終わったページに出し、メールでも送ります。</li>
-        <li><b>キーもメールアドレスも、どこにも送りません。</b>キーはアプリの中で確かめます。起動のときに最大 1 日 1 回、このサイトから返金した購入の一覧を取り、あなたのキーがそこにあるかをアプリの中で確かめます。</li>
-        <li><b>購入から 14 日以内なら返金します。</b>買ったときのメールアドレスから<a href="/ja/contact">お問い合わせ</a>ください。返金した購入のキーは、アプリが次に一覧を取ったときから使えなくなります。詳しくは<a href="/ja/terms">利用規約</a>に書いています。</li>
-        <li><b>Windows 11（x64）は近日、Microsoft Store から無料で入れられるようになります。</b></li>
-      </ul>
+
+      <div class="price">
+        <div class="price-card">
+          <h3>シンプルで損をしない料金体系</h3>
+          <div class="timeline" role="img" aria-label="最初の 14 日は無料、そのあとは続けるなら ¥1,500 の買い切り">
+            <div class="tl-free"><b>無料</b><span>最初の起動から 14 日間</span></div>
+            <div class="tl-paid"><b>¥1,500</b><span>続けるなら · 買い切り</span></div>
+          </div>
+          <div class="cta">
+            <a class="btn btn-primary" href="https://github.com/obutora/sshterm-desktop/releases/latest/download/SSHTermDesktop.dmg">
+              <span class="btn-txt"><small>登録・カード不要</small>Mac で 14 日間 無料で試す</span>
+              <span class="btn-arrow" aria-hidden="true">→</span>
+            </a>
+            <a class="btn btn-ghost" href="https://buy.stripe.com/9B64gs7EN2YBeSQcIAffy02?locale=ja">¥1,500 で購入する</a>
+          </div>
+          <ul class="trust-pills">
+            <li>サブスクなし・自動課金なし</li>
+            <li>購入後 14 日以内は返金対応</li>
+          </ul>
+        </div>
+
+        <ul class="price-list">
+          <li><b>試用中も、買ったあとと同じ全機能が使えます。</b>14 日を過ぎるとライセンスキーを入れるまでアプリは使えなくなりますが、自動課金はなく、ホストで動いている agent と保持シェルは止まりません。</li>
+          <li><b>購入から 14 日以内なら返金します。</b>買ったときのメールアドレスから<a href="/ja/contact">お問い合わせ</a>ください。返金した購入のライセンスキーは、アプリが次に返金した購入の一覧を取ったときから使えなくなります。詳しくは<a href="/ja/terms">利用規約</a>をご覧ください。</li>
+          <li><b>1 本のキーで、本人の Mac と Windows を何台でも。</b>仕事用・自宅用など台数制限なく使えます。あとから出る Windows 11（x64・Microsoft Store 近日公開）にも対応します。キーは購入後の画面に出し、メールでも送ります。</li>
+          <li><b>スマホ版とは別の購入です。</b>スマホ版（iPhone・iPad・Android の <a href="/app">SSH Term</a>）を買っていても、デスクトップ版にはライセンスキーが必要です。</li>
+          <li><b>キーもメールアドレスも、どこにも送りません。</b>キーはアプリの中で確かめます。起動のときに最大 1 日 1 回、このサイトから返金した購入の一覧を取り、あなたのキーがそこにあるかをアプリの中で確かめます。</li>
+        </ul>
+      </div>
+
+      <p class="price-fine">ほかの通貨では、決済の画面にその国の通貨での値段が出ます（Stripe の Adaptive Pricing）。決済は Stripe の画面で行い、販売者は Link（Stripe の決済サービス）です。対応環境：macOS 13 以降（Apple Silicon・Intel）、Windows 11（x64、Microsoft Store にて近日公開）。アプリの言語：English、日本語、한국어、简体中文、繁體中文、Tiếng Việt。</p>
     </div>
-    <p class="wrap price-fine">ほかの通貨では、決済の画面にその国の通貨での値段が出ます（Stripe の Adaptive Pricing）。決済は Stripe の画面で行い、販売者は Link（Stripe の決済サービス）です。アプリの言語は English、日本語、한국어、简体中文、繁體中文、Tiếng Việt。</p>
   </section>
 
-  <section class="section">
+  <section class="section" id="faq">
     <div class="wrap faq-wrap">
-      <h2>よくある質問</h2>
+      <div>
+        <p class="eyebrow">FAQ</p>
+        <h2>よくある質問</h2>
+        <p class="lead">導入前によくいただく疑問をまとめました。そのほかのご相談は<a href="/ja/contact">お問い合わせ</a>からお気軽にご連絡ください。</p>
+      </div>
       <div class="faq">
         <details>
-          <summary>スマホと Mac で、同じ agent を同時に開いても大丈夫？</summary>
-          <p>大丈夫です。agent と保持シェルはホストで動いていて、スマホ版とデスクトップ版はそれぞれそこにつないでいるだけです。どちらから返事を送っても、同じ agent に届きます。</p>
+          <summary>スマホ版を使っていなくても使えますか？</summary>
+          <p>はい、デスクトップ版だけでそのまま使えます。手元のマシンの agent は SSH なしで自動表示され、リモートホストへも初めてつなぐときに必要な補助プログラム（stagent）を自動で入れます。</p>
         </details>
         <details>
-          <summary>スマホ版を使っていなくても使える？</summary>
-          <p>使えます。デスクトップ版だけでもホストにつなぎ、初めてつなぐときに stagent を入れます。手元のマシンの agent も SSH なしで並びます。</p>
+          <summary>14 日間の試用が終わったら、勝手に課金されますか？</summary>
+          <p>いいえ、絶対に自動課金されません。試用にクレジットカード登録もアカウント作成も不要です。14 日が過ぎるとライセンスキーを入れるまでアプリが止まりますが、ホスト側で動いている agent と保持シェルは止まりません。</p>
         </details>
         <details>
-          <summary>14 日が過ぎたら、動いている agent は止まる？</summary>
-          <p>止まりません。止まるのはデスクトップ版のアプリだけで、ホストの agent と保持シェルは動き続けます。スマホ版からはそのまま見られます。</p>
+          <summary>Claude Code 以外の AI や、普通のターミナルとしても使えますか？</summary>
+          <p>はい。Claude Code や Codex などの coding agent に加え、手元と SSH の通常ターミナルや、アプリを閉じても動き続ける保持シェルとしても使えます。ペイン分割や内蔵ファイラもそのまま利用できます。</p>
         </details>
         <details>
-          <summary>Windows ではいつ使える？</summary>
-          <p>近日、Microsoft Store から入れられるようになります。今買ったライセンスキーも、そのまま使えます。</p>
+          <summary>仕事用の Mac と自宅の Mac など、複数台で使えますか？</summary>
+          <p>はい。1 本のライセンスキーで、購入したご本人の Mac と Windows PC なら何台でも使えます。</p>
         </details>
         <details>
-          <summary>ライセンスキーをなくしたら？</summary>
-          <p><a href="/ja/desktop/resend">送り直しのページ</a>から、買ったときのメールアドレスに送り直せます。</p>
+          <summary>スマホ版と Mac で、同じ agent を同時に開いても大丈夫ですか？</summary>
+          <p>大丈夫です。agent と保持シェルはホスト側で動いていて、スマホ版とデスクトップ版はそれぞれそこにつないでいるだけです。どちらから返事を送っても、同じ agent に届きます。</p>
+        </details>
+        <details>
+          <summary>コードや会話が外部のクラウドに送られることはありますか？</summary>
+          <p>ありません。リモートホストとは SSH で直接通信し、間にクラウドサーバーは挟みません。手元のマシンは SSH すら通さずローカルで直接つながります。</p>
+        </details>
+        <details>
+          <summary>Windows ではいつ使えますか？</summary>
+          <p>近日、Microsoft Store から無料でインストールできるようになります。今ご購入いただいたライセンスキーも、そのまま Windows 11 で使えます。</p>
+        </details>
+        <details>
+          <summary>ライセンスキーをなくしたり、返金したいときは？</summary>
+          <p>キーをなくしたときは<a href="/ja/desktop/resend">送り直しのページ</a>から購入時のメールアドレスへ再送できます。購入から 14 日以内の返金は<a href="/ja/contact">お問い合わせ</a>からご連絡ください。</p>
         </details>
       </div>
     </div>
@@ -228,10 +632,22 @@
 
   <section class="closing">
     <div class="wrap">
-      <h2>いまスマホで動いている agent を、Mac で開いてみる。</h2>
-      <div class="cta">
-        <a class="btn" href="https://github.com/obutora/sshterm-desktop/releases/latest/download/SSHTermDesktop.dmg">Mac で 14 日間 無料で試す</a>
-        <p class="cta-note">macOS 13 以降 · 登録もカードも不要 · 続けるなら <b>¥1,500</b></p>
+      <div class="closing-card">
+        <p class="eyebrow eyebrow-center">GET STARTED</p>
+        <h2>次に AI が承認を待つ瞬間から、<br><span class="mark">開発のテンポ</span>が変わります。</h2>
+        <p class="lead">登録もカードも不要。まずは 14 日間、いつもの Mac で試してみてください。</p>
+        <div class="cta cta-center">
+          <a class="btn btn-primary" href="https://github.com/obutora/sshterm-desktop/releases/latest/download/SSHTermDesktop.dmg">
+            <span class="btn-txt"><small>登録・カード不要 · 自動課金なし</small>Mac で 14 日間 無料で試す</span>
+            <span class="btn-arrow" aria-hidden="true">→</span>
+          </a>
+          <a class="btn btn-ghost" href="https://buy.stripe.com/9B64gs7EN2YBeSQcIAffy02?locale=ja">¥1,500 で購入する</a>
+        </div>
+        <ul class="trust-pills trust-pills-center">
+          <li>macOS 13 以降（Apple Silicon / Intel）</li>
+          <li>買い切り ¥1,500 · 何台でも利用可</li>
+          <li>購入後 14 日以内は返金対応</li>
+        </ul>
       </div>
     </div>
   </section>
@@ -247,6 +663,13 @@
     <a href="/desktop" hreflang="en" lang="en">English</a>
   </div>
 </footer>
+
+<div class="stick-mobile">
+  <a class="btn btn-primary" href="https://github.com/obutora/sshterm-desktop/releases/latest/download/SSHTermDesktop.dmg">
+    <span class="btn-txt"><small>登録・カード不要</small>Mac で 14 日間 無料で試す</span>
+    <span class="btn-arrow" aria-hidden="true">→</span>
+  </a>
+</div>
 
 </body>
 </html>

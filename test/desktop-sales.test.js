@@ -45,3 +45,15 @@ test('the sales page downloads the Mac DMG and buys with the Payment Link of its
     for (const link of buys) assert.equal(link.replaceAll('&amp;', '&'), buy, file);
   }
 });
+
+test('every in-page anchor on the sales page points to an existing id', () => {
+  for (const { file } of Object.values(PAGES)) {
+    const html = read(file);
+    const ids = new Set([...html.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]));
+    const anchors = [...html.matchAll(/href="#([^"]+)"/g)].map((m) => m[1]);
+    assert.ok(anchors.length > 0, file);
+    for (const target of anchors) {
+      assert.ok(ids.has(target), `${file}: missing #${target}`);
+    }
+  }
+});
