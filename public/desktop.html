@@ -3,101 +3,249 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="color-scheme" content="light dark">
-<title>SSH Term Desktop · Mac and Windows</title>
-<meta name="description" content="Watch the coding agents on all your hosts from one window. SSH Term for Mac and Windows.">
+<meta name="color-scheme" content="dark">
+<title>SSH Term Desktop · The agents from your phone, on your Mac</title>
+<meta name="description" content="SSH Term for Mac and Windows. Open the Claude Code sessions and kept shells you started from your phone, right where they are. Free for 14 days, then a one-time $9.99.">
 <link rel="icon" href="/icon.png">
 <link rel="alternate" hreflang="ja" href="https://sshterm.iru-yo.com/ja/desktop">
-<link rel="stylesheet" href="/sheet.css">
-<link rel="stylesheet" href="/legal.css">
-<link rel="stylesheet" href="/desktop.css">
+<link rel="stylesheet" href="/sales.css">
 </head>
 <body>
-<div class="sheet">
-<div class="bar">
-  <a class="mark" href="/desktop"><span class="glyph" aria-hidden="true">&gt;_</span>SSH Term Desktop</a>
-  <a href="/ja/desktop" hreflang="ja" lang="ja">日本語</a>
-</div>
-<div class="hero">
-  <h1>SSH Term Desktop</h1>
-  <div class="lede">
-    <p>One place to watch the coding agents on all your hosts. It keeps an eye on the agents on your own machine and on remote hosts in one window, and you approve or reply to the ones that need you.</p>
-    <p class="dates">Mac · Windows</p>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="/desktop"><img src="/desktop/img/app-icon.png" alt="" width="30" height="30">SSH Term Desktop</a>
+    <nav>
+      <a href="#how">How it works</a>
+      <a href="#price">Price</a>
+      <a href="/ja/desktop" hreflang="ja" lang="ja">日本語</a>
+      <a class="btn btn-sm" href="https://github.com/obutora/sshterm-desktop/releases/latest/download/SSHTermDesktop.dmg">Try it free</a>
+    </nav>
   </div>
-</div>
-<div class="actions">
-  <div class="cell">
-    <p class="label">Mac · macOS 13 or later</p>
-    <a class="button" href="https://github.com/obutora/sshterm-desktop/releases/latest/download/SSHTermDesktop.dmg">Download</a>
-  </div>
-  <div class="cell">
-    <p class="label">Windows 11 · Microsoft Store</p>
-    <span class="button soon" aria-disabled="true">Download · Coming soon</span>
-  </div>
-  <div class="cell">
-    <p class="label">One-time purchase · $9.99 / ¥1,500</p>
-    <a class="button" href="https://buy.stripe.com/5kQcMYgbjfLn8us9woffy01?locale=en">Buy</a>
-  </div>
-</div>
+</header>
+
 <main>
 
-  <section>
-    <h2>Watch your agents</h2>
-    <ul>
-      <li>The agents (such as Claude Code) running on your own machine and on remote hosts are listed on the left, grouped by host.</li>
-      <li>Approve or reply to an agent that is waiting for you from its chat view.</li>
-      <li>System notifications tell you when an agent waits for approval, waits for input, or finishes a turn.</li>
-      <li>The terminal is there when you need it. Split the window into as many panes as you like, with local and SSH terminals. Kept shells keep running on the host after you close the app.</li>
-      <li>Your own machine is one of the hosts, reached without SSH. Remote hosts connect through stagent, the same as with the mobile app.</li>
-    </ul>
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-copy">
+        <p class="eyebrow">For people who use SSH Term on their phone</p>
+        <h1><span class="nb">The agents on your phone,</span> <span class="nb">open on your Mac.</span></h1>
+        <p class="lead">The Claude Code sessions and kept shells you started from your phone keep running on the host. Open SSH Term Desktop and the same sessions are there, ready for your next line.</p>
+        <div class="cta">
+          <a class="btn" href="https://github.com/obutora/sshterm-desktop/releases/latest/download/SSHTermDesktop.dmg">Try it free for 14 days on Mac</a>
+          <p class="cta-note">macOS 13 or later · No sign-up, no card<br>Then <b>$9.99</b>, once · Windows coming soon</p>
+        </div>
+      </div>
+
+      <div class="devices" role="img" aria-label="The same Claude Code session open on a Mac and on a phone">
+        <div class="device-mac">
+          <p class="device-label"><b>Mac</b> · SSH Term Desktop</p>
+          <div class="mac">
+            <div class="mac-bar"><i></i><i></i><i></i><span>SSH Term Desktop</span></div>
+            <div class="mac-body">
+              <div class="mac-side">
+                <p class="mac-host">mac-studio</p>
+                <p class="mac-row is-on"><span class="dot run"></span>web-app<small>Working</small></p>
+                <p class="mac-row"><span class="dot wait"></span>mobile<small class="wait">Needs approval</small></p>
+                <p class="mac-host">build-linux</p>
+                <p class="mac-row"><span class="dot run"></span>infra<small>Working</small></p>
+              </div>
+              <div class="mac-pane">
+                <p class="box">✻ Welcome to Claude Code!<br><span class="dim">cwd: ~/dev/web-app</span></p>
+                <p>&gt; Write tests for the payment API and fix it until they all pass</p>
+                <p>● I'll read how the payment API is laid out.</p>
+                <p><span class="ok">●</span> Read(src/payment/api.ts)</p>
+                <p class="dim">  ⎿ Read 182 lines</p>
+                <p>● Wrote 12 tests. Running them now.</p>
+                <p><span class="ok">●</span> Write(test/payment/api.test.ts)</p>
+                <p><span class="ok">●</span> Bash(npm test -- payment)</p>
+                <p class="dim">  ⎿ Tests: 2 failed, 10 passed</p>
+                <p class="busy">✻ Fixing the failing tests…</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="same" aria-hidden="true">Same session</p>
+        <div class="device-phone">
+          <p class="device-label"><b>Phone</b> · SSH Term</p>
+          <div class="phone">
+            <img src="/desktop/img/phone-claude-en.webp" width="585" height="1266" alt="">
+          </div>
+        </div>
+      </div>
+      <p class="shot-note">Screens are illustrative.</p>
+    </div>
   </section>
 
-  <section>
-    <h2>Requirements</h2>
-    <ul>
-      <li>Mac: macOS 13 or later (Apple silicon and Intel). Download it from this page.</li>
-      <li>Windows: Windows 11 (x64). Coming soon, free to install from the Microsoft Store.</li>
-      <li>The app’s languages: English, 日本語, 한국어, 简体中文, 繁體中文, Tiếng Việt.</li>
-    </ul>
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>On your phone when you’re out. On your Mac when you’re back.</h2>
+        <p class="lead">There is nothing to move over. Both apps look at the same agent, running on the host.</p>
+      </div>
+      <ol class="scenes">
+        <li class="scene">
+          <figure><img src="/desktop/img/phone-claude-top-en.webp" width="585" height="700" alt="SSH Term on a phone, asking Claude Code to write tests for the payment API and fix it until they all pass" loading="lazy"></figure>
+          <div class="scene-text">
+            <p class="scene-when">Out and about</p>
+            <h3>Ask claude from your phone</h3>
+            <p>Open the host in SSH Term as usual and give the agent its task.</p>
+          </div>
+        </li>
+        <li class="scene">
+          <figure><img src="/desktop/img/phone-host-card-en.webp" width="585" height="515" alt="The mac-studio card in SSH Term on a phone: web-app needs approval for 2 minutes, mobile is working" loading="lazy"></figure>
+          <div class="scene-text">
+            <p class="scene-when">On the way</p>
+            <h3>Close the app. The agent keeps going.</h3>
+            <p>The agent runs on the host, not on your phone. When it waits for approval or input, you get a notification, and your phone’s home screen shows what is waiting.</p>
+          </div>
+        </li>
+        <li class="scene">
+          <figure>
+            <div class="mac" role="img" aria-label="The list in SSH Term Desktop: web-app on mac-studio needs approval for 2 minutes; mobile and infra on build-linux are working">
+              <div class="mac-bar"><i></i><i></i><i></i><span>SSH Term Desktop</span></div>
+              <div class="mac-side">
+                <p class="mac-host">mac-studio</p>
+                <p class="mac-row is-on"><span class="dot wait"></span>web-app<small class="wait">Needs approval · 2m</small></p>
+                <p class="mac-row"><span class="dot run"></span>mobile<small>Working</small></p>
+                <p class="mac-host">build-linux</p>
+                <p class="mac-row"><span class="dot run"></span>infra<small>Working</small></p>
+              </div>
+            </div>
+          </figure>
+          <div class="scene-text">
+            <p class="scene-when">Back at your desk</p>
+            <h3>The same agents are in your Mac’s list</h3>
+            <p>One list for all your hosts, the ones that need you first. Approve from the chat view, split terminals into panes, and carry on. With the window closed, system notifications still tell you when an agent waits or finishes.</p>
+          </div>
+        </li>
+      </ol>
+      <p class="scenes-after">It works the other way too. Leave an agent running on your Mac, and pick it up from your phone.</p>
+    </div>
   </section>
 
-  <section>
-    <h2>Price</h2>
-    <p class="price">$9.99 <span>/</span> ¥1,500</p>
-    <ul>
-      <li>A one-time purchase. There is no subscription.</li>
-      <li>In other currencies, the checkout shows the price in your local currency (Stripe’s Adaptive Pricing).</li>
-      <li>You pay on Stripe’s checkout. The seller is Link, Stripe’s payment service.</li>
-    </ul>
+  <section class="section section-alt" id="how">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>The same session, because the agent runs on the host.</h2>
+        <p class="lead">Agents and kept shells run inside stagent, the small helper SSH Term installs on the host — not on your phone or your Mac. SSH Term Desktop connects to the stagent the mobile app already installed.</p>
+      </div>
+      <figure class="how-figure" role="img" aria-label="A phone and a Mac both reach the same agents in stagent on the host">
+        <div class="node">
+          <p class="node-name">Phone</p>
+          <p class="node-app">SSH Term</p>
+        </div>
+        <p class="link">SSH</p>
+        <div class="node node-host">
+          <p class="node-name">Host · mac-studio</p>
+          <p class="node-app">stagent</p>
+          <ul>
+            <li><span class="dot wait"></span>web-app  claude</li>
+            <li><span class="dot run"></span>mobile  codex</li>
+            <li><span class="dot"></span>kept shell</li>
+          </ul>
+        </div>
+        <p class="link">SSH</p>
+        <div class="node">
+          <p class="node-name">Mac</p>
+          <p class="node-app">SSH Term Desktop</p>
+        </div>
+      </figure>
+      <ul class="checks">
+        <li>Open it on your phone and your Mac at the same time. A reply from either reaches the same agent.</li>
+        <li>Nothing but SSH in between. No cloud in the middle.</li>
+        <li>Install it on the very Mac your phone connects to, and the same agents show up under your own machine, without SSH.</li>
+      </ul>
+    </div>
   </section>
 
-  <section>
-    <h2>Trial</h2>
-    <p>For 14 days from the first launch, the app works without a license key, with every feature you get when you buy it.</p>
-    <p>After 14 days, it needs a license key to keep working. Agents and kept shells running on your hosts do not stop.</p>
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Up and running in 3 minutes</h2>
+      </div>
+      <ol class="steps">
+        <li><h3>Open the DMG and move the app to Applications</h3><p>No sign-up, no email address. macOS 13 or later (Apple silicon and Intel).</p></li>
+        <li><h3>Add your hosts</h3><p>The hosts in <code>~/.ssh/config</code> are already listed. Add others with “+ Add connection”.</p></li>
+        <li><h3>Click “Connect”</h3><p>The agents you run from your phone appear in the list.</p></li>
+      </ol>
+    </div>
   </section>
 
-  <section>
-    <h2>License key</h2>
-    <ul>
-      <li>One key works on any number of the buyer’s own Macs and Windows PCs, including the Windows version when it comes out.</li>
-      <li>The key is shown on the page you land on after buying, and sent by email.</li>
-      <li>The app checks the key by itself, and never sends the key or your email address anywhere. At launch, at most once a day, it fetches the list of refunded purchases from this site and checks inside the app whether your key is on it.</li>
-      <li>It is separate from buying the mobile app (<a href="/app">SSH Term</a> for iPhone, iPad and Android). Owning the mobile app does not give you a license key for SSH Term Desktop.</li>
-    </ul>
+  <section class="section section-alt" id="price">
+    <div class="wrap price">
+      <div>
+        <h2>Use it for 14 days, then decide.</h2>
+        <div class="timeline" role="img" aria-label="Free for the first 14 days, then a one-time $9.99 if you keep it">
+          <div class="tl-free"><b>Free</b><span>14 days from the first launch</span></div>
+          <div class="tl-paid"><b>$9.99</b><span>If you keep it · once</span></div>
+        </div>
+        <div class="cta">
+          <a class="btn" href="https://github.com/obutora/sshterm-desktop/releases/latest/download/SSHTermDesktop.dmg">Try it free for 14 days on Mac</a>
+          <a class="btn btn-ghost" href="https://buy.stripe.com/5kQcMYgbjfLn8us9woffy01?locale=en">Buy for $9.99</a>
+        </div>
+      </div>
+      <ul class="price-list">
+        <li><b>The trial has every feature you get when you buy.</b>After 14 days the app needs a license key to keep working. Agents and kept shells running on your hosts do not stop.</li>
+        <li><b>It is separate from the mobile app.</b>Owning the mobile app (<a href="/app">SSH Term</a> for iPhone, iPad and Android) does not give you a license key for SSH Term Desktop.</li>
+        <li><b>One key, any number of your own Macs and Windows PCs.</b>Including the Windows version when it comes out. The key is shown on the page you land on after buying, and sent by email.</li>
+        <li><b>Your key and email address go nowhere.</b>The app checks the key by itself. At launch, at most once a day, it fetches the list of refunded purchases from this site and checks inside the app whether your key is on it.</li>
+        <li><b>Refunds within 14 days of purchase.</b>Write to us from the email address you bought with; see <a href="/contact">Contact</a>. The key of a refunded purchase stops working once the app next fetches the list. See the <a href="/terms">Terms of Use</a> for details.</li>
+        <li><b>Windows 11 (x64) is coming soon, free to install from the Microsoft Store.</b></li>
+      </ul>
+    </div>
+    <p class="wrap price-fine">¥1,500 in Japan. In other currencies, the checkout shows the price in your local currency (Stripe’s Adaptive Pricing). You pay on Stripe’s checkout; the seller is Link, Stripe’s payment service. The app’s languages: English, 日本語, 한국어, 简体中文, 繁體中文, Tiếng Việt.</p>
   </section>
 
-  <section>
-    <h2>Refunds</h2>
-    <p>Within 14 days of purchase, you can get a refund. Write to us from the email address you bought with; see <a href="/contact">Contact</a>. The license key of a refunded purchase stops working once the app next fetches the list of refunded purchases. See the <a href="/terms">Terms of Use</a> for details.</p>
+  <section class="section">
+    <div class="wrap faq-wrap">
+      <h2>Questions</h2>
+      <div class="faq">
+        <details>
+          <summary>Can I open the same agent on my phone and my Mac at once?</summary>
+          <p>Yes. Agents and kept shells run on the host, and the mobile app and SSH Term Desktop each just connect to them. A reply from either reaches the same agent.</p>
+        </details>
+        <details>
+          <summary>Do I need the mobile app?</summary>
+          <p>No. SSH Term Desktop connects to your hosts on its own and installs stagent the first time it connects. The agents on your own machine show up too, without SSH.</p>
+        </details>
+        <details>
+          <summary>Do my agents stop when the 14 days are over?</summary>
+          <p>No. Only the SSH Term Desktop app stops; the agents and kept shells on your hosts keep running, and the mobile app still shows them.</p>
+        </details>
+        <details>
+          <summary>When is Windows coming?</summary>
+          <p>Soon, from the Microsoft Store. A license key you buy now will work there too.</p>
+        </details>
+        <details>
+          <summary>I lost my license key.</summary>
+          <p>The <a href="/desktop/resend">resend page</a> sends it again to the email address you bought with.</p>
+        </details>
+      </div>
+    </div>
   </section>
+
+  <section class="closing">
+    <div class="wrap">
+      <h2>Open the agent running on your phone right now — on your Mac.</h2>
+      <div class="cta">
+        <a class="btn" href="https://github.com/obutora/sshterm-desktop/releases/latest/download/SSHTermDesktop.dmg">Try it free for 14 days on Mac</a>
+        <p class="cta-note">macOS 13 or later · No sign-up, no card · Then <b>$9.99</b>, once</p>
+      </div>
+    </div>
+  </section>
+
 </main>
-<div class="foot">
-  <a href="/terms">Terms of Use</a>
-  <a href="/privacy">Privacy Policy</a>
-  <a href="/contact">Contact</a>
-  <span class="coord">sshterm.iru-yo.com/desktop</span>
-</div>
-</div>
+
+<footer class="foot">
+  <div class="wrap">
+    <a href="/terms">Terms of Use</a>
+    <a href="/privacy">Privacy Policy</a>
+    <a href="/contact">Contact</a>
+    <a href="/ja/desktop" hreflang="ja" lang="ja">日本語</a>
+  </div>
+</footer>
+
 </body>
 </html>

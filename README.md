@@ -213,21 +213,31 @@ policy link to it from their foot.
 ## The SSH Term Desktop sales page
 
 `https://sshterm.iru-yo.com/desktop` (English) and `/ja/desktop` (Japanese)
-sell SSH Term Desktop, the Mac and Windows app: what it does, the
-requirements, the price (¥1,500 / $9.99, other currencies by Stripe's
-Adaptive Pricing), the 14-day trial, the license key (any number of the
-buyer's own Macs and Windows PCs, separate from the mobile app) and refunds.
-Plain HTML with no script, on `sheet.css`, `legal.css` and `desktop.css`.
-Refunds are asked for through the contact page. The Mac download points at
+sell SSH Term Desktop, the Mac and Windows app. They speak first to people
+who already use the mobile app: the agents and kept shells they start from
+the phone run in stagent on the host, and SSH Term Desktop opens the same
+sessions on the Mac. The first screen shows one Claude Code session on a Mac
+window and on a phone; then the phone-then-Mac moments, how both apps reach
+the same stagent, getting started, the price (¥1,500 / $9.99, other
+currencies by Stripe's Adaptive Pricing), the 14-day trial, the license key
+(any number of the buyer's own Macs and Windows PCs, separate from the mobile
+app), refunds and questions.
+
+Plain HTML with no script, on their own `sales.css` (the app's dark terminal
+ground, one mint for every button). The phone screens in `desktop/img/` are
+the mobile app's store shots (its own widgets drawn with made-up data, in
+each language); the Mac window is drawn in HTML and the page says the screens
+are illustrative. Refunds are asked for through the contact page.
+
+Every "Try it free" / 無料で試す button is the Mac download,
 `https://github.com/obutora/sshterm-desktop/releases/latest/download/SSHTermDesktop.dmg`:
 the release workflow uploads that unchanging name alongside the versioned DMG
 for every general release (1.0.0 on), and `latest` skips prereleases. The
-Microsoft Store link stays greyed out as 近日公開 / Coming soon until the
-Windows version is out; the license key already covers it. "Buy" is the live
-Managed Payments Payment Link for the page's language (`?locale=en` /
-`?locale=ja`); it comes back to `/desktop/purchased` or `/ja/desktop/purchased`
-with the Checkout Session's id (`workers/license` in obutora/agent-orchestra
-makes the key from it).
+pages say Windows is coming soon from the Microsoft Store; the license key
+already covers it. "Buy" is the live Managed Payments Payment Link for the
+page's language (`?locale=en` / `?locale=ja`); it comes back to
+`/desktop/purchased` or `/ja/desktop/purchased` with the Checkout Session's id
+(`workers/license` in obutora/agent-orchestra makes the key from it).
 
 ## The purchase-complete page
 
