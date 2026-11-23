@@ -201,6 +201,14 @@ IDs with their OS and model, trial machines; obutora/agent-orchestra#1863),
 what for and for how long; change it, its date and its history in both
 languages when those flows change.
 
+On every page on `legal.css` (the terms, the privacy policy, the contact page,
+the purchase-complete and resend pages, the polls), Japanese titles
+(`.hero h1`, `main h2`) break only at spaces, punctuation and the `<wbr>`
+between phrases (`word-break: keep-all`), so Safari does not split a word; a
+word longer than the line still breaks. A new or reworded Japanese title in
+these pages needs its own `<wbr>`s (a poll's title has none and breaks at its
+spaces and punctuation).
+
 ## The contact page
 
 `https://sshterm.iru-yo.com/contact` (English) and `/ja/contact` (Japanese)
