@@ -185,7 +185,10 @@ terms of use and privacy policy: the URLs to give the App Store and Google
 Play, and Stripe for SSH Term Desktop. They are plain HTML with no script, on
 `sheet.css` and `legal.css`, and keep `/*`'s headers (CSP, `noindex`). They
 cover the mobile app and SSH Term Desktop. The terms hold SSH Term
-Desktop's one-time purchase, its 14-day trial and its refunds (within 14
+Desktop's one-time purchase, its 14-day trial (once per machine), linking a
+purchase to a Google or GitHub account for up to 5 machines with a
+registration check at least every 30 days (obutora/agent-orchestra#1863),
+and its refunds (within 14
 days of purchase; Stripe may refund within 60 days; either way the key of a
 refunded purchase stops working once the app next fetches the list of
 refunded purchases). The privacy policy states the apps', stagent's and the
@@ -226,8 +229,9 @@ continuity via stagent on the host. The page walks through a hero with a
 Mac+phone visual, 4-pillar overview, 5 problem->benefit reasons with CSS
 diagrams, mid-page CTA, 4 Before/After use cases, a 3-column feature list,
 5-step onboarding flow, price & risk-free guarantees (¥1,500 / $9.99
-one-time, 14-day trial, 14-day refunds, one key for any number of the
-buyer's own Macs and Windows PCs, separate from the mobile app), FAQ, closing
+one-time, 14-day trial, 14-day refunds, one purchase for up to 5 of the
+buyer's own Macs and Windows PCs once linked to a Google or GitHub account,
+separate from the mobile app), FAQ, closing
 CTA, and a floating trial button on narrow screens.
 
 Plain HTML with no script, on their own `sales.css` (the app's dark terminal
