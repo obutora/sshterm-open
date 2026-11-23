@@ -19,7 +19,7 @@
 <div class="hero">
   <h1>Privacy Policy</h1>
   <div class="lede">
-    <p>SSH Term sends none of your data to the operator’s servers. There is no account to sign up for. Only when you buy SSH Term Desktop does what is listed below pass through the operator’s Worker, to make and deliver your license key. The Worker stores nothing.</p>
+    <p>SSH Term sends none of your data to the operator’s servers. Only for SSH Term Desktop does what is listed below pass through the operator’s Worker, to make and deliver your license key and to check your machines and trial. The Worker stores only what “SSH Term Desktop accounts and machines” lists.</p>
     <p>It has no analytics, advertising, tracking or crash-reporting SDK. Your connection details, passwords and SSH keys stay on your device, encrypted.</p>
     <p>Polls are answered on this site, not in the app. Only if you choose to answer one does the operator receive and keep your answer, as described in “Answering polls on the web”.</p>
     <p class="dates">Effective: November 5, 2026 · Revised: November 23, 2026</p>
@@ -34,7 +34,7 @@
       <li>the iOS and Android app SSH Term (the mobile app; shown as SSH Term X on iOS, <code>com.obuto.sshterm</code>)</li>
       <li>the Mac and Windows app SSH Term Desktop</li>
       <li>stagent, the agent the app installs on your host</li>
-      <li>the Worker that makes and delivers SSH Term Desktop license keys and publishes the list of refunded purchases (under <code>sshterm.iru-yo.com</code>)</li>
+      <li>the Worker that makes and delivers SSH Term Desktop license keys, publishes the list of refunded purchases, and links purchases to an account to check machines and trials (under <code>sshterm.iru-yo.com</code>)</li>
       <li>this site (<code>sshterm.iru-yo.com</code>), including its poll pages (<code>/polls/…</code>) and the functions that receive answers</li>
     </ul>
     <p>This policy is also published in Japanese. If the two versions differ, the Japanese version prevails.</p>
@@ -84,12 +84,12 @@
 
   <section>
     <h2>SSH Term Desktop</h2>
-    <p>The data SSH Term Desktop handles stays on your own machine. None of it reaches the operator.</p>
+    <p>The data SSH Term Desktop handles stays on your own machine. Apart from what “SSH Term Desktop accounts and machines” lists for the license and the trial, none of it reaches the operator.</p>
     <ul>
       <li>It only reads your hosts from <code>~/.ssh/config</code> and never changes it. It also only reads the known_hosts in <code>~/.ssh</code>, and keeps the keys of hosts you newly trust in the app. Passwords are kept in the OS’s credential store. It holds no SSH keys of its own; it uses those in <code>~/.ssh</code> and your ssh-agent.</li>
-      <li>It connects only to the SSH servers you specify, to GitHub when stagent is installed (releases of <code>github.com/obutora/stagent</code>), on Mac to GitHub to check for and download updates (releases of <code>github.com/obutora/sshterm-desktop</code>), and, while a license key is entered, to this site for the list of refunded purchases (below). On Windows, the Microsoft Store updates it. stagent on your own machine is started without going through the network.</li>
+      <li>It connects only to the SSH servers you specify, to GitHub when stagent is installed (releases of <code>github.com/obutora/stagent</code>), on Mac to GitHub to check for and download updates (releases of <code>github.com/obutora/sshterm-desktop</code>), while a license key is entered to this site for the list of refunded purchases (below), to Google or GitHub to sign in when linking a purchase (in your browser), and to the operator’s Worker to check your machines and trial (below). On Windows, the Microsoft Store updates it. stagent on your own machine is started without going through the network.</li>
       <li>System notifications are shown by the app on your own machine. It writes nothing to stagent’s notification destinations (such as ntfy).</li>
-      <li>The trial is counted only inside the app. License keys are checked with a public key built into the app. A key holds no email address.</li>
+      <li>The trial and the machines you may use are checked with the operator’s Worker (“SSH Term Desktop accounts and machines” below). License keys are checked with a public key built into the app. A key holds no email address.</li>
       <li>While a license key is entered, when the app starts and at least a day has passed since it last checked, it fetches the list of refunded purchases from <code>https://sshterm.iru-yo.com/api/license/revoked</code>, at most once a day and not while it keeps running. It sends neither the key nor an email address: it only downloads the list, checks its signature, and decides inside the app whether your key is on it. As with any web request, Cloudflare sees your IP address.</li>
       <li>There is no crash-reporting SDK.</li>
     </ul>
@@ -130,13 +130,13 @@
 
   <section>
     <h2>SSH Term Desktop purchases</h2>
-    <p>Buying SSH Term Desktop passes data to the following. The operator stores none of it on its own servers.</p>
+    <p>Buying SSH Term Desktop passes data to the following. The operator stores none of what this section lists on its own servers.</p>
     <div class="scroll">
       <table>
         <thead><tr><th>Recipient</th><th>What it receives</th><th>What for</th></tr></thead>
         <tbody>
         <tr><td>Stripe and Link (the seller)</td><td>What you enter at checkout (email address, payment details, country and so on)</td><td>Payment, receipts, tax and refunds, handled under <a href="https://link.com/privacy">Link’s Privacy Policy</a> and <a href="https://stripe.com/privacy">Stripe’s Privacy Policy</a>.</td></tr>
-        <tr><td>The operator’s Worker (Cloudflare Workers)</td><td>From the page you land on after buying, the Checkout Session ID. From Stripe, that purchase’s email address and payment status. On the resend page, the email address you enter and your IP address.</td><td>To ask Stripe whether the purchase is paid, make the license key, return it and send it by email. On the resend page, the IP address is used only to limit how many times one address can send in 10 minutes; the count is held in memory and dropped when the window ends. It has no database and stores nothing.</td></tr>
+        <tr><td>The operator’s Worker (Cloudflare Workers)</td><td>From the page you land on after buying, the Checkout Session ID. From Stripe, that purchase’s email address and payment status. On the resend page, the email address you enter and your IP address.</td><td>To ask Stripe whether the purchase is paid, make the license key, return it and send it by email. On the resend page, the IP address is used only to limit how many times one address can send in 10 minutes; the count is held in memory and dropped when the window ends. None of what it receives here is stored.</td></tr>
         <tr><td>The operator’s Worker, for the list of refunded purchases</td><td>From Stripe, which purchases were fully refunded</td><td>To publish, at <code>/api/license/revoked</code>, a signed list that holds only a short hash of each refunded purchase’s Checkout Session ID (no email address or other personal details), which SSH Term Desktop reads to stop the keys of refunded purchases. It stores nothing; Cloudflare may cache the list for a short time.</td></tr>
         <tr><td>Cloudflare Email Service</td><td>The recipient’s email address and the message (the license key)</td><td>To send the key from <code>license@sshterm.iru-yo.com</code>, handled under <a href="https://www.cloudflare.com/privacypolicy/">Cloudflare’s Privacy Policy</a>.</td></tr>
         <tr><td>Cloudflare Turnstile (on the resend page only)</td><td>Signals from your browser and device, and your IP address, that Turnstile reads to tell people from bots</td><td>To keep bots from using the resend page, handled under <a href="https://www.cloudflare.com/turnstile-privacy-policy/">Cloudflare’s Turnstile Privacy Addendum</a>.</td></tr>
@@ -147,6 +147,27 @@
       <li>Card and other payment details never reach the operator.</li>
       <li>The purchase record (email address, country, amount and so on) stays with Stripe. The operator may look at it in Stripe’s dashboard to answer questions and handle refunds.</li>
       <li>The Worker and the email run on Cloudflare, so Cloudflare may process connection records such as IP addresses.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>SSH Term Desktop accounts and machines</h2>
+    <p>SSH Term Desktop links a purchase to a Google or GitHub account and lets one purchase be used on up to 5 machines. The trial is once per machine. From the version that brings this in, the operator’s Worker receives the following.</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>What it receives</th><th>What for</th><th>How long it is kept</th></tr></thead>
+        <tbody>
+        <tr><td>The ID of the Google or GitHub account you sign in with (not your email address or name)</td><td>To link the purchase to that account, so that only you can register machines or unregister them</td><td>Stored in a form that cannot be turned back, until the purchase is refunded or you ask for deletion</td></tr>
+        <tr><td>A machine ID (made from the identifier your OS gives the machine), and the OS and model</td><td>To count the machines a purchase is used on and list your registered machines</td><td>The ID is stored in a form that cannot be turned back; deleted after 30 days without use</td></tr>
+        <tr><td>The machine ID of a trial, and the day it started</td><td>To allow one trial per machine</td><td>Deleted after 1 year</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <ul>
+      <li>To link a purchase to another account, a confirmation code is sent by Cloudflare Email Service to the purchase’s email address at Stripe. The email address is not stored.</li>
+      <li>What it receives is used for nothing else and is not given to third parties. It is stored in Cloudflare D1; deleted data stays in D1’s history for up to 30 days.</li>
+      <li>Signing in is handled under <a href="https://policies.google.com/privacy">Google’s</a> and <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">GitHub’s</a> privacy policies.</li>
+      <li>Ask for deletion through the <a href="/contact">Contact</a> page.</li>
     </ul>
   </section>
 
@@ -172,7 +193,7 @@
       <li>Deleting the mobile app deletes all of SSH Term’s data on your device. Delete any backups you wrote out yourself.</li>
       <li>stagent and its settings are on your host; you can remove them there.</li>
       <li>Delete notifications that reached ntfy, Slack, Discord or Telegram in those services.</li>
-      <li>The operator’s Worker stores nothing. SSH Term Desktop purchase records stay with Stripe under Link’s and Stripe’s policies. Delete the key email from your mailbox yourself.</li>
+      <li>What the operator’s Worker stores, and for how long, is in “SSH Term Desktop accounts and machines”. SSH Term Desktop purchase records stay with Stripe under Link’s and Stripe’s policies. Delete the key email from your mailbox yourself.</li>
       <li>Poll answers: each vote’s record is deleted within about an hour after the poll’s deadline, and free text within about an hour once 90 days have passed since it. Deleted data stays restorable in Cloudflare D1’s history for up to 30 days. The totals stay published.</li>
       <li>What you write in the contact form (Google Forms) or send to <code>support.iruyo@gmail.com</code> (Gmail) is used only to reply and to deal with your request. Both are kept with Google, under <a href="https://policies.google.com/privacy">Google’s Privacy Policy</a>.</li>
     </ul>
@@ -188,6 +209,7 @@
     <h2>Changes</h2>
     <p>When this policy changes, the date at the top is updated and the change is listed here.</p>
     <ul>
+      <li>November 23, 2026: SSH Term Desktop links purchases to a Google or GitHub account and checks machines and trials with the operator’s Worker (from the version that brings this in); added what the Worker stores</li>
       <li>November 23, 2026: SSH Term Desktop now fetches the list of refunded purchases from this site (at most once a day, at launch, while a license key is entered), and the operator’s Worker publishes it; added the contact email address</li>
       <li>November 15, 2026: added polls (the app reading <code>/polls/current.json</code> on this site, and what the operator receives and keeps when you answer on the web)</li>
       <li>November 14, 2026: added the license key resend page (Cloudflare Turnstile, and the per-IP-address limit of the operator’s Worker)</li>
